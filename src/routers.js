@@ -5,4 +5,8 @@ export default [{
   path: '/login',
   name: 'login',
   component: require('./views/user/login')
+}, {
+  path: '/editor',
+  name: 'editor',
+  component: require('./views/editor/index.vue')
 }]

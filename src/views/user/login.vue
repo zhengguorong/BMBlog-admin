@@ -2,10 +2,13 @@
   <div class="container">
     <div class="login-main">
       <div class="login-title">
-        欢迎来到蓝月亮博客管理后台
+        蓝月亮前端－冇理想同条咸鱼有咩分别
       </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">
+          <div class="error-info" v-if="errorInfo">
+            <div><i class="el-icon-warning"></i><span>{{errorInfo}}</span></div>
+          </div>
           <el-form-item prop="loginId">
             <el-input type="text" v-model="loginForm.loginId" placeholder="帐号(邮箱或者手机号)"></el-input>
           </el-form-item>
@@ -18,8 +21,6 @@
         </el-form>
       </div>
     </div>
-
-  </div>
   </div>
 </template>
 
@@ -27,6 +28,7 @@
   export default {
     data () {
       return {
+        errorInfo: '',
         loginForm: {
           loginId: '',
           password: ''
@@ -43,9 +45,17 @@
     },
     methods: {
       login (ev) {
+        this.errorInfo = ''
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
+            this.$http.post('http://localhost:3000/auth/login', {loginId: this.loginForm.loginId, password: this.loginForm.password})
+              .then(response => {
 
+              }, response => {
+                if (response.status === 401) {
+                  this.errorInfo = '用户名或密码错误'
+                }
+              })
           } else {
             return false
           }
@@ -62,7 +72,22 @@
     background-size: auto;
     min-height: calc(100vh);
   }
-
+  .error-info {
+    text-align: left;
+    background: #ffeeed;
+    padding: 7px 9px 7px ;
+    margin: 0 0 10px;
+    border-radius: 6px;
+    line-height: 1.5;
+    color: #666;
+    font-size: 12px;
+    i {
+      color: #f60;
+    }
+    span {
+      padding-left: 10px;
+    }
+  }
   .login-main {
     width: 450px;
     margin: 0 auto;
