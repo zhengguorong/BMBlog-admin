@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import * as http from '../../util/http'
   export default {
     data () {
       return {
@@ -48,10 +49,12 @@
         this.errorInfo = ''
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            this.$http.post('http://localhost:3000/auth/login', {loginId: this.loginForm.loginId, password: this.loginForm.password})
+            http.post('/auth/login', {loginId: this.loginForm.loginId, password: this.loginForm.password})
               .then(response => {
-
-              }, response => {
+                window.localStorage.setItem('token', response.token)
+                window.location.href = '#/editor'
+              })
+              .catch(response => {
                 if (response.status === 401) {
                   this.errorInfo = '用户名或密码错误'
                 }

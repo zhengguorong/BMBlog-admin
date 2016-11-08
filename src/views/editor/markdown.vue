@@ -1,25 +1,57 @@
 <template>
-<div>
-  <div class="title"><input type="" v-model="title" name=""></div>
-  <div id="editor">
-      <textarea :value="input" @input="update"></textarea>
-      <div v-html="compiledMarkdown"></div>
-  </div>
+  <div>
+    <div class="title">
+      <input type="" v-model="editorArticle.title" name="">
+      <el-button class="save" type="primary" @click="save">保存</el-button>
+    </div>
+    <div id="editor">
+      <textarea :value="editorArticle.markdown" @input="update"></textarea>
+      <div class="markdown-body" v-html="compiledMarkdown"></div>
+    </div>
   </div>
 </template>
+
+<script>
+  import marked from 'marked'
+  require('github-markdown-css')
+  export default {
+    props: {
+      editorArticle: {
+        type: Object,
+        require
+      }
+    },
+    computed: {
+      compiledMarkdown () {
+        return marked(this.editorArticle.markdown)
+      }
+    },
+    methods: {
+      update (e) {
+        this.editorArticle.markdown = e.target.value
+      },
+      save () {
+        this.$store.dispatch('addArticle')
+      }
+    }
+  }
+
+</script>
+
 <style>
   .title {
-    width: 100%;
+    display:flex;
     border-bottom: 1px solid #ccc
   }
   .title input {
-    width: 70%;
     height: 65px;
     padding-left: 20px;
     color: #242628;
     font-size: 20px;
     font-weight: 700;
-    border: 0
+    border: 0;
+    outline: none;
+    flex:3
   }
   #editor {
     margin: 0;
@@ -54,24 +86,3 @@ code {
   color: #f66;
 }
 </style>
-<script>
-  import marked from 'marked'
-  export default {
-    data () {
-      return {
-        input: '# hello',
-        title: '无标题文章'
-      }
-    },
-    computed: {
-      compiledMarkdown: function () {
-        return marked(this.input, { sanitize: true })
-      }
-    },
-    methods: {
-      update: function (e) {
-        this.input = e.target.value
-      }
-    }
-  }
-</script>

@@ -1,24 +1,39 @@
 <template>
   <div class="article-list">
     <ul>
-      <li v-for="article in articles">
+      <li v-for="(article, index) in articleList" @click="selectedArticle(article)">
         <p>{{article.title}}</p>
       </li>
     </ul>
   </div>
 </template>
-<style>
-
+<style scoped>
+  .article-list {
+    border-right:1px solid #d9d9d9;
+  }
+  ul {
+    padding:0
+  }
+  li {
+    list-style-type: none;
+    height:90px;
+    cursor: pointer;
+  }
+  li.active {
+    background-color: #ccc;
+  }
 </style>
 <script>
   export default {
-    data () {
-      return {
-        articles: [{
-          title: '今天天气好晴朗'
-        }, {
-          title: '处处好风光'
-        }]
+    props: {
+      articleList: {
+        type: Array,
+        required: true
+      }
+    },
+    methods: {
+      selectedArticle (article) {
+        this.$store.commit('SET_EDITOR_ARTICLE', article)
       }
     }
   }

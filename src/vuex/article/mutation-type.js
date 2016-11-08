@@ -1,0 +1,4 @@
+export const GET_ARTICLE_LIST = 'GET_ARTICLE_LIST'
+export const SET_EDITOR_ARTICLE = 'SET_EDITOR_ARTICLE'
+export const ADD_ARTICLE = 'ADD_ARTICLE'
+
