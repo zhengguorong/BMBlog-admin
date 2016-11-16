@@ -1,8 +1,9 @@
 <template>
   <div class="article-list">
     <ul>
-      <li v-for="(article, index) in articleList" @click="selectedArticle(article)">
+      <li v-for="(article, index) in articleList" :class="{active: article.active}" @click="selectedArticle(article)">
         <p>{{article.title}}</p>
+        {{article.active}}
       </li>
     </ul>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="editorArticle" >
     <div class="title">
       <input type="" v-model="editorArticle.title" name="">
       <el-button class="save" type="primary" @click="save">保存</el-button>

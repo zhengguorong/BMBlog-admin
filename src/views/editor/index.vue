@@ -14,7 +14,7 @@
         return this.$store.state.article.list
       },
       editorArticle () {
-        return this.$store.state.article.editorArticle
+        return this.$store.state.editorArticle
       }
     },
     mounted () {
