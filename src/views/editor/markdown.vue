@@ -1,5 +1,5 @@
 <template>
-  <div v-if="editorArticle" >
+  <div v-if="editorArticle">
     <div class="title">
       <input type="" v-model="editorArticle.title" name="">
       <el-button class="save" type="primary" @click="save">保存</el-button>
@@ -38,7 +38,7 @@
 
 </script>
 
-<style>
+<style scoped>
   .title {
     display:flex;
     border-bottom: 1px solid #ccc

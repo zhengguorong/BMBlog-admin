@@ -1,7 +1,7 @@
 <template>
 	<div class="eidtor">
       <articles class="articles" :articleList="articleList"></articles>
-      <markdown class="markdown" :editorArticle="editorArticle"></markdown>
+      <markdown style="flex:4" class="markdown" :editorArticle="editorArticle"></markdown>
 	</div>
 </template>
 
@@ -14,7 +14,7 @@
         return this.$store.state.article.list
       },
       editorArticle () {
-        return this.$store.state.editorArticle
+        return this.$store.state.article.editorArticle
       }
     },
     mounted () {
@@ -30,9 +30,9 @@
     display: flex;
   }
   .articles {
-    flex:1
+    flex:1;
   }
   .markdown {
-    flex:4
+    flex:4;
   }
 </style>
