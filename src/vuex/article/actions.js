@@ -14,13 +14,21 @@ export const getArticleList = ({commit}) => {
         commit(types.ADD_ARTICLE, article)
       } else {
         commit(types.GET_ARTICLE_LIST, res)
+        commit(types.SET_EDITOR_ARTICLE, res[0])
       }
     })
 }
 
-export const addArticle = ({commit, article}) => {
-  http.post('/api/articles', article)
-    .then(res => {
-      commit(types.ADD_ARTICLE, res)
-    })
+export const saveArticle = ({commit}, article) => {
+  if (article && article._id) {
+    http.put('/api/articles', JSON.parse(JSON.stringify(article)))
+      .then(res => {
+        commit(types.UPDATE_ARTICLE, res)
+      })
+  } else {
+    http.post('/api/articles', JSON.parse(JSON.stringify(article)))
+      .then(res => {
+        commit(types.UPDATE_ARTICLE, res)
+      })
+  }
 }

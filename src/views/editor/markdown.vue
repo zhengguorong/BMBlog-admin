@@ -1,5 +1,5 @@
 <template>
-  <div v-if="editorArticle">
+  <div>
     <div class="title">
       <input type="" v-model="editorArticle.title" name="">
       <el-button class="save" type="primary" @click="save">保存</el-button>
@@ -31,7 +31,7 @@
         this.editorArticle.markdown = e.target.value
       },
       save () {
-        this.$store.dispatch('addArticle')
+        this.$store.dispatch('saveArticle', this.editorArticle)
       }
     }
   }

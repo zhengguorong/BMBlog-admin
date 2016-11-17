@@ -32,3 +32,31 @@ export const post = (url, query) => {
     return Promise.reject(new Error(res.status))
   })
 }
+
+export const put = (url, article) => {
+  const token = 'Bearer ' + window.localStorage.token
+  let _url = `http://localhost:3000${url}/${article._id}`
+  return vue.http.put(_url, article, {
+    headers: { authorization: token }
+  })
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.data
+      }
+      return Promise.reject(new Error(res.status))
+    })
+}
+
+export const del = (url, article) => {
+  const token = 'Bearer ' + window.localStorage.token
+  let _url = `http://localhost:3000${url}/${article._id}`
+  return vue.http.delete(_url, {
+    headers: { authorization: token }
+  })
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.data
+      }
+      return Promise.reject(new Error(res.status))
+    })
+}

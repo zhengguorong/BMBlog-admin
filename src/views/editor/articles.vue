@@ -1,11 +1,12 @@
 <template>
   <div class="article-list">
     <ul>
-      <li v-for="(article, index) in articleList" :class="{active: article.active}" @click="selectedArticle(article)">
+      <li v-for="(article, index) in articleList" :class="{active: article == editorArticle}" @click="selectedArticle(article)">
         <p>{{article.title}}</p>
         {{article.active}}
       </li>
     </ul>
+    <el-button class="add" type="primary" @click="addArticle">添加</el-button>
   </div>
 </template>
 <style scoped>
@@ -32,9 +33,17 @@
         required: true
       }
     },
+    computed: {
+      editorArticle () {
+        return this.$store.state.article.editorArticle
+      }
+    },
     methods: {
       selectedArticle (article) {
         this.$store.commit('SET_EDITOR_ARTICLE', article)
+      },
+      addArticle (article) {
+        this.$store.commit('ADD_ARTICLE')
       }
     }
   }

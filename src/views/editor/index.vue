@@ -1,7 +1,11 @@
 <template>
 	<div class="eidtor">
-      <articles class="articles" :articleList="articleList"></articles>
-      <markdown style="flex:4" class="markdown" :editorArticle="editorArticle"></markdown>
+      <div  class="articles">
+        <articles :articleList="articleList"></articles>
+      </div>
+      <div class="markdown">
+        <markdown  :editorArticle="editorArticle"></markdown>
+      </div>
 	</div>
 </template>
 
