@@ -31,19 +31,19 @@
       articleList: {
         type: Array,
         required: true
+      },
+      addArticle: {
+        type: Function,
+        required: true
+      },
+      selectedArticle: {
+        type: Function,
+        required: true
       }
     },
     computed: {
       editorArticle () {
         return this.$store.state.article.editorArticle
-      }
-    },
-    methods: {
-      selectedArticle (article) {
-        this.$store.commit('SET_EDITOR_ARTICLE', article)
-      },
-      addArticle (article) {
-        this.$store.commit('ADD_ARTICLE')
       }
     }
   }

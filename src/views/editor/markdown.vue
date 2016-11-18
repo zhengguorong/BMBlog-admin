@@ -2,7 +2,7 @@
   <div>
     <div class="title">
       <input type="" v-model="editorArticle.title" name="">
-      <el-button class="save" type="primary" @click="save">保存</el-button>
+      <el-button class="save" type="primary" @click="saveArticle">保存</el-button>
     </div>
     <div id="editor">
       <textarea :value="editorArticle.markdown" @input="update"></textarea>
@@ -18,7 +18,11 @@
     props: {
       editorArticle: {
         type: Object,
-        require
+        require: true
+      },
+      saveArticle: {
+        type: Function,
+        require: true
       }
     },
     computed: {
@@ -29,9 +33,6 @@
     methods: {
       update (e) {
         this.editorArticle.markdown = e.target.value
-      },
-      save () {
-        this.$store.dispatch('saveArticle', this.editorArticle)
       }
     }
   }

@@ -1,10 +1,10 @@
 <template>
 	<div class="eidtor">
       <div  class="articles">
-        <articles :articleList="articleList"></articles>
+        <articles :selectedArticle="selectedArticle" :addArticle="addArticle" :articleList="articleList"></articles>
       </div>
       <div class="markdown">
-        <markdown  :editorArticle="editorArticle"></markdown>
+        <markdown :saveArticle="saveArticle" :editorArticle="editorArticle"></markdown>
       </div>
 	</div>
 </template>
@@ -23,6 +23,17 @@
     },
     mounted () {
       this.$store.dispatch('getArticleList')
+    },
+    methods: {
+      saveArticle () {
+        this.$store.dispatch('saveArticle', this.editorArticle)
+      },
+      selectedArticle (article) {
+        this.$store.commit('SET_EDITOR_ARTICLE', article)
+      },
+      addArticle (article) {
+        this.$store.commit('ADD_ARTICLE')
+      }
     },
     components: {
       articles, markdown

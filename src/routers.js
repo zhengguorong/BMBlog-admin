@@ -9,4 +9,8 @@ export default [{
   path: '/editor',
   name: 'editor',
   component: require('./views/editor/index.vue')
+}, {
+  path: '/h5editor',
+  name: 'h5editor',
+  component: require('./views/h5editor/index.vue')
 }]
