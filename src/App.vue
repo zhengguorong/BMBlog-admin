@@ -20,4 +20,7 @@
   body{
     margin: 0 auto;
   }
+  img{
+        -webkit-user-drag: none;
+  }
 </style>

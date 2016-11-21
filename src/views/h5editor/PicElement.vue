@@ -1,6 +1,6 @@
 <template>
-  <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
-      <div class="inner"></div>
+  <div class='wrap'  @mousemove="mousemove" @mousedown="mousedown" @mouseup="mouseup">
+    <slot></slot>
   </div>
 </template>
 
@@ -16,32 +16,35 @@
           moveEle: ''
         }
       },
+      // todo 怎么解决外层事件传递问题
+      /**
       mounted () {
-        var self = this
-        document.querySelector('.canvas').onmousemove = function (event) {
+        document.querySelector('.canvas').onmousemove = (event) => {
           var e = event || window.event
-          if (self.flag) {
+          if (this.flag) {
             let nowX = e.clientX
             let nowY = e.clientY
-            let disX = nowX - self.currentX
-            let disY = nowY - self.currentY
-            let top = parseInt(self.top) + disY
-            let left = parseInt(self.left) + disX
-            if (top === 0) {
-              console.log('gg')
-              self.moveEle.style.top = '0px'
-            } else {
-              self.moveEle.style.top = top + 'px'
-            }
-            if (left === 0) {
-              self.moveEle.style.left = '0px'
-            } else {
-              self.moveEle.style.left = left + 'px'
-            }
+            let disX = nowX - this.currentX
+            let disY = nowY - this.currentY
+            let top = parseInt(this.top) + disY
+            let left = parseInt(this.left) + disX
+            this.moveEle.style.top = top + 'px'
+            this.moveEle.style.left = left + 'px'
           }
         }
       },
+      **/
       methods: {
+        mousemove (e) {
+          if (this.flag) {
+            let nowX = e.clientX
+            let nowY = e.clientY
+            let disX = nowX - this.currentX
+            let disY = nowY - this.currentY
+            this.moveEle.style.top = parseInt(this.top) + disY + 'px'
+            this.moveEle.style.left = parseInt(this.left) + disX + 'px'
+          }
+        },
         mousedown (e) {
           this.flag = true
           this.currentX = e.clientX
@@ -61,12 +64,9 @@
 <style lang='less' scoped>
   .wrap {
     position: absolute;
-  }
-  .inner {
-    position: absolute;
-    width:50px;
-    height:50px;
-    background-color: red;
     cursor: move;
+  }
+  .wrap img {
+    position: absolute;
   }
 </style>

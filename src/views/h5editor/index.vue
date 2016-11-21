@@ -1,28 +1,24 @@
 <template>
     <div class="container">
-      <div class="canvas">
-        <PicElement/>
-      </div>
+        <Page/>
     </div>
 </template>
 
 <script>
-    import PicElement from './PicElement'
+    import Page from './Page'
+    import Swiper from '../../libs/js/swiper.min.js'
+    import SwiperAnimate from '../../libs/js/swiper.animate.min.js'
     export default{
       components: {
-        PicElement
+        Page, Swiper, SwiperAnimate
       }
     }
 </script>
-
-<style scoped>
+<style lang="less">
+  @import '../../libs/css/animate.min.css';
+  @import '../../libs/css/swiper.min.css';
   .container {
     background-color:#ccc
   }
-  .canvas {
-    width:320px;
-    height:504px;
-    background-color:#fff;
-    margin:0 auto;
-  }
+
 </style>
