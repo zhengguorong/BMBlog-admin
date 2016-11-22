@@ -1,0 +1,16 @@
+/**
+ * Created by zhengguorong on 2016/11/21.
+ */
+export default class Element {
+  constructor (ele = {}) {
+    this.type = ele.type || 'pic'
+    this.left = ele.left || 0
+    this.top = ele.top || 0
+    this.width = ele.width || 0
+    this.height = ele.height || 0
+    this.animatedName = ele.animatedName
+    this.duration = ele.duration
+    this.delay = ele.delay
+    this.playing = false
+  }
+}
