@@ -4,6 +4,7 @@
 export default class Element {
   constructor (ele = {}) {
     this.type = ele.type || 'pic'
+    this.imgSrc = ele.imgSrc || ''
     this.left = ele.left || 0
     this.top = ele.top || 0
     this.width = ele.width || 0

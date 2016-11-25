@@ -2,25 +2,57 @@ import * as types from './mutation-type'
 
 const mutations = {
   [types.SET_CUR_EDITOR_ELEMENT] (state, data) {
-    state.curElement = data
+    state.editorElement = data
   },
   [types.ADD_PIC_ELEMENT] (state, data) {
-    state.curElement = data
-    state.pageElement.push(data)
+    state.editorPage.elements.push(data)
   },
   [types.PLAY_ANIMATE] (state, data) {
     // 如存在选择元素，则播放选择元素动画，否则全部元素播放
-    if (state.curElement) {
-      state.pageElement.find((value, index, arr) => {
-        if (value === state.curElement) {
-          value.playing = true
+    var elements = state.editorPage.elements
+    if (state.editorElement) {
+      elements.find((value, index, arr) => {
+        if (value === state.editorElement) {
+          if (value.playing) {
+            value.playing = false
+            setTimeout(() => {
+              value.playing = true
+            }, 100)
+          } else {
+            value.playing = true
+          }
         }
       })
     } else {
-      for (var element of state.pageElement) {
+      for (var element of elements) {
         element.playing = true
       }
     }
+  },
+  [types.ADD_PAGE] (state, page) {
+    state.editorTheme.pages.push(page)
+  },
+  [types.DELETE_PAGE] (state, data) {
+    state.editorTheme.findIndex((value, index, arr) => {
+      if (value === data) {
+        state.editorTheme.splice(index, 1)
+      }
+    })
+  },
+  [types.SET_CUR_EDITOR_PAGE] (state, data) {
+    state.editorPage = data
+  },
+  [types.GET_USER_THEME_LIST] (state, data) {
+    state.themeList = data
+  },
+  [types.SET_CUR_EDITOR_THEME] (state, data) {
+    state.editorTheme = data
+  },
+  [types.CREATE_THEME] (state, data) {
+    state.themeList.push(data)
+  },
+  [types.ADD_THEME_SUCCESS] (state, data) {
+    state.editorTheme._id = data._id
   }
 }
 export default mutations

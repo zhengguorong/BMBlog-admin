@@ -1,3 +1,11 @@
 export const SET_CUR_EDITOR_ELEMENT = 'SET_CUR_EDITOR_ELEMENT' // 设置当前编辑的h5元素
 export const ADD_PIC_ELEMENT = 'ADD_PIC_ELEMENT' // 添加图片元素
 export const PLAY_ANIMATE = 'PLAY_ANIMATE' // 播放动画
+export const ADD_PAGE = 'ADD_PAGE' // 添加页面
+export const DELETE_PAGE = 'DELETE_PAGE' // 删除页面
+export const SET_CUR_EDITOR_PAGE = 'SET_CUR_EDITOR_PAGE' // 设置当前编辑的页面
+export const GET_USER_THEME_LIST = 'GET_USER_THEME_LIST' // 获取用户h5列表
+export const SET_CUR_EDITOR_THEME = 'SET_CUR_EDITOR_THEME' // 设置当前编辑h5页面
+export const CREATE_THEME = 'CREATE_THEME' // 创建主题
+export const UPDATE_THEME_SUCCESS = 'UPDATE_THEME_SUCCESS' // 更新数据成功
+export const ADD_THEME_SUCCESS = 'ADD_THEME_SUCCESS' // 新增页面数据成功

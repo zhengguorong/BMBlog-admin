@@ -21,14 +21,14 @@ export const getArticleList = ({commit}) => {
 
 export const saveArticle = ({commit}, article) => {
   if (article && article._id) {
-    http.put('/api/articles', JSON.parse(JSON.stringify(article)))
+    http.put('/api/articles/' + article._id, JSON.parse(JSON.stringify(article)))
       .then(res => {
-        commit(types.UPDATE_ARTICLE, res)
+        commit(types.UPDATE_ARTICLE_SUCCESS, res)
       })
   } else {
     http.post('/api/articles', JSON.parse(JSON.stringify(article)))
       .then(res => {
-        commit(types.UPDATE_ARTICLE, res)
+        commit(types.ADD_ARTICLE_SUCCESS, res)
       })
   }
 }

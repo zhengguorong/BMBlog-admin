@@ -33,10 +33,24 @@ export const post = (url, query) => {
   })
 }
 
-export const put = (url, article) => {
+export const put = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
-  let _url = `http://localhost:3000${url}/${article._id}`
-  return vue.http.put(_url, article, {
+  let _url = `http://localhost:3000${url}`
+  return vue.http.put(_url, query, {
+    headers: { authorization: token }
+  })
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.data
+      }
+      return Promise.reject(new Error(res.status))
+    })
+}
+
+export const patch = (url, query) => {
+  const token = 'Bearer ' + window.localStorage.token
+  let _url = `http://localhost:3000${url}`
+  return vue.http.patch(_url, query, {
     headers: { authorization: token }
   })
     .then((res) => {

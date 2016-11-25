@@ -13,4 +13,8 @@ export default [{
   path: '/h5editor',
   name: 'h5editor',
   component: require('./views/h5editor/index.vue')
+}, {
+  path: '/themelist',
+  name: 'themelist',
+  component: require('./views/h5editor/themelist.vue')
 }]
