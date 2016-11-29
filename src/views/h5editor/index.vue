@@ -30,7 +30,7 @@
 
 <script>
     import tools from '../../util/tools'
-    import Page from './Page'
+    import Page from '../../components/Page'
     export default{
       computed: {
         pages () {
