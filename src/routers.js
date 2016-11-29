@@ -2,6 +2,10 @@
  * Created by zhengguorong on 16/11/3.
  */
 export default [{
+  path: '/',
+  name: 'index',
+  component: require('./components/Hello')
+}, {
   path: '/login',
   name: 'login',
   component: require('./views/user/login')
