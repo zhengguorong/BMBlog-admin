@@ -1,5 +1,5 @@
 import * as types from './mutation-type'
-import * as http from '../../util/http'
+import api from '../../api/editor'
 import Page from '../../model/Page'
 import Theme from '../../model/Theme'
 import Element from '../../model/Element'
@@ -9,15 +9,13 @@ import Element from '../../model/Element'
  */
 export const saveTheme = ({commit}, theme) => {
   if (theme && theme._id) {
-    http.put('/api/pages/' + theme._id, theme)
-      .then(res => {
-        commit(types.UPDATE_THEME_SUCCESS, res)
-      })
+    api.updateTheme(theme, (res) => {
+      commit(types.UPDATE_THEME_SUCCESS, res)
+    })
   } else {
-    http.post('/api/pages', theme)
-      .then(res => {
-        commit(types.ADD_THEME_SUCCESS, res)
-      })
+    api.saveTheme(theme, (res) => {
+      commit(types.ADD_THEME_SUCCESS, res)
+    })
   }
 }
 
@@ -26,10 +24,9 @@ export const saveTheme = ({commit}, theme) => {
  * @param commit
  */
 export const getUserThemeList = ({commit}) => {
-  http.get('/api/pages')
-    .then(res => {
-      commit(types.GET_USER_THEME_LIST, res)
-    })
+  api.getUserThemeList((res) => {
+    commit(types.GET_USER_THEME_LIST, res)
+  })
 }
 
 /**
