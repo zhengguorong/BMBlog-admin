@@ -1,6 +1,6 @@
 <template>
   <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
-    <slot></slot>
+    <img style="width:100%;height:100%;" :src="element.imgSrc">
   </div>
 </template>
 

@@ -5,8 +5,7 @@
                   :element="element"
                   :style="{width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
       >
-        <img style="width:100%;height:100%;"
-             src="http://mall.xykjg.com/mall/tmall_lzt/upload/page1/moonnstar.png">
+
       </PicElement>
     </div>
 
