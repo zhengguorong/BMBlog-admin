@@ -22,7 +22,7 @@
       toEditor (item) {
         this.$store.dispatch('setEditorTheme', item)
         this.$store.dispatch('setEditorPage', item.pages[0])
-        window.location.href = '#/h5editor'
+        this.$router.push({path: '/h5editor', query: {itemId: item._id}})
       },
       create () {
         this.$store.dispatch('createTheme')

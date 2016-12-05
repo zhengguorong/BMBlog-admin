@@ -9,3 +9,6 @@ export const SET_CUR_EDITOR_THEME = 'SET_CUR_EDITOR_THEME' // 设置当前编辑
 export const CREATE_THEME = 'CREATE_THEME' // 创建主题
 export const UPDATE_THEME_SUCCESS = 'UPDATE_THEME_SUCCESS' // 更新数据成功
 export const ADD_THEME_SUCCESS = 'ADD_THEME_SUCCESS' // 新增页面数据成功
+export const SAVE_PIC = 'SAVE_PIC' // 保存图片
+export const COPY_PAGE = 'COPY_PAGE' // 复制页面
+export const GET_PAGE_THEMEID = 'GET_PAGE_THEMEID' // 根据主题ID获取页面

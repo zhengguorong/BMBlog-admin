@@ -1,4 +1,5 @@
 import * as types from './mutation-type'
+import * as app from '../../util/appConst'
 
 const mutations = {
   [types.SET_CUR_EDITOR_ELEMENT] (state, data) {
@@ -6,6 +7,7 @@ const mutations = {
   },
   [types.ADD_PIC_ELEMENT] (state, data) {
     state.editorPage.elements.push(data)
+    console.log(state.editorPage)
   },
   [types.PLAY_ANIMATE] (state, data) {
     // 如存在选择元素，则播放选择元素动画，否则全部元素播放
@@ -33,9 +35,9 @@ const mutations = {
     state.editorTheme.pages.push(page)
   },
   [types.DELETE_PAGE] (state, data) {
-    state.editorTheme.findIndex((value, index, arr) => {
+    state.editorTheme.pages.findIndex((value, index, arr) => {
       if (value === data) {
-        state.editorTheme.splice(index, 1)
+        state.editorTheme.pages.splice(index, 1)
       }
     })
   },
@@ -53,6 +55,15 @@ const mutations = {
   },
   [types.ADD_THEME_SUCCESS] (state, data) {
     state.editorTheme._id = data._id
+  },
+  [types.UPDATE_THEME_SUCCESS] (state, data) {
+    console.log('成功！！！！！')
+  },
+  [types.SAVE_PIC] (state, data) {
+    state.editorElement.imgSrc = app.APP_MALL_API_URL + data.filePath
+  },
+  [types.GET_PAGE_THEMEID] (state, data) {
+    state.editorPage = data
   }
 }
 export default mutations

@@ -4,25 +4,27 @@
       <div class="login-title">
         蓝月亮前端－冇理想同条咸鱼有咩分别
       </div>
-      <div class="zhengguorong">
-        <input type="text" value="123">
-      </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">
           <div class="error-info" v-if="errorInfo">
             <div><i class="el-icon-warning"></i><span>{{errorInfo}}</span></div>
           </div>
           <el-form-item prop="loginId">
-            <el-input class="login-id" type="text" v-model="loginForm.loginId" placeholder="帐号(邮箱或者手机号)"></el-input>
+            <el-input type="text" v-model="loginForm.loginId" placeholder="帐号(邮箱或者手机号)"></el-input>
+          </el-form-item>
+          <el-form-item prop="name">
+            <el-input type="text" v-model="loginForm.name" placeholder="昵称"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input class="password" type="password" v-model="loginForm.password" placeholder="密码"></el-input>
+            <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
+          </el-form-item>
+          <el-form-item prop="checkPassword">
+            <el-input type="password" v-model="loginForm.checkPassword" auto-complete="off" placeholder="再次输入密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="login-btn" @click.native.prevent="login">登录</el-button>
+            <el-button type="primary" class="login-btn" @click.native.prevent="register">注册</el-button>
           </el-form-item>
         </el-form>
-        <router-link to="/register">注册</router-link>
       </div>
     </div>
   </div>
@@ -32,31 +34,58 @@
   import * as http from '../../util/http'
   export default {
     data () {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.loginForm.checkPassword !== '') {
+            this.$refs.loginForm.validateField('checkPassword')
+          }
+          callback()
+        }
+      }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.loginForm.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
       return {
         errorInfo: '',
         loginForm: {
           loginId: '',
-          password: ''
+          name: '',
+          password: '',
+          checkPassword: ''
         },
         loginRule: {
           loginId: [
             {required: true, message: '请输入邮箱或手机号', trigger: 'blur'}
           ],
+          name: [
+            {required: true, message: '请输入昵称', trigger: 'blur'}
+          ],
           password: [
-            {required: true, message: '请输入密码', trigger: 'blur'}
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          checkPassword: [
+            { validator: validatePass2, trigger: 'blur' }
           ]
         }
       }
     },
     methods: {
-      login (ev) {
+      register (ev) {
         this.errorInfo = ''
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            http.post('/auth/login', {loginId: this.loginForm.loginId, password: this.loginForm.password})
+            http.post('/auth/register', {loginId: this.loginForm.loginId, name: this.loginForm.name, password: this.loginForm.password})
               .then(response => {
                 window.localStorage.setItem('token', response.token)
-                window.location.href = '#/themeList'
+                window.location.href = '#/editor'
               })
               .catch(response => {
                 if (response.status === 401) {
@@ -67,7 +96,7 @@
             return false
           }
         }
-      )
+        )
       }
     }
   }
@@ -88,12 +117,12 @@
     line-height: 1.5;
     color: #666;
     font-size: 12px;
-    i {
-      color: #f60;
-    }
-    span {
-      padding-left: 10px;
-    }
+  i {
+    color: #f60;
+  }
+  span {
+    padding-left: 10px;
+  }
   }
   .login-main {
     width: 450px;

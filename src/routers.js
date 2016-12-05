@@ -10,6 +10,10 @@ export default [{
   name: 'login',
   component: require('./views/user/login')
 }, {
+  path: '/register',
+  name: 'register',
+  component: require('./views/user/register')
+}, {
   path: '/editor',
   name: 'editor',
   component: require('./views/editor/index.vue')

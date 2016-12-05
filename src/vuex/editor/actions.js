@@ -3,6 +3,7 @@ import api from '../../api/editor'
 import Page from '../../model/Page'
 import Theme from '../../model/Theme'
 import Element from '../../model/Element'
+import tools from '../../util/tools'
 
 /**
  * 保存页面数据
@@ -73,6 +74,41 @@ export const addElement = ({commit}, data) => {
   var element = new Element(data)
   commit(types.ADD_PIC_ELEMENT, element)
   commit(types.SET_CUR_EDITOR_ELEMENT, element)
+}
+
+/**
+ * 保存图片
+ * @param commit
+ * @param data
+ */
+export const savePic = ({commit}, data) => {
+  api.uploadPic(data, (res) => {
+    commit(types.SAVE_PIC, res)
+  })
+}
+
+/**
+ * 复制页面
+ * @param commit
+ */
+export const copyPage = ({commit}, data) => {
+  var page = tools.vue2json(data)
+  commit(types.ADD_PAGE, page)
+}
+
+/**
+ * 删除页面
+ * @param commit
+ */
+export const delPage = ({commit}, page) => {
+  commit(types.DELETE_PAGE, page)
+}
+
+export const getPageByThemeId = ({commit}, id) => {
+  api.getPageByThemeId(id, (res) => {
+    commit(types.SET_CUR_EDITOR_THEME, res)
+    commit(types.SET_CUR_EDITOR_PAGE, res.pages[0])
+  })
 }
 
 export const setEditorElement = ({commit}, element) => {

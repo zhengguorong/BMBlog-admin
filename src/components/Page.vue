@@ -1,25 +1,34 @@
 <template>
-  <div class="canvas">
-    <div v-for="element in elements" @click="selectedElement(element)">
-      <PicElement :class="[element.playing?'animated ' + element.animatedName:'']"
+  <div :class="[type!=='see'?'canvas':'']">
+    <div v-for="element in elements" @click="selectedElement(element)" >
+      <PicElement :type="type" v-if="element.type==='pic'"
+                  :class="[element.playing?'animated ' + element.animatedName:'']"
                   :element="element"
-                  :style="{width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
+                  :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
       >
-
+        <img style="width:100%;height:100%;"
+             :src="element.imgSrc">
       </PicElement>
+      <FontElement v-if="element.type==='text'"
+                   :element="element"
+                   :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
+                   :class="[element.playing?'animated ' + element.animatedName:'']"
+      ></FontElement>
     </div>
 
   </div>
 </template>
 
 <script>
-  import PicElement from './PicElement'
+  import PicElement from './Element/PicElement'
+  import FontElement from './Element/FontElement'
   import 'animate.css'
   export default {
     props: {
       elements: {
         type: Array
-      }
+      },
+      type: ''
     },
     methods: {
       selectedElement (element) {
@@ -27,13 +36,16 @@
       }
     },
     components: {
-      PicElement
+      PicElement, FontElement
     }
   }
 
 </script>
 
 <style lang="less" scoped>
+  div{
+    -webkit-animation-fill-mode:none
+  }
   .canvas {
     width: 320px;
     height: 504px;

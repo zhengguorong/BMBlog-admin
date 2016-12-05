@@ -2,11 +2,22 @@
   <div class="container">
     <div class="controll-panel" style="position:absolute">
       <el-button type="primary" @click="addPicElement">添加元素</el-button>
+      <el-button type="primary" @click="addTextElement">添加文本</el-button>
       <el-button type="primary" @click="playAnimate">播放动画</el-button>
       <el-button type="primary" @click="save">保存</el-button>
       <el-button type="primary" @click="addPage">添加页面</el-button>
       <el-button type="primary" @click="deploy">发布</el-button>
-      <el-input placeholder="图片地址" v-model="element.imgSrc"></el-input>
+      <el-input placeholder="文本" v-model="element.text"></el-input>
+      <div>
+        透明度
+        <el-slider v-model="element.opacity" show-input></el-slider>
+      </div>
+      <div>
+        旋转
+        <el-slider v-model="element.transform" show-input></el-slider>
+      </div>
+      <el-input placeholder="图片地址" v-model="element.imgSrc"  ></el-input>
+      <picpicker v-model="picBase64"></picpicker>
       <el-input placeholder="动画名" v-model="element.animatedName"></el-input>
       <el-input placeholder="速度" v-model="element.duration"></el-input>
       <el-input placeholder="延迟" v-model="element.delay"></el-input>
@@ -15,13 +26,18 @@
       <el-input placeholder="宽" v-model="element.width"></el-input>
       <el-input placeholder="高" v-model="element.height"></el-input>
     </div>
-    <div style="float:right">页面索引：
-      <ul v-for="(page, index) in pages">
-        <div v-if="page === editorPage">当前编辑页面</div>
-        <div style="width:50px;height:50px;border:1px solid;" @click="setEditorPage(page)">
-          页面{{index}}
-        </div>
 
+    <div style="float:right">页面索引：
+      <ul >
+        <li v-for="(page, index) in pages">
+          <div v-if="page === editorPage">当前编辑页面</div>
+          <div style="width:321px;height:504px;border:1px solid;transform: scale(0.16,0.1);position: relative;transform-origin: top left;"  @click="setEditorPage(page)">
+            <Page :elements="page.elements" type="see"/>
+            <div style="position: absolute;top: 0;bottom: 0;left: 0;right: 0"></div>
+          </div>
+          <el-button type="primary" @click="copyPage(page)">复制</el-button>
+          <el-button type="primary" @click="delPage(page)">删除</el-button>
+        </li>
       </ul>
     </div>
     <Page :elements="editorPage.elements"/>
@@ -31,8 +47,22 @@
 <script>
     import tools from '../../util/tools'
     import Page from '../../components/Page'
+    import picpicker from '../../components/PicturePicker'
     export default{
+      data () {
+        return {
+          picBase64: ''
+        }
+      },
+      watch: {
+        picBase64: function () {
+          this.$store.dispatch('savePic', {'imgData': this.picBase64, 'themeId': this.themeId})
+        }
+      },
       computed: {
+        themeId () {
+          return this.$store.state.editor.editorTheme._id
+        },
         pages () {
           return this.$store.state.editor.editorTheme.pages
         },
@@ -45,6 +75,11 @@
       },
       methods: {
         addPicElement () {
+          this.element.type = 'pic'
+          this.$store.dispatch('addElement', this.element)
+        },
+        addTextElement () {
+          this.element.type = 'text'
           this.$store.dispatch('addElement', this.element)
         },
         playAnimate () {
@@ -60,16 +95,33 @@
         },
         setEditorPage (page) {
           this.$store.dispatch('setEditorPage', page)
+        },
+        copyPage (page) {
+          this.$store.dispatch('copyPage', page)
+        },
+        delPage (page) {
+          this.$store.dispatch('delPage', page)
         }
       },
       components: {
-        Page
+        Page, picpicker
+      },
+      mounted () {
+        if (!this.pages) {
+          this.$store.dispatch('getPageByThemeId', this.$route.query.itemId)
+        }
       }
     }
 
 </script>
-<style lang="less">
+<style lang="less" scoped>
   .container {
+    ul li{
+      list-style: none;
+      height: 90px;
+      width: 90px;
+    }
   }
+
 
 </style>
