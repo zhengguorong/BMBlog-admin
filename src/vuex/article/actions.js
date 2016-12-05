@@ -6,7 +6,7 @@ import api from '../../api/article'
  * 获取文章列表
  */
 export const getArticleList = ({commit}) => {
-  api.getArticleList((res) => {
+  api.getArticleList().then((res) => {
     if (res.length === 0) {
       let article = new Article()
       commit(types.SET_EDITOR_ARTICLE, article)
@@ -43,11 +43,11 @@ export const setEditorArticle = ({commit}, article) => {
  */
 export const saveArticle = ({commit}, article) => {
   if (article && article._id) {
-    api.updateArticle(article, (res) => {
+    api.updateArticle(article).then((res) => {
       commit(types.UPDATE_ARTICLE_SUCCESS)
     })
   } else {
-    api.createArticle(article, (res) => {
+    api.createArticle(article).then((res) => {
       commit(types.CREATE_ARTICLE_SUCCESS)
     })
   }

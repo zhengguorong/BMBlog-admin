@@ -11,17 +11,14 @@ export const get = (url, query) => {
   return axios.get(_url, {
     headers: { authorization: token }
   })
-  .then((res) => {
-    if (res.status >= 200 && res.status < 300) {
-      return res.data
-    }
-    return Promise.reject(new Error(res.status))
-  })
-    .catch((err) => {
-      if (err.status === 401) {
-        console.log('token过期，重新登录！！')
-        window.location.href = '#/login'
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.data
       }
+    })
+    .catch((err) => {
+      errorProcess(err)
+      return Promise.reject(err)
     })
 }
 
@@ -31,17 +28,14 @@ export const post = (url, query) => {
   return axios.post(_url, query, {
     headers: { authorization: token }
   })
-  .then((res) => {
-    if (res.status >= 200 && res.status < 300) {
-      return res.data
-    }
-    return Promise.reject(new Error(res.status))
-  })
-    .catch((err) => {
-      if (err.status === 401) {
-        console.log('token过期，重新登录！！')
-        window.location.href = '#/login'
+    .then((res) => {
+      if (res.status >= 200 && res.status < 300) {
+        return res.data
       }
+    })
+    .catch((err) => {
+      errorProcess(err)
+      return Promise.reject(err)
     })
 }
 
@@ -55,13 +49,10 @@ export const put = (url, query) => {
       if (res.status >= 200 && res.status < 300) {
         return res.data
       }
-      return Promise.reject(new Error(res.status))
     })
     .catch((err) => {
-      if (err.status === 401) {
-        console.log('token过期，重新登录！！')
-        window.location.href = '#/login'
-      }
+      errorProcess(err)
+      return Promise.reject(err)
     })
 }
 
@@ -75,13 +66,10 @@ export const patch = (url, query) => {
       if (res.status >= 200 && res.status < 300) {
         return res.data
       }
-      return Promise.reject(new Error(res.status))
     })
     .catch((err) => {
-      if (err.status === 401) {
-        console.log('token过期，重新登录！！')
-        window.location.href = '#/login'
-      }
+      errorProcess(err)
+      return Promise.reject(err)
     })
 }
 
@@ -95,12 +83,15 @@ export const del = (url, article) => {
       if (res.status >= 200 && res.status < 300) {
         return res.data
       }
-      return Promise.reject(new Error(res.status))
     })
     .catch((err) => {
-      if (err.status === 401) {
-        console.log('token过期，重新登录！！')
-        window.location.href = '#/login'
-      }
+      errorProcess(err)
+      return Promise.reject(err)
     })
+}
+
+const errorProcess = (err) => {
+  if (err.response.status === 401) {
+    window.location.href = '#/login'
+  }
 }

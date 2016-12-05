@@ -4,24 +4,15 @@
 import * as http from '../util/http'
 
 const getArticleList = (cb) => {
-  http.get('/api/articles')
-    .then(res => {
-      cb(res)
-    })
+  return http.get('/api/articles')
 }
 
 const createArticle = (article, cb) => {
-  http.post('/api/articles', article)
-    .then(res => {
-      cb(res)
-    })
+  return http.post('/api/articles', article)
 }
 
 const updateArticle = (article, cb) => {
-  http.put('/api/articles/' + article._id, article)
-    .then(res => {
-      cb(res)
-    })
+  return http.put('/api/articles/' + article._id, article)
 }
 
 module.exports = {

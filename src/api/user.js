@@ -1,10 +1,7 @@
 import * as http from '../util/http'
 
-const login = (cb) => {
-  http.post('/auth/login')
-    .then((res) => {
-      cb(res)
-    })
+const login = (userInfo) => {
+  return http.post('/auth/login', userInfo)
 }
 
 module.exports = {

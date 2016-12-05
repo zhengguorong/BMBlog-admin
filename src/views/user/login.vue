@@ -4,9 +4,6 @@
       <div class="login-title">
         蓝月亮前端－冇理想同条咸鱼有咩分别
       </div>
-      <div class="zhengguorong">
-        <input type="text" value="123">
-      </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">
           <div class="error-info" v-if="errorInfo">
@@ -29,11 +26,9 @@
 </template>
 
 <script>
-  import * as http from '../../util/http'
   export default {
     data () {
       return {
-        errorInfo: '',
         loginForm: {
           loginId: '',
           password: ''
@@ -48,21 +43,16 @@
         }
       }
     },
+    computed: {
+      errorInfo () {
+        return this.$store.state.user.errorInfo
+      }
+    },
     methods: {
       login (ev) {
-        this.errorInfo = ''
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            http.post('/auth/login', {loginId: this.loginForm.loginId, password: this.loginForm.password})
-              .then(response => {
-                window.localStorage.setItem('token', response.token)
-                window.location.href = '#/themeList'
-              })
-              .catch(response => {
-                if (response.status === 401) {
-                  this.errorInfo = '用户名或密码错误'
-                }
-              })
+            this.$store.dispatch('login', {loginId: this.loginForm.loginId, password: this.loginForm.password})
           } else {
             return false
           }
