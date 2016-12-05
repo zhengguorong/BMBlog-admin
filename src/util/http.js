@@ -1,4 +1,4 @@
-import vue from 'vue'
+import axios from 'axios'
 
 export const get = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
@@ -8,7 +8,7 @@ export const get = (url, query) => {
   } else {
     _url = `http://localhost:3000${url}`
   }
-  return vue.http.get(_url, {
+  return axios.get(_url, {
     headers: { authorization: token }
   })
   .then((res) => {
@@ -22,7 +22,7 @@ export const get = (url, query) => {
 export const post = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
   let _url = `http://localhost:3000${url}`
-  return vue.http.post(_url, query, {
+  return axios.post(_url, query, {
     headers: { authorization: token }
   })
   .then((res) => {
@@ -36,7 +36,7 @@ export const post = (url, query) => {
 export const put = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
   let _url = `http://localhost:3000${url}`
-  return vue.http.put(_url, query, {
+  return axios.put(_url, query, {
     headers: { authorization: token }
   })
     .then((res) => {
@@ -50,7 +50,7 @@ export const put = (url, query) => {
 export const patch = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
   let _url = `http://localhost:3000${url}`
-  return vue.http.patch(_url, query, {
+  return axios.patch(_url, query, {
     headers: { authorization: token }
   })
     .then((res) => {
@@ -64,7 +64,7 @@ export const patch = (url, query) => {
 export const del = (url, article) => {
   const token = 'Bearer ' + window.localStorage.token
   let _url = `http://localhost:3000${url}/${article._id}`
-  return vue.http.delete(_url, {
+  return axios.delete(_url, {
     headers: { authorization: token }
   })
     .then((res) => {

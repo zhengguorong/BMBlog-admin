@@ -4,16 +4,19 @@
       <div class="login-title">
         蓝月亮前端－冇理想同条咸鱼有咩分别
       </div>
+      <div class="zhengguorong">
+        <input type="text" value="123">
+      </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">
           <div class="error-info" v-if="errorInfo">
             <div><i class="el-icon-warning"></i><span>{{errorInfo}}</span></div>
           </div>
           <el-form-item prop="loginId">
-            <el-input type="text" v-model="loginForm.loginId" placeholder="帐号(邮箱或者手机号)"></el-input>
+            <el-input class="login-id" type="text" v-model="loginForm.loginId" placeholder="帐号(邮箱或者手机号)"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input type="password" v-model="loginForm.password" placeholder="密码"></el-input>
+            <el-input class="password" type="password" v-model="loginForm.password" placeholder="密码"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" class="login-btn" @click.native.prevent="login">登录</el-button>

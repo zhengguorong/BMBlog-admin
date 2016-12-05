@@ -10,7 +10,7 @@ const getArticleList = (cb) => {
     })
 }
 
-const saveArticle = (article, cb) => {
+const createArticle = (article, cb) => {
   http.post('/api/articles', article)
     .then(res => {
       cb(res)
@@ -25,5 +25,5 @@ const updateArticle = (article, cb) => {
 }
 
 module.exports = {
-  getArticleList, saveArticle, updateArticle
+  getArticleList, createArticle, updateArticle
 }

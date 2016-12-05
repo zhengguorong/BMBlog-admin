@@ -12,6 +12,7 @@
 <script>
   import articles from './articles'
   import markdown from './markdown'
+  import tools from '../../util/tools'
   export default {
     computed: {
       articleList () {
@@ -26,7 +27,7 @@
     },
     methods: {
       saveArticle () {
-        this.$store.dispatch('saveArticle', this.editorArticle)
+        this.$store.dispatch('saveArticle', tools.vue2json(this.editorArticle))
       },
       selectedArticle (article) {
         this.$store.commit('SET_EDITOR_ARTICLE', article)

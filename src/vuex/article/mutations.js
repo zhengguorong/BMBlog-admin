@@ -10,12 +10,6 @@ const mutations = {
   },
   [types.ADD_ARTICLE] (state, data) {
     state.list.unshift(new Article())
-  },
-  [types.UPDATE_ARTICLE_SUCCESS] (state, data) {
-    console.log('update success')
-  },
-  [types.ADD_ARTICLE_SUCCESS] (state, data) {
-    console.log('add success')
   }
 }
 export default mutations
