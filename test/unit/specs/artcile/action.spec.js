@@ -1,7 +1,7 @@
 /**
  * Created by zhengguorong on 2016/11/30.
  */
-import {expect} from 'chai'
+import { expect } from 'chai'
 import Article from 'src/model/Article'
 const actionsInjector = require('inject!src/vuex/article/actions')
 
@@ -12,20 +12,26 @@ articleList.push(article)
 const actions = actionsInjector({
   // 文件路径相对于当前action
   '../../api/article': {
-    getArticleList (cb) {
-      setTimeout(() => {
-        cb(articleList)
-      }, 100)
+    getArticleList () {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(articleList)
+        }, 100)
+      })
     },
     createArticle (article, cb) {
-      setTimeout(() => {
-        cb(article)
-      }, 100)
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(article)
+        }, 100)
+      })
     },
     updateArticle (articleForUpdate, cb) {
-      setTimeout(() => {
-        cb(articleForUpdate)
-      }, 100)
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(articleForUpdate)
+        }, 100)
+      })
     }
   }
 })
@@ -58,36 +64,36 @@ const testAction = (action, args, state, expectedMutations, done) => {
 describe('article actions', () => {
   it('获取文章列表不为空', done => {
     testAction(actions.getArticleList, [], {}, [
-      {type: 'GET_ARTICLE_LIST', payload: articleList},
-      {type: 'SET_EDITOR_ARTICLE', payload: articleList[0]}
+      { type: 'GET_ARTICLE_LIST', payload: articleList },
+      { type: 'SET_EDITOR_ARTICLE', payload: articleList[0] }
     ], done)
   })
   it('获取文章列表为空', done => {
     articleList = []
     testAction(actions.getArticleList, [], {}, [
-      {type: 'SET_EDITOR_ARTICLE', payload: article}
+      { type: 'SET_EDITOR_ARTICLE', payload: article }
     ], done)
   })
   it('添加文章', done => {
     testAction(actions.addArticle, [], {}, [
-      {type: 'ADD_ARTICLE', payload: article}
+      { type: 'ADD_ARTICLE', payload: article }
     ], done)
   })
   it('设置正在编辑的文章', done => {
     testAction(actions.setEditorArticle, [], {}, [
-      {type: 'SET_EDITOR_ARTICLE', payload: article}
+      { type: 'SET_EDITOR_ARTICLE', payload: article }
     ], done)
   })
   it('保存文章', done => {
     testAction(actions.saveArticle, [], {}, [
-      {type: 'CREATE_ARTICLE_SUCCESS', payload: ''}
+      { type: 'CREATE_ARTICLE_SUCCESS', payload: '' }
     ], done)
   })
   it('更新文章', done => {
     var updateArticle = article
     updateArticle._id = '1234567'
     testAction(actions.saveArticle, [updateArticle], {}, [
-      {type: 'UPDATE_ARTICLE_SUCCESS', payload: ''}
+      { type: 'UPDATE_ARTICLE_SUCCESS', payload: '' }
     ], done)
   })
 })

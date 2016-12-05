@@ -2,7 +2,7 @@ import mutations from './mutations'
 import * as actions from './actions'
 
 const state = {
-  errorInfo: ''
+  loginResult: {isSuccess: true, msg: ''}
 }
 
 export default{

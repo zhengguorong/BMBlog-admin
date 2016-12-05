@@ -6,8 +6,8 @@
       </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">
-          <div class="error-info" v-if="errorInfo">
-            <div><i class="el-icon-warning"></i><span>{{errorInfo}}</span></div>
+          <div class="error-info" v-if="loginResult">
+            <div><i class="el-icon-warning"></i><span>{{loginResult}}</span></div>
           </div>
           <el-form-item prop="loginId">
             <el-input class="login-id" type="text" v-model="loginForm.loginId" placeholder="帐号(邮箱或者手机号)"></el-input>
@@ -43,9 +43,13 @@
         }
       }
     },
+    mounted () {
+      // 初始化错误提示
+      this.$store.commit('SET_ERROR_INFO', '')
+    },
     computed: {
-      errorInfo () {
-        return this.$store.state.user.errorInfo
+      loginResult () {
+        return this.$store.state.user.loginResult
       }
     },
     methods: {
@@ -56,8 +60,7 @@
           } else {
             return false
           }
-        }
-      )
+        })
       }
     }
   }
@@ -69,10 +72,11 @@
     background-size: auto;
     min-height: calc(100vh);
   }
+  
   .error-info {
     text-align: left;
     background: #ffeeed;
-    padding: 7px 9px 7px ;
+    padding: 7px 9px 7px;
     margin: 0 0 10px;
     border-radius: 6px;
     line-height: 1.5;
@@ -85,6 +89,7 @@
       padding-left: 10px;
     }
   }
+  
   .login-main {
     width: 450px;
     margin: 0 auto;
@@ -92,23 +97,23 @@
     position: relative;
     top: 100px;
   }
-
+  
   .login-title {
     margin: 0;
     padding: 30px 20px 26px;
     text-align: center;
     font-size: 18px;
   }
-
+  
   .content {
     padding: 0 25px 10px;
   }
-
+  
   .form-item {
     line-height: 1.5;
     margin-bottom: 17px;
   }
-
+  
   .login-btn {
     width: 100%;
   }
