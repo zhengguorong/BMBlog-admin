@@ -16,6 +16,7 @@
     "art-template": "^3.0.3",
     "fastclick": "^1.0.6",
     "github-markdown-css": "^2.4.1",
+    "lrz": "^4.9.40",
     "marked": "^0.3.6",
     "moment": "^2.15.2",
     "vue": "^2.1.0",

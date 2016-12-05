@@ -17,6 +17,12 @@ export const get = (url, query) => {
     }
     return Promise.reject(new Error(res.status))
   })
+    .catch((err) => {
+      if (err.status === 401) {
+        console.log('token过期，重新登录！！')
+        window.location.href = '#/login'
+      }
+    })
 }
 
 export const post = (url, query) => {
@@ -31,6 +37,12 @@ export const post = (url, query) => {
     }
     return Promise.reject(new Error(res.status))
   })
+    .catch((err) => {
+      if (err.status === 401) {
+        console.log('token过期，重新登录！！')
+        window.location.href = '#/login'
+      }
+    })
 }
 
 export const put = (url, query) => {
@@ -44,6 +56,12 @@ export const put = (url, query) => {
         return res.data
       }
       return Promise.reject(new Error(res.status))
+    })
+    .catch((err) => {
+      if (err.status === 401) {
+        console.log('token过期，重新登录！！')
+        window.location.href = '#/login'
+      }
     })
 }
 
@@ -59,6 +77,12 @@ export const patch = (url, query) => {
       }
       return Promise.reject(new Error(res.status))
     })
+    .catch((err) => {
+      if (err.status === 401) {
+        console.log('token过期，重新登录！！')
+        window.location.href = '#/login'
+      }
+    })
 }
 
 export const del = (url, article) => {
@@ -72,5 +96,11 @@ export const del = (url, article) => {
         return res.data
       }
       return Promise.reject(new Error(res.status))
+    })
+    .catch((err) => {
+      if (err.status === 401) {
+        console.log('token过期，重新登录！！')
+        window.location.href = '#/login'
+      }
     })
 }

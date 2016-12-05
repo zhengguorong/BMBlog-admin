@@ -27,7 +27,7 @@
     },
     computed: {
       compiledMarkdown () {
-        return marked(this.editorArticle.markdown)
+        return marked(this.editorArticle.markdown || '')
       }
     },
     methods: {

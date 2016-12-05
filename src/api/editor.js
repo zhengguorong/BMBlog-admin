@@ -9,7 +9,12 @@ const getUserThemeList = (cb) => {
       cb(res)
     })
 }
-
+const getPageByThemeId = (id, cb) => {
+  http.get('/api/pages/' + id)
+    .then(res => {
+      cb(res)
+    })
+}
 const saveTheme = (theme, cb) => {
   http.post('/api/pages', theme)
     .then(res => {
@@ -24,6 +29,12 @@ const updateTheme = (theme, cb) => {
     })
 }
 
+const uploadPic = (data, cb) => {
+  http.post('/api/upload', data)
+    .then(res => {
+      cb(res)
+    })
+}
 module.exports = {
-  getUserThemeList, saveTheme, updateTheme
+  getUserThemeList, saveTheme, updateTheme, uploadPic, getPageByThemeId
 }

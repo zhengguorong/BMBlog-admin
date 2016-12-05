@@ -10,7 +10,8 @@
         element: {
           type: Object,
           require: true
-        }
+        },
+        type: ''
       },
       data () {
         return {
