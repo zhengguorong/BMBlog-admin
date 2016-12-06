@@ -19,9 +19,4 @@ export const register = ({commit}, userInfo) => {
       window.localStorage.setItem('token', res.token)
       window.location.href = '#/editor'
     })
-    .catch(res => {
-      if (res.response.status === 401) {
-        commit('REGISTER_FAILURE', '用户名或密码错误')
-      }
-    })
 }
