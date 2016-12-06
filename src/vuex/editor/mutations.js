@@ -6,6 +6,8 @@ const mutations = {
     state.editorElement = data
   },
   [types.ADD_PIC_ELEMENT] (state, data) {
+    console.log(data)
+    console.log(state.editorPage.elements)
     state.editorPage.elements.push(data)
     console.log(state.editorPage)
   },

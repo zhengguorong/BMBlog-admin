@@ -5,6 +5,9 @@ const mutations = {
   },
   [types.LOGIN_FAILURE] (state, data) {
     state.errorInfo = data
+  },
+  [types.REGISTER_FAILURE] (state, data) {
+    state.errorInfo = data
   }
 }
 

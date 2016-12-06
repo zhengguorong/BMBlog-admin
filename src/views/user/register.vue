@@ -31,7 +31,6 @@
 </template>
 
 <script>
-  import * as http from '../../util/http'
   export default {
     data () {
       var validatePass = (rule, value, callback) => {
@@ -82,16 +81,7 @@
         this.errorInfo = ''
         this.$refs.loginForm.validate((valid) => {
           if (valid) {
-            http.post('/auth/register', {loginId: this.loginForm.loginId, name: this.loginForm.name, password: this.loginForm.password})
-              .then(response => {
-                window.localStorage.setItem('token', response.token)
-                window.location.href = '#/editor'
-              })
-              .catch(response => {
-                if (response.status === 401) {
-                  this.errorInfo = '用户名或密码错误'
-                }
-              })
+            this.$store.dispatch('register', {loginId: this.loginForm.loginId, name: this.loginForm.name, password: this.loginForm.password})
           } else {
             return false
           }

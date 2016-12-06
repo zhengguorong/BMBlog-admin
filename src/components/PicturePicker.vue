@@ -4,6 +4,7 @@
       <img class="img-pic"  v-show="picUrl"   :src="picUrl">
       <input class="input-pic"  type="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="fileChange"/>
     </label>
+    <img>
   </div>
 
 </template>
@@ -36,7 +37,7 @@
     methods: {
       fileChange (value) {
         if (!value) return
-        console.log(value)
+//        console.log(value.target.files[0])
         let file = value.target.files[0]
         lrz(file)
           . then(rst => {
@@ -46,6 +47,17 @@
           .catch(err => {
             console.log(err)
           })
+        var reader = new window.FileReader()
+        reader.onload = function (e) {
+          var data = e.target.result
+          var image = new window.Image()
+          image.onload = function () {
+            console.log(image.width)
+            console.log(image.height)
+          }
+          image.src = data
+        }
+        reader.readAsDataURL(file)
       }
     }
   }
