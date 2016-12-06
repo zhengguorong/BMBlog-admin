@@ -8,6 +8,7 @@ const mutations = {
   },
   [types.REGISTER_FAILURE] (state, data) {
     state.errorInfo = data
+  },
   [types.SET_ERROR_INFO] (state, data) {
     state.loginResult = data
   }
