@@ -1,7 +1,7 @@
 <template>
   <div class="el-input">
     <label class="lable-pic dib el-input__inner" >
-      <img class="img-pic"  v-show="picUrl"   :src="picUrl">
+      <img class="img-pic"  v-show="picUrl" :src="picUrl">
       <input class="input-pic"  type="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="fileChange"/>
     </label>
     <img>
@@ -31,17 +31,21 @@
   export default{
     data () {
       return {
-        picUrl: ''
+        picUrl: '',
+        style: {
+          width: 200,
+          height: 200
+        }
       }
     },
     methods: {
       fileChange (value) {
+        var $vue = this
         if (!value) return
-//        console.log(value.target.files[0])
         let file = value.target.files[0]
         lrz(file)
           . then(rst => {
-            this.picUrl = rst.base64
+//            this.picUrl = rst.base64
             this.$emit('input', rst.base64)
           })
           .catch(err => {
@@ -52,8 +56,10 @@
           var data = e.target.result
           var image = new window.Image()
           image.onload = function () {
-            console.log(image.width)
+            $vue.style.width = image.width
+            $vue.style.height = image.height
             console.log(image.height)
+            $vue.$emit('style', $vue.style)
           }
           image.src = data
         }

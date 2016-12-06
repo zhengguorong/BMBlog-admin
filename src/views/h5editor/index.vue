@@ -16,8 +16,9 @@
         旋转
         <el-slider v-model="element.transform" show-input></el-slider>
       </div>
-      <el-input placeholder="图片地址" v-model="element.imgSrc"  ></el-input>
-      <picpicker v-model="picBase64"></picpicker>
+      <el-input placeholder="图片地址" v-model="element.imgSrc"></el-input>
+      <picpicker v-model="picBase64" @style="style"></picpicker>
+      <img :src="element.imgSrc" v-if="element.type=='pic'" @dblclick="addPicElement(element)" class="img" v-for="element in editorPage.elements">
       <el-input placeholder="动画名" v-model="element.animatedName"></el-input>
       <el-input placeholder="速度" v-model="element.duration"></el-input>
       <el-input placeholder="延迟" v-model="element.delay"></el-input>
@@ -74,9 +75,13 @@
         }
       },
       methods: {
-        addPicElement () {
+        addPicElement (ele) {
+          if (ele) {
+            this.$store.dispatch('addElement', ele)
+          } else {
+            this.$store.dispatch('addElement', this.element)
+          }
           this.element.type = 'pic'
-          this.$store.dispatch('addElement', this.element)
         },
         addTextElement () {
           this.element.type = 'text'
@@ -101,6 +106,10 @@
         },
         delPage (page) {
           this.$store.dispatch('delPage', page)
+        },
+        style (val) {
+          this.element.width = val.width
+          this.element.height = val.height
         }
       },
       components: {
@@ -120,6 +129,11 @@
       list-style: none;
       height: 90px;
       width: 90px;
+    }
+    .img{
+      width: 2.95rem;
+      height: 2.95rem;
+      padding-left: 10px;
     }
   }
 
