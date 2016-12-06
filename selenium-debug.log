@@ -1,0 +1,67 @@
+15:43:44.715 INFO - Launching a standalone Selenium Server
+15:43:44.772 INFO - Java: Oracle Corporation 25.40-b25
+15:43:44.773 INFO - OS: Mac OS X 10.12.1 x86_64
+15:43:44.792 INFO - v2.53.1, with Core v2.53.1. Built from revision a36b8b1
+15:43:44.904 INFO - Driver provider org.openqa.selenium.ie.InternetExplorerDriver registration is skipped:
+registration capabilities Capabilities [{ensureCleanSession=true, browserName=internet explorer, version=, platform=WINDOWS}] does not match the current platform MAC
+15:43:44.905 INFO - Driver provider org.openqa.selenium.edge.EdgeDriver registration is skipped:
+registration capabilities Capabilities [{browserName=MicrosoftEdge, version=, platform=WINDOWS}] does not match the current platform MAC
+15:43:44.906 INFO - Driver class not found: com.opera.core.systems.OperaDriver
+15:43:44.906 INFO - Driver provider com.opera.core.systems.OperaDriver is not registered
+15:43:44.909 INFO - Driver class not found: org.openqa.selenium.htmlunit.HtmlUnitDriver
+15:43:44.910 INFO - Driver provider org.openqa.selenium.htmlunit.HtmlUnitDriver is not registered
+15:43:45.003 INFO - RemoteWebDriver instances should connect to: http://127.0.0.1:4444/wd/hub
+15:43:45.003 INFO - Selenium Server is up and running
+15:43:45.880 INFO - Executing: [new session: Capabilities [{acceptSslCerts=true, name=Test, browserName=chrome, javascriptEnabled=true, platform=ANY}]])
+15:43:45.891 INFO - Creating a new session for Capabilities [{acceptSslCerts=true, name=Test, browserName=chrome, javascriptEnabled=true, platform=ANY}]
+Starting ChromeDriver 2.25.426935 (820a95b0b81d33e42712f9198c215f703412e1a1) on port 39003
+Only local connections are allowed.
+15:43:47.264 INFO - Done: [new session: Capabilities [{acceptSslCerts=true, name=Test, browserName=chrome, javascriptEnabled=true, platform=ANY}]]
+15:43:47.282 INFO - Executing: [get: http://localhost:8080/#/login])
+15:43:54.495 INFO - Done: [get: http://localhost:8080/#/login]
+15:43:54.508 INFO - Executing: [find elements: By.cssSelector: #app])
+15:43:54.571 INFO - Done: [find elements: By.cssSelector: #app]
+15:43:54.581 INFO - Executing: [is displayed: 0 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: #app]])
+15:43:54.602 INFO - Done: [is displayed: 0 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: #app]]
+15:43:54.609 INFO - Executing: [find element: By.cssSelector: .login-btn])
+15:43:54.628 INFO - Done: [find element: By.cssSelector: .login-btn]
+15:43:54.632 INFO - Executing: [click: 1 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-btn]])
+15:43:54.724 INFO - Done: [click: 1 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-btn]]
+15:43:54.736 INFO - Executing: [find elements: By.cssSelector: .login-id + div])
+15:43:54.791 INFO - Done: [find elements: By.cssSelector: .login-id + div]
+15:43:54.797 INFO - Executing: [is displayed: 2 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id + div]])
+15:43:54.821 INFO - Done: [is displayed: 2 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id + div]]
+15:43:55.330 INFO - Executing: [is displayed: 2 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id + div]])
+15:43:55.338 INFO - Done: [is displayed: 2 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id + div]]
+15:43:55.344 INFO - Executing: [find elements: By.cssSelector: .password + div])
+15:43:55.358 INFO - Done: [find elements: By.cssSelector: .password + div]
+15:43:55.361 INFO - Executing: [is displayed: 3 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .password + div]])
+15:43:55.374 INFO - Done: [is displayed: 3 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .password + div]]
+15:43:55.384 INFO - Executing: [find element: By.cssSelector: .login-id + div])
+15:43:55.406 INFO - Done: [find element: By.cssSelector: .login-id + div]
+15:43:55.412 INFO - Executing: [get text: 2 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id + div]])
+15:43:55.431 INFO - Done: [get text: 2 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id + div]]
+15:43:55.437 INFO - Executing: [find element: By.cssSelector: .password + div])
+15:43:55.452 INFO - Done: [find element: By.cssSelector: .password + div]
+15:43:55.456 INFO - Executing: [get text: 3 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .password + div]])
+15:43:55.474 INFO - Done: [get text: 3 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .password + div]]
+15:43:55.478 INFO - Executing: [find element: By.cssSelector: .login-id input])
+15:43:55.498 INFO - Done: [find element: By.cssSelector: .login-id input]
+15:43:55.504 INFO - Executing: [send keys: 4 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id input], [z, g, r]])
+15:43:55.594 INFO - Done: [send keys: 4 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-id input], [z, g, r]]
+15:43:55.600 INFO - Executing: [find element: By.cssSelector: .password input])
+15:43:55.618 INFO - Done: [find element: By.cssSelector: .password input]
+15:43:55.622 INFO - Executing: [send keys: 5 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .password input], [1, 2, 3, 4, 5, 6]])
+15:43:55.681 INFO - Done: [send keys: 5 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .password input], [1, 2, 3, 4, 5, 6]]
+15:43:55.689 INFO - Executing: [find element: By.cssSelector: .login-btn])
+15:43:55.706 INFO - Done: [find element: By.cssSelector: .login-btn]
+15:43:55.710 INFO - Executing: [click: 1 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-btn]])
+15:43:55.746 INFO - Done: [click: 1 [[ChromeDriver: chrome on MAC (fde3e2afb426ed70223f03794a4e2a05)] -> css selector: .login-btn]]
+15:43:55.756 INFO - Executing: [find elements: By.cssSelector: .login-id + div])
+15:43:55.766 INFO - Done: [find elements: By.cssSelector: .login-id + div]
+15:43:56.274 INFO - Executing: [find elements: By.cssSelector: .login-id + div])
+15:43:56.282 INFO - Done: [find elements: By.cssSelector: .login-id + div]
+15:43:56.287 INFO - Executing: [find elements: By.cssSelector: .password + div])
+15:43:56.294 INFO - Done: [find elements: By.cssSelector: .password + div]
+15:43:56.300 INFO - Executing: [delete session: df24872b-7217-4286-868a-18b95b6ae653])
+15:43:56.376 INFO - Done: [delete session: df24872b-7217-4286-868a-18b95b6ae653]
