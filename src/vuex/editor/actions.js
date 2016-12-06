@@ -10,11 +10,11 @@ import tools from '../../util/tools'
  */
 export const saveTheme = ({commit}, theme) => {
   if (theme && theme._id) {
-    api.updateTheme(theme, (res) => {
+    api.updateTheme(theme).then((res) => {
       commit(types.UPDATE_THEME_SUCCESS, res)
     })
   } else {
-    api.saveTheme(theme, (res) => {
+    api.saveTheme(theme).then((res) => {
       commit(types.ADD_THEME_SUCCESS, res)
     })
   }
@@ -25,7 +25,7 @@ export const saveTheme = ({commit}, theme) => {
  * @param commit
  */
 export const getUserThemeList = ({commit}) => {
-  api.getUserThemeList((res) => {
+  api.getUserThemeList().then((res) => {
     commit(types.GET_USER_THEME_LIST, res)
   })
 }
@@ -82,7 +82,7 @@ export const addElement = ({commit}, data) => {
  * @param data
  */
 export const savePic = ({commit}, data) => {
-  api.uploadPic(data, (res) => {
+  api.uploadPic(data).then((res) => {
     commit(types.SAVE_PIC, res)
   })
 }
@@ -105,7 +105,7 @@ export const delPage = ({commit}, page) => {
 }
 
 export const getPageByThemeId = ({commit}, id) => {
-  api.getPageByThemeId(id, (res) => {
+  api.getPageByThemeId(id).then((res) => {
     commit(types.SET_CUR_EDITOR_THEME, res)
     commit(types.SET_CUR_EDITOR_PAGE, res.pages[0])
   })
