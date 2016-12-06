@@ -5,6 +5,7 @@
                   :class="[element.playing?'animated ' + element.animatedName:'']"
                   :element="element"
                   :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
+                  :showOperate="editorElement == element"
       >
         <img style="width:100%;height:100%;"
              :src="element.imgSrc">
@@ -27,6 +28,9 @@
     props: {
       elements: {
         type: Array
+      },
+      editorElement: {
+        type: Object
       },
       type: ''
     },

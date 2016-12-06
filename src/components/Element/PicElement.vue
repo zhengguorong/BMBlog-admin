@@ -1,15 +1,20 @@
 <template>
   <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
     <img style="width:100%;height:100%;" :src="element.imgSrc">
+    <Operate v-show="showOperate"/>
   </div>
 </template>
 
 <script>
+    import Operate from '../Operate'
     export default{
       props: {
         element: {
           type: Object,
           require: true
+        },
+        showOperate: {
+          type: Boolean
         },
         type: ''
       },
@@ -47,6 +52,9 @@
         mouseup (e) {
           this.flag = false
         }
+      },
+      components: {
+        Operate
       }
     }
 </script>

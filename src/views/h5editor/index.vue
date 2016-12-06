@@ -40,7 +40,7 @@
         </li>
       </ul>
     </div>
-    <Page :elements="editorPage.elements"/>
+    <Page :elements="editorPage.elements" :editorElement="element"/>
   </div>
 </template>
 
