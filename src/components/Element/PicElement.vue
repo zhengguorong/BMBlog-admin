@@ -1,6 +1,6 @@
 <template>
   <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
-    <img style="width:100%;height:100%;" :src="element.imgSrc">
+    <img @dragstart="dragstart" style="width:100%;height:100%;" :src="element.imgSrc">
     <Operate v-show="showOperate" @mousedown.native.stop="scaleMousedown" @mouseup.native.stop="scaleMouseup" @mousemove.native.stop="scaleMousemove"
     />
   </div>
@@ -91,11 +91,13 @@
                   this.element.left = parseInt(this.left) + disX
                   this.element.height = parseInt(this.height) + disY
                   break
+                // 右上
                 case 'ne':
                   this.element.height = parseInt(this.height) - disY
                   this.element.top = parseInt(this.top) + disY
                   this.element.width = parseInt(this.width) + disX
                   break
+                // 右下
                 case 'se':
                   this.element.height = parseInt(this.height) + disY
                   this.element.width = parseInt(this.width) + disX
@@ -129,6 +131,9 @@
         },
         scaleMouseup (e) {
           this.scaleFlag = false
+        },
+        dragstart () {
+          console.log('dragstart')
         }
       },
       components: {

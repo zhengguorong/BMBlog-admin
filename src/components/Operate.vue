@@ -24,7 +24,7 @@
   
   .operate::before,
   {
-    top: -2px;
+    top: 2px;
     content: '';
     position: absolute;
     width: 100%;
@@ -32,7 +32,7 @@
   }
   
   .operate::after {
-    bottom: -2px;
+    bottom: 2px;
     content: '';
     position: absolute;
     width: 100%;
@@ -40,7 +40,7 @@
   }
   
   .border-line::before {
-    left: -2px;
+    left: 2px;
     content: '';
     position: absolute;
     height: 100%;
@@ -48,7 +48,7 @@
   }
   
   .border-line::after {
-    right: -2px;
+    right: 2px;
     content: '';
     position: absolute;
     height: 100%;
@@ -65,56 +65,56 @@
   }
   
   .scale-nw {
-    top: -5px;
-    left: -5px;
+    top: -3px;
+    left: -2px;
     cursor: nw-resize;
     border-radius: 50%;
   }
   
   .scale-ne {
-    top: -5px;
-    right: -5px;
+    top: -3px;
+    right: -2px;
     cursor: ne-resize;
     border-radius: 50%;
   }
   
   .scale-sw {
-    bottom: -5px;
-    left: -5px;
+    bottom: -3px;
+    left: -2px;
     cursor: sw-resize;
     border-radius: 50%;
   }
   
   .scale-se {
-    bottom: -5px;
-    right: -5px;
+    bottom: -3px;
+    right: -2px;
     cursor: se-resize;
     border-radius: 50%;
   }
   
   .scale-n {
-    top: -5px;
+    top: -2px;
     left: 50%;
     margin-left: -5px;
     cursor: n-resize;
   }
   
   .scale-e {
-    right: -5px;
+    right: -3px;
     top: 50%;
     margin-top: -5px;
     cursor: e-resize;
   }
   
   .scale-s {
-    bottom: -5px;
+    bottom: -3px;
     left: 50%;
     margin-left: -5px;
     cursor: s-resize;
   }
   
   .scale-w {
-    left: -5px;
+    left: -3px;
     top: 50%;
     margin-top: -5px;
     cursor: w-resize;
