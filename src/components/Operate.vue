@@ -1,23 +1,20 @@
 <template>
   <div class="operate">
     <div class="border-line"></div>
-    <div class="scale scale-nw"></div>
-    <div class="scale scale-ne"></div>
-    <div class="scale scale-sw"></div>
-    <div class="scale scale-se"></div>
-    <div class="scale scale-n"></div>
-    <div class="scale scale-e"></div>
-    <div class="scale scale-s"></div>
-    <div class="scale scale-w"></div>
+    <div class="scale scale-nw" data-direction="nw"></div>
+    <div class="scale scale-ne" data-direction="ne"></div>
+    <div class="scale scale-sw" data-direction="sw"></div>
+    <div class="scale scale-se" data-direction="se"></div>
+    <div class="scale scale-n" data-direction="n"></div>
+    <div class="scale scale-e" data-direction="e"></div>
+    <div class="scale scale-s" data-direction="s"></div>
+    <div class="scale scale-w" data-direction="w"></div>
   </div>
   </div>
   </div>
 </template>
 </template>
 </template>
-
-<script>
-</script>
 
 <style lang="less" scoped>
   .operate {
@@ -62,9 +59,8 @@
     position: absolute;
     background: #fff;
     border: 1px solid #000;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    width: 7px;
+    height: 7px;
     z-index: 1;
   }
   
@@ -72,24 +68,28 @@
     top: -5px;
     left: -5px;
     cursor: nw-resize;
+    border-radius: 50%;
   }
   
   .scale-ne {
     top: -5px;
     right: -5px;
     cursor: ne-resize;
+    border-radius: 50%;
   }
   
   .scale-sw {
     bottom: -5px;
     left: -5px;
     cursor: sw-resize;
+    border-radius: 50%;
   }
   
   .scale-se {
     bottom: -5px;
     right: -5px;
     cursor: se-resize;
+    border-radius: 50%;
   }
   
   .scale-n {
