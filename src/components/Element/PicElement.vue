@@ -49,6 +49,9 @@
         },
         // 处理元素伸缩
         scaleMousemove () {
+          document.querySelector('.canvas').onmouseup = (event) => {
+            this.scaleFlag = false
+          }
           document.querySelector('.canvas').onmousemove = (event) => {
             var e = event || window.event
             if (this.scaleFlag) {
