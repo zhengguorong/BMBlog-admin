@@ -39,6 +39,9 @@
     methods: {
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)
+      },
+      deleteElement () {
+        this.$store.dispatch('deleteSelectedElement')
       }
     },
     components: {
