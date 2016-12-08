@@ -15,6 +15,7 @@
                    :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
                    :class="[element.playing?'animated ' + element.animatedName:'']"
       ></FontElement>
+      <!--<ShapesElement></ShapesElement>-->
     </div>
 
   </div>
@@ -23,6 +24,7 @@
 <script>
   import PicElement from './Element/PicElement'
   import FontElement from './Element/FontElement'
+  import ShapesElement from './Element/ShapesElement'
   import 'animate.css'
   export default {
     props: {
@@ -40,7 +42,7 @@
       }
     },
     components: {
-      PicElement, FontElement
+      PicElement, FontElement, ShapesElement
     }
   }
 
