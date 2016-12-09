@@ -120,7 +120,7 @@ export const deleteElement = ({commit}, element) => {
 }
 
 export const deleteSelectedElement = ({commit, state}) => {
-  commit(types.DELETE_ELEMENT, this.state.editorElement)
+  commit(types.DELETE_ELEMENT, state.editorElement)
 }
 
 export const playAnimate = ({commit}) => {
