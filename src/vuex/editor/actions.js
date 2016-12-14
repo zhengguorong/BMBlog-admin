@@ -115,6 +115,14 @@ export const setEditorElement = ({commit}, element) => {
   commit(types.SET_CUR_EDITOR_ELEMENT, element)
 }
 
+export const deleteElement = ({commit}, element) => {
+  commit(types.DELETE_ELEMENT, element)
+}
+
+export const deleteSelectedElement = ({commit, state}) => {
+  commit(types.DELETE_ELEMENT, state.editorElement)
+}
+
 export const playAnimate = ({commit}) => {
   commit(types.PLAY_ANIMATE)
 }

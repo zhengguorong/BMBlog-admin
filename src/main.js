@@ -8,7 +8,8 @@ import store from './vuex/store'
 
 Vue.use(ElementUI)
 Vue.use(VueRouter)
-const router = new VueRouter({routes: routerConfig})
+const router = new VueRouter({ routes: routerConfig })
+
 /* eslint-disable no-new */
 new Vue({
   router,

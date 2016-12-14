@@ -35,11 +35,12 @@
     </div>
 
     <div style="float:right">页面索引：
-      <ul >
+      <ul>
         <li v-for="(page, index) in pages">
           <div v-if="page === editorPage">当前编辑页面</div>
-          <div style="width:321px;height:504px;border:1px solid;transform: scale(0.16,0.1);position: relative;transform-origin: top left;"  @click="setEditorPage(page)">
-            <Page :elements="page.elements" type="see"/>
+          <div style="width:321px;height:504px;border:1px solid;transform: scale(0.16,0.1);position: relative;transform-origin: top left;"
+            @click="setEditorPage(page)">
+            <Page :elements="page.elements" type="see" />
             <div style="position: absolute;top: 0;bottom: 0;left: 0;right: 0"></div>
           </div>
           <el-button type="primary" @click="copyPage(page)">复制</el-button>
@@ -47,7 +48,7 @@
         </li>
       </ul>
     </div>
-    <Page :elements="editorPage.elements" :editorElement="element"/>
+    <Page :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :deleteElement="deleteElement"/>
   </div>
 </template>
 
@@ -120,6 +121,12 @@
         delPage (page) {
           this.$store.dispatch('delPage', page)
         },
+        selectedElement (element) {
+          this.$store.dispatch('setEditorElement', element)
+        },
+        deleteElement () {
+          this.$store.dispatch('deleteSelectedElement')
+        },
         style (val) {
           this.element.width = val.width
           this.element.height = val.height
@@ -138,17 +145,15 @@
 </script>
 <style lang="less" scoped>
   .container {
-    ul li{
+    ul li {
       list-style: none;
       height: 90px;
       width: 90px;
     }
-    .img{
+    .img {
       width: 2.95rem;
       height: 2.95rem;
       padding-left: 10px;
     }
   }
-
-
 </style>
