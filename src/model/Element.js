@@ -17,5 +17,6 @@ export default class Element {
     this.zindex = ele.zindex || 1
     this.transform = ele.transform || 0
     this.text = ele.text || ''
+    this.iconKey = ele.iconKey || ''
   }
 }

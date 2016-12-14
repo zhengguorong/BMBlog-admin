@@ -15,7 +15,12 @@
                    :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
                    :class="[element.playing?'animated ' + element.animatedName:'']"
       ></FontElement>
-      <!--<ShapesElement></ShapesElement>-->
+      <ShapesElement v-if="element.type==='icon'"
+                     :iconKey="element.iconKey"
+                     :element="element"
+                     :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
+                     :class="[element.playing?'animated ' + element.animatedName:'']"
+      ></ShapesElement>
     </div>
 
   </div>

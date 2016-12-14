@@ -26,6 +26,12 @@
       <el-input placeholder="Y" v-model="element.top"></el-input>
       <el-input placeholder="宽" v-model="element.width"></el-input>
       <el-input placeholder="高" v-model="element.height"></el-input>
+      <svg @click="addIcon('action-redo')">
+        <use xlink:href="/static/svg/icon.svg#action-redo"></use>
+      </svg>
+      <svg @click="addIcon('circle-fill')">
+        <use xlink:href="/static/svg/icon.svg#circle-fill"></use>
+      </svg>
     </div>
 
     <div style="float:right">页面索引：
@@ -82,6 +88,13 @@
             this.$store.dispatch('addElement', this.element)
           }
           this.element.type = 'pic'
+        },
+        addIcon (iconKey) {
+          this.element.type = 'icon'
+          this.element.iconKey = iconKey
+          this.element.top = 0
+          this.element.left = 0
+          this.$store.dispatch('addElement', this.element)
         },
         addTextElement () {
           this.element.type = 'text'
