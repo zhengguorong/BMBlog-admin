@@ -1,8 +1,7 @@
 export default class Article {
-  constructor (title, markdown, html, createDate, author) {
-    this.title = title || '无标题文章'
-    this.markdown = markdown || '# hello'
-    this.html = html
+  constructor ({ title = '无标题文章', markdown = '# hello', author = '' } = {}) {
+    this.title = title
+    this.markdown = markdown
     this.author = author
   }
 }

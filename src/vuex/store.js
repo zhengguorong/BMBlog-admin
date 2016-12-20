@@ -1,15 +1,11 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 import article from './article'
 import editor from './editor'
 import user from './user'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default {
   modules: {
     article,
     editor,
     user
   }
-})
+}

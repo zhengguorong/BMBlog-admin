@@ -1,54 +1,39 @@
-import * as types from './mutation-type'
-import Article from '../../model/Article'
+import * as types from './types'
+import ArticleModal from '../../model/Article'
 import api from '../../api/article'
 
-/**
- * 获取文章列表
- */
-export const getArticleList = ({commit}) => {
-  api.getArticleList().then((res) => {
-    if (res.length === 0) {
-      let article = new Article()
-      commit(types.SET_EDITOR_ARTICLE, article)
-    } else {
-      commit(types.GET_ARTICLE_LIST, res)
-      commit(types.SET_EDITOR_ARTICLE, res[0])
-    }
-  })
-}
-
-/**
- * 添加文章
- * @param commit
- * @param article
- * @constructor
- */
-export const addArticle = ({commit}, article) => {
-  commit(types.ADD_ARTICLE, article)
-}
-
-/**
- * 设置正在编辑的文章
- * @param commit
- * @param article
- */
-export const setEditorArticle = ({commit}, article) => {
-  commit(types.SET_EDITOR_ARTICLE, article)
-}
-
-/**
- * 保存或修改文章
- * @param commit
- * @param article
- */
-export const saveArticle = ({commit}, article) => {
-  if (article && article._id) {
-    api.updateArticle(article).then((res) => {
-      commit(types.UPDATE_ARTICLE_SUCCESS)
+export default {
+  [types.GET_ARTICLE_LIST] ({ commit, state, dispatch }) {
+    api.getArticleList().then((res) => {
+      if (res.length === 0) {
+        dispatch(types.ADD_ARTICLE)
+      } else {
+        commit(types.GET_ARTICLE_LIST, res)
+      }
     })
-  } else {
-    api.createArticle(article).then((res) => {
-      commit(types.CREATE_ARTICLE_SUCCESS)
+  },
+  [types.SET_EDITOR_ARTICLE] ({ commit, state }, payload) {
+    let item = state.list.find(value => value._id === payload.id)
+    commit(types.SET_EDITOR_ARTICLE, item)
+  },
+  [types.ADD_ARTICLE] ({ commit }, payload) {
+    api.createArticle(new ArticleModal(payload && payload.item)).then(res => {
+      commit(types.ADD_ARTICLE, res)
+    })
+  },
+  [types.DELETE_ARTICLE] ({ commit }, payload) {
+    commit(types.DELETE_ARTICLE, payload.id)
+  },
+  [types.ADD_COPY_ARTICLE] ({ commit, state, dispatch }, payload) {
+    let list = state.list
+    let item = Object.assign({}, list.find(value => value._id === payload.id))
+    item.title += ' 的副本'
+    dispatch(types.ADD_ARTICLE, { item })
+  },
+  [types.UPDATE_ARTICLE] (_, payload) {
+    api.updateArticle(payload.item).then(res => {
+      console.log('保存成功')
+      console.log(res)
     })
   }
 }

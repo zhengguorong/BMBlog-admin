@@ -1,20 +1,29 @@
+// 全局插件
 import Vue from 'vue'
-import App from './App'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
 import VueRouter from 'vue-router'
-import routerConfig from './routers'
-import store from './vuex/store'
+import Vuex from 'vuex'
+import ElementUI from 'element-ui'
+import App from './App'
 
-Vue.use(ElementUI)
+// 插件配置
+import RouterConfig from './routers'
+import Store from './vuex/store'
+
+// 加载插件
 Vue.use(VueRouter)
-const router = new VueRouter({ routes: routerConfig })
+Vue.use(Vuex)
+Vue.use(ElementUI)
 
+// 全局样式
+import 'normalize.css'
+import 'element-ui/lib/theme-default/index.css'
+import './util/main.css'
+
+// 初始化
 /* eslint-disable no-new */
 new Vue({
-  router,
+  router: new VueRouter({ routes: RouterConfig }),
+  store: new Vuex.Store(Store),
   el: '#app',
-  store,
   render: h => h(App)
 })
-

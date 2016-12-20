@@ -1,0 +1,24 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    display: block;
+    width: 5px;
+    background: #FAFAFA;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #BDBDBD;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 5px; 
+    background: #E0E0E0;
+}
