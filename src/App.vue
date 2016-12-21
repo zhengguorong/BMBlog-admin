@@ -1,28 +1,10 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
-  import './style/main.css'
-  export default {
-    name: 'app',
-    components: {}
-  }
+  export default { }
 </script>
 
 <style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #ccc;
-  }
-  body{
-    margin: 0 auto;
-  }
-  img{
-        -webkit-user-drag: none;
-  }
 </style>

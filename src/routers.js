@@ -14,9 +14,9 @@ export default [{
   name: 'register',
   component: require('./views/user/register')
 }, {
-  path: '/editor',
-  name: 'editor',
-  component: require('./views/editor/index.vue')
+  path: '/article',
+  name: 'article',
+  component: require('./views/article/Article.vue')
 }, {
   path: '/h5editor',
   name: 'h5editor',

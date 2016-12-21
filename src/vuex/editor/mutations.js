@@ -6,10 +6,7 @@ const mutations = {
     state.editorElement = data
   },
   [types.ADD_PIC_ELEMENT] (state, data) {
-    console.log(data)
-    console.log(state.editorPage.elements)
     state.editorPage.elements.push(data)
-    console.log(state.editorPage)
   },
   [types.PLAY_ANIMATE] (state, data) {
     // 如存在选择元素，则播放选择元素动画，否则全部元素播放
