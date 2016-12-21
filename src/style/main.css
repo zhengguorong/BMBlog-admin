@@ -192,12 +192,10 @@ a.tdl:hover {text-decoration: none;}
 .left {left: 0;}
 
 /* 清除浮动 */
-.clearfix {*zoom: 1;}
 .clearfix:after {
-  content: '';
+  content: "";
   display: block;
   clear: both;
-  visibility: hidden;
 }
 
 /* 居中 */
@@ -383,4 +381,28 @@ body {
 a:link {
   text-decoration: none;
   color: #000;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 5px;
+  background: #FAFAFA;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #BDBDBD;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: #E0E0E0;
 }

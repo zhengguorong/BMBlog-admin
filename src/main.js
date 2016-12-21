@@ -17,7 +17,7 @@ Vue.use(ElementUI)
 // 全局样式
 import 'normalize.css'
 import 'element-ui/lib/theme-default/index.css'
-import './util/main.css'
+import './style/main.css'
 
 // 初始化
 /* eslint-disable no-new */
