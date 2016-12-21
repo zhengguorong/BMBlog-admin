@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
-    "art-template": "^3.0.3",
     "axios": "^0.15.3",
+    "element-ui": "^1.0.6",
     "fastclick": "^1.0.6",
     "github-markdown-css": "^2.4.1",
     "lrz": "^4.9.40",

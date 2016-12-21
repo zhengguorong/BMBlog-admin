@@ -4,7 +4,7 @@
 export default [{
   path: '/',
   name: 'index',
-  component: require('./components/Hello')
+  component: require('./views/user/login')
 }, {
   path: '/login',
   name: 'login',
