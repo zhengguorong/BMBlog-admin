@@ -1,13 +1,13 @@
 <template>
   <div class="markdown">
     <template v-if="Object.keys(this.editorArticle).length !== 0">
-      <Toolbar class="toolbar" :content="content" />
+      <Toolbar class="toolbar" @editContent="editContent" :params="{ content, selectionStart, selectionEnd }" />
       <div class="editor clearfix">
-        <textarea class="textarea custom-scrollbar" v-model="content"></textarea>
+        <textarea class="textarea custom-scrollbar" v-model="content" @click="select" :data-id="id"></textarea>
         <div class="markdown-body custom-scrollbar" v-html="markdownHtml"></div>
       </div>
     </template>
-    <span v-else class="watermark">Bluemoon Frontend Group</span>
+    <span v-else class="watermark">Bluemoon Frontend Team</span>
   </div>
 </template>
 
@@ -17,7 +17,9 @@
   export default {
     data () {
       return {
-        saveTimer: null
+        saveTimer: null,
+        selectionStart: null,
+        selectionEnd: null
       }
     },
     computed: {
@@ -39,6 +41,14 @@
       },
       markdownHtml () {
         return Marked(this.content || '')
+      },
+      id () {
+        return this.editorArticle._id
+      }
+    },
+    watch: {
+      id () {
+        clearTimeout(this.saveTimer)
       }
     },
     methods: {
@@ -50,13 +60,20 @@
             type: 'success'
           })
         })
+      },
+      editContent (value) {
+        this.content = value
+      },
+      select (event) {
+        this.selectionStart = event.target.selectionStart
+        this.selectionEnd = event.target.selectionEnd
       }
     },
     components: { Toolbar }
   }
 </script>
 
-<style src="github-markdown-css/github-markdown.css" scoped></style>
+<style src="github-markdown-css/github-markdown.css"></style>
 <style lang="less" scoped>
   .markdown {
     position: relative;
