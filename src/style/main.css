@@ -406,3 +406,12 @@ a, a:link, a:visited, a:hover, a:active {
   border-radius: 5px;
   background: #E0E0E0;
 }
+
+.reset-btn {
+  border: none;
+  outline: none;
+  background: none;
+  appearance: none;
+  margin: 0;
+  padding: 0;
+}

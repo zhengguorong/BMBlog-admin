@@ -5,15 +5,11 @@ import api from '../../api/article'
 export default {
   [types.GET_ARTICLE_LIST] ({ commit, state, dispatch }) {
     api.getArticleList().then((res) => {
-      if (res.length === 0) {
-        dispatch(types.ADD_ARTICLE)
-      } else {
-        commit(types.GET_ARTICLE_LIST, res)
-      }
+      commit(types.GET_ARTICLE_LIST, res)
     })
   },
   [types.SET_EDITOR_ARTICLE] ({ commit, state }, payload) {
-    let item = state.list.find(value => value._id === payload.id)
+    let item = state.list.find(value => value._id === payload._id)
     commit(types.SET_EDITOR_ARTICLE, item)
   },
   [types.ADD_ARTICLE] ({ commit }, payload) {
@@ -22,7 +18,9 @@ export default {
     })
   },
   [types.DELETE_ARTICLE] ({ commit }, payload) {
-    commit(types.DELETE_ARTICLE, payload.id)
+    api.deleteArticle({_id: payload._id}).then(() => {
+      commit(types.DELETE_ARTICLE, payload._id)
+    })
   },
   [types.ADD_COPY_ARTICLE] ({ commit, state, dispatch }, payload) {
     let list = state.list
@@ -31,9 +29,6 @@ export default {
     dispatch(types.ADD_ARTICLE, { item })
   },
   [types.UPDATE_ARTICLE] (_, payload) {
-    api.updateArticle(payload.item).then(res => {
-      console.log('保存成功')
-      console.log(res)
-    })
+    api.updateArticle(payload.item)
   }
 }

@@ -1,35 +1,43 @@
 <template>
   <ul class="toolbar">
-    <li><button class="icon">加粗</button></li>
-    <li><button class="icon">斜体</button></li>
-    <li><button class="icon">链接</button></li>
-    <li><button class="icon">引用</button></li>
-    <li><button class="icon">代码</button></li>
-    <li><button class="icon">图片</button></li>
-    <li><button class="icon">列表</button></li>
-    <li><button class="icon">标题</button></li>
-    <li><button class="icon">分割</button></li>
-    <li><button class="icon">表格</button></li>
+    <li><button class="reset-btn" @click="bold">加粗</li>
   </ul>
 </template>
 
 <script>
   export default {
+    props: ['content'],
+    methods: {
+      selection () {
+        if (typeof window.getSelection === 'function') {
+          let selection = window.getSelection()
+          if (selection.anchorNode === selection.focusNode) {
+          }
+        }
+        return ''
+      },
+      bold () {
+        console.log(this.content)
+        console.log('该功能还在完善')
+      }
+    }
   }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
   .toolbar {
     width: 100%;
-    background-color: #ccc;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    height: 45px;
+    background-color: #009688;
+    box-shadow: 4px 3px 3px #aaa;
   }
 
-  .icon {
+  .reset-btn {
     float: left;
-    height: 100%;
-    display: block;
+    line-height: 45px;
+    font-size: 1.2em;
+    color: #fff;
+    padding: 0 10px;
+    font-weight: bold;
   }
 </style>

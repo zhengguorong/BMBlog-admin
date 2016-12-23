@@ -16,7 +16,7 @@ const updateArticle = (article) => {
 }
 
 const deleteArticle = (article) => {
-  return http.delete('/api/articles/' + article._id)
+  return http.del('/api/articles/', article)
 }
 
 module.exports = {

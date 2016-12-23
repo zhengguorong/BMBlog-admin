@@ -1,15 +1,14 @@
 <template>
-  <div class="container">
-    <ul class="list custom-scrollbar">
-      <li v-for="item in articleList">
-        <div class="list-item" :class="{ active: item._id === editingId }" @click="selectedArticle(item._id)">
+  <div class="list">
+    <ul class="documents custom-scrollbar">
+      <li v-for="item in articleList" :key="item._id">
+        <div class="documents-item" :class="{ active: item._id === editingId }" @click="selectedArticle(item._id)">
           <p>{{ item.title }}</p>
-          <i class="el-icon-plus" @click.stop="copy(item._id)"></i>
-          <i class="el-icon-delete" @click.stop="clean(item._id)"></i>
+          <button class="close-btn reset-btn" @click.stop="clean(item._id)"><i class="el-icon-close"></i></button>
         </div>
       </li>
     </ul>
-    <el-button class="btn" type="primary" @click="addArticle">添加</el-button>
+    <button class="add reset-btn" @click="addArticle"><i class="el-icon-plus"></i></button>
   </div>
 </template>
 <script>
@@ -18,76 +17,87 @@
       articleList () {
         return this.$store.state.article.list
       },
+      editorArticle () {
+        return this.$store.state.article.editorArticle
+      },
       editingId () {
-        return this.$store.state.article.editorArticle._id
+        return this.editorArticle._id
       }
     },
     methods: {
       addArticle () {
-        this.$store.dispatch('ADD_ARTICLE')
+        this.$store.dispatch('ADD_ARTICLE').then(() => {
+        })
       },
-      selectedArticle (id) {
-        this.$store.dispatch('SET_EDITOR_ARTICLE', { id })
+      selectedArticle (_id) {
+        this.$store.dispatch('SET_EDITOR_ARTICLE', { _id })
       },
-      copy (id) {
-        this.$store.dispatch('ADD_COPY_ARTICLE', { id })
-      },
-      clean (id) {
-        this.$store.dispatch('DELETE_ARTICLE', { id })
+      clean (_id) {
+        this.$store.dispatch('DELETE_ARTICLE', { _id })
       }
     }
   }
 </script>
-<style scoped lang="scss">
-  .container {
+<style scoped lang="less">
+  .list {
     display: flex;
     flex-direction: column;
+    background-color: #f5f5f5;
+    box-shadow: 4px 5px 3px #aaa;
+    height: 100%;
   }
-  .list {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    overflow-y: auto;
-    $icons: ".el-icon-plus, .el-icon-delete";
-    #{$icons} {
-      cursor: pointer;
-      position: absolute;
-      right: 10px;
-      display: none;
-    }
-    .el-icon-delete {
-      top: 55%;
-    }
-    .el-icon-plus {
-      bottom: 55%;
-    }
+  .documents {
+    overflow: auto;
+    border-bottom: 1px solid #bdbdbd;
+    cursor: default; 
     &-item {
-      border-bottom: 1px solid #ccc;
-      transition: box-shadow 0.3s;
+      color: #9E9E9E;
+      transition: all ease .3s;
+      padding: 15px;
       position: relative;
-      min-height: 100px;
-      padding: 10px 30px 10px 10px;
+      .close-btn {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        font-size: 0.3em;
+        padding: 5px;
+        &:hover {
+          background-color: #EF5350;
+          color: #fff;
+        }
+        &:active {
+          background-color: #F44336;
+          color: #fff;
+        }
+      }
       &:hover {
-        box-shadow: 0 1px 7px rgba(0,0,0,0.3);
-        #{$icons} {
+        background-color: #eee;
+        .close-btn {
           display: block;
-          color: #ccc;
         }
       }
       &.active {
-        color: #fff;
-        background-color: #d1c091;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-        #{$icons} {
-          display: block;
-          color: inherit;
-        }
+        color: #616161;
+        border-left: 6px solid #009688;
       }
     }
   }
   
-  .btn {
-    width: 100%;
+  .add {
+    display: block;
+    height: 55px;
+    line-height: 55px;
+    text-align: center;
     flex-shrink: 0;
+    color: #616161;
+    transition: all ease .3s;
+    &:hover {
+      background-color: #e0e0e0;
+    }
+    &:active {
+      background-color: #bdbdbd;
+    }
   }
 </style>

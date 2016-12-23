@@ -1,7 +1,9 @@
 <template>
   <div class="eidtor">
     <List class="list" />
-    <Markdown class="markdown" />
+    <div class="markdown-wrapper">
+      <Markdown class="markdown" />
+    </div>
   </div>
 </template>
 
@@ -17,28 +19,36 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style scoped>
   .eidtor {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    bottom: 0;
+    right: 0;
     left: 0;
     top: 0;
     overflow: hidden;
+    background-color: #e0e0e0;
   }
   
   .list {
-    float: left;
-    width: 20%;
-    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 220px;
     overflow: auto;
-    border-right: 1px solid #d9d9d9;
+    z-index: 2;
   }
   
-  .markdown {
-    float: left;
-    width: 80%;
+  .markdown-wrapper {
+    width: 100%;
     height: 100%;
     overflow: auto;
+    padding-left: 220px;
+  }
+
+  .markdown {
+    width: 100%;
+    height: 100%;
   }
 </style>

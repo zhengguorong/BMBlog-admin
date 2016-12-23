@@ -48,8 +48,10 @@
           <el-input placeholder="" v-model="element.imgSrc"></el-input>
         </div>
         <div class="block">
-          <el-tag class="block-title">图片预览</el-tag>
-          <img class="preview" :src="element.imgSrc" v-if="element.type=='pic'" @dblclick="addPicElement(element)" v-for="element in editorPage.elements">
+          <el-tag class="block-title">图片列表</el-tag>
+          <div class="clearfix">
+            <img class="preview" :src="element.imgSrc" v-if="element.type=='pic'" @dblclick="addPicElement(element)" v-for="element in editorPage.elements">
+          </div>
         </div>
         <div class="block">
           <el-tag class="block-title">属性调节</el-tag>
@@ -258,7 +260,10 @@
       }
     }
     .preview {
-      max-width: 100%;
+      display: inline-block;
+      vertical-align: top;
+      margin-bottom: 5px;
+      width: 50%;
     }
     .svg {
       float: left;

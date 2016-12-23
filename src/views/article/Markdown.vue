@@ -1,16 +1,13 @@
 <template>
   <div class="markdown">
     <template v-if="Object.keys(this.editorArticle).length !== 0">
-      <div class="title-bar">
-        <input class="input" type="text" v-model="title"><el-button class="btn" type="primary" @click="save">保存</el-button>
-      </div>
+      <Toolbar class="toolbar" :content="content" />
       <div class="editor clearfix">
-        <Toolbar class="toolbar" />
         <textarea class="textarea custom-scrollbar" v-model="content"></textarea>
         <div class="markdown-body custom-scrollbar" v-html="markdownHtml"></div>
       </div>
     </template>
-    <span v-else class="watermark">Bluemoon</span>
+    <span v-else class="watermark">Bluemoon Frontend Group</span>
   </div>
 </template>
 
@@ -18,17 +15,14 @@
   import Marked from 'marked'
   import Toolbar from './Toolbar'
   export default {
+    data () {
+      return {
+        saveTimer: null
+      }
+    },
     computed: {
       editorArticle () {
         return this.$store.state.article.editorArticle
-      },
-      title: {
-        get () {
-          return this.editorArticle.title
-        },
-        set (value) {
-          this.$store.commit('SET_EDITOR_TITLE', value)
-        }
       },
       content: {
         get () {
@@ -36,6 +30,11 @@
         },
         set (value) {
           this.$store.commit('SET_EDITOR_CONTENT', value)
+          this.$store.commit('SET_EDITOR_TITLE', value.match(/^.*/)[0])
+          clearTimeout(this.saveTimer)
+          this.saveTimer = setTimeout(() => {
+            this.save()
+          }, 1500)
         }
       },
       markdownHtml () {
@@ -44,7 +43,13 @@
     },
     methods: {
       save () {
-        this.$store.dispatch('UPDATE_ARTICLE', { item: this.editorArticle })
+        this.$store.dispatch('UPDATE_ARTICLE', { item: this.editorArticle }).catch(() => {
+        }).then(() => {
+          this.$message({
+            message: '笔记已保存',
+            type: 'success'
+          })
+        })
       }
     },
     components: { Toolbar }
@@ -52,79 +57,60 @@
 </script>
 
 <style src="github-markdown-css/github-markdown.css" scoped></style>
-<style lang="scss" scoped>
+<style lang="less" scoped>
   .markdown {
     position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 45px;
   }
 
-  .content {
+  .toolbar {
+    width: 100%;
+    position: absolute;
     z-index: 2;
-    background-color: #fff;
-    height: 100%;
-    width: 100%;
-  }
-
-  .watermark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    color: #666;
-    text-shadow: 0 1px 0 #ccc;
-    font-size: 4em;
-    transform: translate(-50%);
-  }
-
-  .title-bar {
-    position: absolute;
-    top: 0;
     left: 0;
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px solid #ccc;
-    background-color: #fff;
-  }
-  
-  .title-bar .input {
-    border: none;
-    outline: none;
-    display: inline-block;
-    width: 90%;
-    padding: 0 10px;
-  }
-
-  .title-bar .btn {
-    width: 10%;
-    height: 100%;
-    padding-left: 0;
-    padding-right: 0;
+    top: 0;
   }
 
   .editor {
     width: 100%;
     height: 100%;
-    padding-top: 100px;
-    .toolbar {
-      position: absolute;
-      left: 0;
-      top: 60px;
-      height: 40px;
-      overflow: hidden;
-      width: 100%;
-    }
-    .textarea {
+    padding: 10px 0;
+    .textarea, .markdown-body {
       float: left;
-      width: 50%;
+      width: 48.5%;
       height: 100%;
-      border: none;
-      outline: none;
-      border-right: 1px solid #ccc;
-      resize: none;
-    }
-    .markdown-body {
-      float: left;
-      width: 50%;
-      height: 100%;
+      padding: 15px;
+      margin-left: 1%;
+      background-color: #f5f5f5;
+      font-size: 1.5em;
+      color: #616161;
+      box-shadow: 4px 5px 3px #aaa;
       overflow: auto;
     }
-  }  
+    .textarea {
+      vertical-align: top;
+      resize: none;
+      border: none;
+      outline: none;
+    }
+  }
+
+  .watermark {
+    display: block;
+    height: 100%;
+    text-align: center;
+    color: #e4e4e4;
+    font-size: 4em;
+    text-shadow: 0 1px 0 white;
+    overflow: hidden;
+    white-space: nowrap;
+    &:after {
+      content: "";
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+    }
+  }
 </style>
