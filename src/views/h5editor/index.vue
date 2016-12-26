@@ -84,7 +84,7 @@
             </svg>
           </div>
         </div>
-      </div>        
+      </div>
     </div>
   </div>
 </template>
@@ -123,19 +123,22 @@
     },
     methods: {
       addPicElement (ele) {
-        if (ele) {
-          this.$store.dispatch('addElement', ele)
-        } else {
-          this.$store.dispatch('addElement', this.element)
-        }
+//        if (ele) {
+        this.$store.dispatch('addElement', ele)
+//        } else {
+//          this.$store.dispatch('addElement', this.element)
+//        }
         this.element.type = 'pic'
       },
       addIcon (iconKey) {
-        this.element.type = 'icon'
-        this.element.iconKey = iconKey
-        this.element.top = 0
-        this.element.left = 0
-        this.$store.dispatch('addElement', this.element)
+        let obj = {}
+        obj.type = 'icon'
+        obj.iconKey = iconKey
+        obj.top = 0
+        obj.left = 0
+        obj.width = 100
+        obj.height = 100
+        this.$store.dispatch('addElement', obj)
       },
       addTextElement () {
         this.element.type = 'text'
@@ -269,7 +272,7 @@
       float: left;
       width: 50px;
       height: 50px;
-      
+
     }
   }
 
