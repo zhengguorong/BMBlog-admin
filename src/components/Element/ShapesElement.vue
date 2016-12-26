@@ -1,7 +1,7 @@
 <template>
     <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
       <!--<icon></icon>-->
-      <svg style="width: 100%">
+      <svg style="width: 100%;height: 100%;position: absolute">
         <use v-bind:xlink:href="'/static/svg/icon.svg#'+ iconKey"/>
       </svg>
       <Operate v-show="showOperate" @mousedown.native.stop="scaleMousedown" @mouseup.native.stop="scaleMouseup" @mousemove.native.stop="scaleMousemove"
