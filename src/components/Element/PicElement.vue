@@ -151,5 +151,6 @@
   .wrap img {
     position: absolute;
     user-select: none;
+    -webkit-user-drag: none;
   }
 </style>

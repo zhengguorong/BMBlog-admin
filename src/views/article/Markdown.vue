@@ -111,6 +111,7 @@
       resize: none;
       border: none;
       outline: none;
+      font-size: 0.9em;
     }
   }
 
