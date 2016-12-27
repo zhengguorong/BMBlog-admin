@@ -12,7 +12,7 @@
   import Markdown from './Markdown'
   export default {
     created () {
-      this.$store.dispatch('GET_ARTICLE_LIST')
+      this.$store.dispatch('getArticleList')
     },
     components: {
       List, Markdown

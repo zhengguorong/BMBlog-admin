@@ -53,7 +53,7 @@
     },
     methods: {
       save () {
-        this.$store.dispatch('UPDATE_ARTICLE', { item: this.editorArticle }).catch(() => {
+        this.$store.dispatch('saveArticle', { item: this.editorArticle }).catch(() => {
         }).then(() => {
           this.$message({
             message: '笔记已保存',

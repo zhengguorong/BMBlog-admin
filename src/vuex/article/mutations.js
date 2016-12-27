@@ -1,4 +1,4 @@
-import * as types from './types'
+import * as types from './mutation-type'
 
 const mutations = {
   [types.GET_ARTICLE_LIST] (state, data) {

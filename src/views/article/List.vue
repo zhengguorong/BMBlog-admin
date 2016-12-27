@@ -2,7 +2,7 @@
   <div class="list">
     <ul class="documents custom-scrollbar">
       <li v-for="item in articleList" :key="item._id">
-        <div class="documents-item" :class="{ active: item._id === editingId }" @click="selectedArticle(item._id)">
+        <div class="documents-item" :class="{ active: item._id === editingId }" @click="selectArticle(item._id)">
           <p>{{ item.title }}</p>
           <button class="close-btn reset-btn" @click.stop="clean(item._id)"><i class="el-icon-close"></i></button>
         </div>
@@ -26,14 +26,14 @@
     },
     methods: {
       addArticle () {
-        this.$store.dispatch('ADD_ARTICLE').then(() => {
+        this.$store.dispatch('addArticle').then(() => {
         })
       },
-      selectedArticle (_id) {
-        this.$store.dispatch('SET_EDITOR_ARTICLE', { _id })
+      selectArticle (_id) {
+        this.$store.dispatch('setEditorArticle', { _id })
       },
       clean (_id) {
-        this.$store.dispatch('DELETE_ARTICLE', { _id })
+        this.$store.dispatch('deleteArticle', { _id })
       }
     }
   }
