@@ -1,12 +1,27 @@
 import * as types from './mutation-type'
 import * as app from '../../util/appConst'
+import Element from '../../model/Element'
 
 const mutations = {
   [types.SET_CUR_EDITOR_ELEMENT] (state, data) {
     state.editorElement = data
   },
   [types.ADD_PIC_ELEMENT] (state, data) {
-    state.editorPage.elements.push(data)
+    state.editorPage.elements.push(new Element(data))
+  },
+  [types.SET_BG_ELEMENT] (state, data) {
+    let haveBG = false
+    state.editorPage.elements.findIndex((value, index, arr) => {
+      if (value.type === 'bg') {
+        haveBG = true
+        value.imgSrc = data.imgSrc
+        value.width = data.width
+        value.height = data.height
+      }
+    })
+    if (!haveBG) {
+      state.editorPage.elements.push(new Element(data))
+    }
   },
   [types.PLAY_ANIMATE] (state, data) {
     // 如存在选择元素，则播放选择元素动画，否则全部元素播放
@@ -70,6 +85,19 @@ const mutations = {
   },
   [types.GET_PAGE_THEMEID] (state, data) {
     state.editorPage = data
+  },
+  [types.CLEAN_BG] (state) {
+    state.editorPage.elements.findIndex((value, index, arr) => {
+      if (value.type === 'bg') {
+        state.editorPage.elements.splice(index, 1)
+      }
+    })
+  },
+  [types.CLEAN_ELE] (state, ele) {
+    state.editorPage.elements.splice(state.editorPage.elements.indexOf(ele), 1)
+  },
+  [types.FETCH_PIC_LIST] (state, picList) {
+    state.picList = picList
   }
 }
 export default mutations

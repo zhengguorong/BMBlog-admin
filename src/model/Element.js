@@ -18,5 +18,6 @@ export default class Element {
     this.transform = ele.transform || 0
     this.text = ele.text || ''
     this.iconKey = ele.iconKey || ''
+    this.bg = ele.bg || ''
   }
 }

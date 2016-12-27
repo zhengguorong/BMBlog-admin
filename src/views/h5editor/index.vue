@@ -19,19 +19,28 @@
     <div class="control-panel">
       <div class="main-nav">
         <el-tooltip class="item main-btn" effect="dark" content="添加元素" placement="left">
-          <span @click="addPicElement">元</span>
+          <span @click="addPicElement">ELE</span>
+        </el-tooltip>
+        <el-tooltip class="item main-btn" effect="dark" content="添加元素" placement="left">
+          <span @click="cleanEle">CELE</span>
+        </el-tooltip>
+        <el-tooltip class="item main-btn" effect="dark" content="添加背景图" placement="left">
+          <span @click="addBG">BG</span>
+        </el-tooltip>
+        <el-tooltip class="item main-btn" effect="dark" content="清除背景图" placement="left">
+          <span @click="cleanBG">CBG</span>
         </el-tooltip>
         <el-tooltip class="item main-btn" effect="dark" content="添加文本" placement="left">
-          <span @click="addTextElement">文</span>
+          <span @click="addTextElement">WORD</span>
         </el-tooltip>
         <el-tooltip class="item main-btn" effect="dark" content="播放动画" placement="left">
-          <span @click="playAnimate">播</span>
+          <span @click="playAnimate">PLAY</span>
         </el-tooltip>
         <el-tooltip class="item main-btn" effect="dark" content="保存" placement="left">
-          <span @click="save">保</span>
+          <span @click="save">SAVE</span>
         </el-tooltip>
         <el-tooltip class="item main-btn" effect="dark" content="发布" placement="left">
-          <span @click="deploy">发</span>
+          <span @click="deploy">SEND</span>
         </el-tooltip>
       </div>
       <div class="wrapper custom-scrollbar">
@@ -72,6 +81,7 @@
           <div class="clearfix adjust">Y偏移<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.top"></el-input></div>
           <div class="clearfix adjust">宽度<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.width"></el-input></div>
           <div class="clearfix adjust">高度<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.height"></el-input></div>
+          <div class="clearfix adjust">顺序<el-input class="adjust-control" placeholder="填写顺序（z-index）" v-model="element.zindex"></el-input></div>
         </div>
         <div class="block">
           <el-tag class="block-title">svg元素</el-tag>
@@ -122,8 +132,12 @@
       }
     },
     methods: {
+      getPicList () {
+        this.$store.dispatch('getPicListByThemeId', this.themeId)
+      },
       addPicElement (ele) {
 //        if (ele) {
+
         this.$store.dispatch('addElement', ele)
 //        } else {
 //          this.$store.dispatch('addElement', this.element)
@@ -139,6 +153,23 @@
         obj.width = 100
         obj.height = 100
         this.$store.dispatch('addElement', obj)
+      },
+      addBG () {
+        let obj = {}
+        obj.type = 'bg'
+        obj.top = 0
+        obj.left = 0
+        obj.width = this.element.width
+        obj.height = this.element.height
+        obj.imgSrc = this.element.imgSrc
+        obj.zindex = 0
+        this.$store.dispatch('addBGElement', obj)
+      },
+      cleanBG () {
+        this.$store.dispatch('cleanBG')
+      },
+      cleanEle () {
+        this.$store.dispatch('cleanEle', this.element)
       },
       addTextElement () {
         this.element.type = 'text'
@@ -187,6 +218,7 @@
       if (!this.pages) {
         this.$store.dispatch('getPageByThemeId', this.$route.query.itemId)
       }
+      this.getPicList()
     }
   }
 

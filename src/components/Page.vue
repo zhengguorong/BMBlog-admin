@@ -2,19 +2,22 @@
   <div :class="[type!=='see'?'canvas':'']"  @click="cleanSelected">
     <div>
       <template v-for="element in elements">
+        <div v-if="element.type==='bg'"  class="bg-layer" style="background-color: rgb(250, 250, 250);">
+          <div style="left: -499px; top: 0px; width: 1638px; height: 1008px; opacity: 1; ">
+            <img :src="element.imgSrc" alt="">
+          </div>
+        </div>
         <div @click.stop="selectedElement(element)">
           <PicElement :type="type" v-if="element.type==='pic'" :class="[element.playing?'animated ' + element.animatedName:'']" :element="element"
-            :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
-            :showOperate="editorElement == element">
+                      :style="{transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
+                      :showOperate="editorElement == element">
             <img style="width:100%;height:100%;" :src="element.imgSrc">
-</PicElement>
-<FontElement v-if="element.type==='text'" :element="element" :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
-  :class="[element.playing?'animated ' + element.animatedName:'']"></FontElement>
-<ShapesElement v-if="element.type==='icon'" :iconKey="element.iconKey" :element="element" :style="{transform:'rotate('+element.transform+'deg)',opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
-  :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></ShapesElement>
-</div>
-</template>
-</div>
+          </PicElement>
+          <FontElement v-if="element.type==='text'" :element="element" :style="{transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']"></FontElement>
+          <ShapesElement v-if="element.type==='icon'" :iconKey="element.iconKey" :element="element" :style="{transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></ShapesElement>
+        </div>
+      </template>
+    </div>
 
 </div>
 </template>
@@ -76,5 +79,12 @@
     background-color: #fff;
     margin: 0 auto;
     position: relative;
+  }
+  .bg-layer{
+    position:relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    z-index: 0;
   }
 </style>

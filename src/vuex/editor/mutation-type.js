@@ -13,3 +13,7 @@ export const ADD_THEME_SUCCESS = 'ADD_THEME_SUCCESS' // 新增页面数据成功
 export const SAVE_PIC = 'SAVE_PIC' // 保存图片
 export const COPY_PAGE = 'COPY_PAGE' // 复制页面
 export const GET_PAGE_THEMEID = 'GET_PAGE_THEMEID' // 根据主题ID获取页面
+export const CLEAN_BG = 'CLEAN_BG' // 清除背景图
+export const CLEAN_ELE = 'CLEAN_ELE' // 清除元素
+export const FETCH_PIC_LIST = 'FETCH_PIC_LIST' // 获取图片列表
+export const SET_BG_ELEMENT = 'SET_BG_ELEMENT' // 设置背景图

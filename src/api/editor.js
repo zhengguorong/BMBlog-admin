@@ -20,6 +20,10 @@ const updateTheme = (theme) => {
 const uploadPic = (data) => {
   return http.post('/api/upload', data)
 }
+
+const getPicListByThemeId = (_id) => {
+  return http.get('api/upload/theme/' + _id)
+}
 module.exports = {
-  getUserThemeList, saveTheme, updateTheme, uploadPic, getPageByThemeId
+  getUserThemeList, saveTheme, updateTheme, uploadPic, getPageByThemeId, getPicListByThemeId
 }

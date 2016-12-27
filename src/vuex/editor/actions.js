@@ -77,6 +77,15 @@ export const addElement = ({commit}, data) => {
 }
 
 /**
+ * 添加背景图片
+ */
+export const addBGElement = ({commit}, data) => {
+  var element = new Element(data)
+  commit(types.SET_BG_ELEMENT, element)
+  commit(types.SET_CUR_EDITOR_ELEMENT, element)
+}
+
+/**
  * 保存图片
  * @param commit
  * @param data
@@ -86,7 +95,17 @@ export const savePic = ({commit}, data) => {
     commit(types.SAVE_PIC, res)
   })
 }
+/**
+ * 清除背景
+ * @param commit
+ */
+export const cleanBG = ({commit}) => {
+  commit(types.CLEAN_BG)
+}
 
+export const cleanEle = ({commit}, ele) => {
+  commit(types.CLEAN_ELE, ele)
+}
 /**
  * 复制页面
  * @param commit
@@ -125,4 +144,11 @@ export const deleteSelectedElement = ({commit, state}) => {
 
 export const playAnimate = ({commit}) => {
   commit(types.PLAY_ANIMATE)
+}
+
+export const getPicListByThemeId = ({commit}, _id) => {
+  console.log(_id)
+  api.getPicListByThemeId(_id).then((res) => {
+    commit(types.FETCH_PIC_LIST, res)
+  })
 }
