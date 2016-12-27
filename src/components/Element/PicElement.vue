@@ -132,8 +132,9 @@
         scaleMouseup (e) {
           this.scaleFlag = false
         },
-        dragstart () {
+        dragstart (event) {
           console.log('dragstart')
+          event.preventDefault()
         }
       },
       components: {
@@ -151,6 +152,6 @@
   .wrap img {
     position: absolute;
     user-select: none;
-    -webkit-user-drag: none;
+    /*-webkit-user-drag: none;*/
   }
 </style>
