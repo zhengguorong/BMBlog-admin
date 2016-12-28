@@ -1,6 +1,6 @@
 <template>
   <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
-    <img @dragstart="dragstart" style="width:100%;height:100%;" :src="element.imgSrc">
+    <img @dragstart="dragstart" style="width:100%;height:100%;" :src="http + element.imgSrc">
     <Operate v-show="showOperate" @mousedown.native.stop="scaleMousedown" @mouseup.native.stop="scaleMouseup" @mousemove.native.stop="scaleMousemove"
     />
   </div>
@@ -8,6 +8,7 @@
 
 <script>
     import Operate from '../Operate'
+    import * as appConst from '../../util/appConst'
     export default{
       props: {
         element: {
@@ -29,7 +30,8 @@
           currentY: 0,
           flag: false,
           scaleFlag: false,
-          direction: ''
+          direction: '',
+          http: appConst.APP_MALL_API_URL
         }
       },
       methods: {

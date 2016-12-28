@@ -92,7 +92,8 @@ export const addBGElement = ({commit}, data) => {
  */
 export const savePic = ({commit}, data) => {
   api.uploadPic(data).then((res) => {
-    commit(types.SAVE_PIC, res)
+    // commit(types.SAVE_PIC, res)
+    commit(types.PUSH_PIC_LIST, res)
   })
 }
 /**

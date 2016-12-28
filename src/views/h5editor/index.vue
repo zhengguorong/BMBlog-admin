@@ -59,7 +59,7 @@
         <div class="block">
           <el-tag class="block-title">图片列表</el-tag>
           <div class="clearfix">
-            <img class="preview" :src="element.imgSrc" v-if="element.type=='pic'" @dblclick="addPicElement(element)" v-for="element in editorPage.elements">
+            <img class="preview" :src="http + element.filePath" @dblclick="addPicElement(element)" v-for="element in picList">
           </div>
         </div>
         <div class="block">
@@ -103,18 +103,20 @@
   import tools from '../../util/tools'
   import Page from '../../components/Page'
   import PicPicker from '../../components/PicturePicker'
+  import * as appConst from '../../util/appConst'
   export default {
     data () {
       return {
         canvasWidth: '320',
         canvasHeight: '504',
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
-        picBase64: ''
+        picBase64: '',
+        http: appConst.APP_MALL_API_URL
       }
     },
     watch: {
       picBase64: function () {
-        this.$store.dispatch('savePic', { 'imgData': this.picBase64, 'themeId': this.themeId })
+        this.$store.dispatch('savePic', {'imgData': this.picBase64, 'themeId': this.themeId, 'width': this.element.width, 'height': this.element.height})
       }
     },
     computed: {
@@ -129,16 +131,25 @@
       },
       element () {
         return this.$store.state.editor.editorElement
+      },
+      picList () {
+        return this.$store.state.editor.picList
       }
     },
     methods: {
-      getPicList () {
-        this.$store.dispatch('getPicListByThemeId', this.themeId)
+      getPicList (_id) {
+        this.$store.dispatch('getPicListByThemeId', _id)
       },
       addPicElement (ele) {
 //        if (ele) {
-
-        this.$store.dispatch('addElement', ele)
+        let obj = {}
+        obj.type = 'pic'
+        obj.top = 0
+        obj.left = 0
+        obj.width = ele.width
+        obj.height = ele.height
+        obj.imgSrc = ele.filePath
+        this.$store.dispatch('addElement', obj)
 //        } else {
 //          this.$store.dispatch('addElement', this.element)
 //        }
@@ -212,13 +223,13 @@
       }
     },
     components: {
-      Page, PicPicker
+      Page, PicPicker, appConst
     },
     mounted () {
       if (!this.pages) {
         this.$store.dispatch('getPageByThemeId', this.$route.query.itemId)
       }
-      this.getPicList()
+      this.getPicList(this.$route.query.itemId)
     }
   }
 

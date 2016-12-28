@@ -22,7 +22,7 @@ const uploadPic = (data) => {
 }
 
 const getPicListByThemeId = (_id) => {
-  return http.get('api/upload/theme/' + _id)
+  return http.get('/api/upload/theme/' + _id)
 }
 module.exports = {
   getUserThemeList, saveTheme, updateTheme, uploadPic, getPageByThemeId, getPicListByThemeId

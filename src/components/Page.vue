@@ -4,7 +4,7 @@
       <template v-for="element in elements">
         <div v-if="element.type==='bg'"  class="bg-layer" style="background-color: rgb(250, 250, 250);">
           <div style="left: -499px; top: 0px; width: 1638px; height: 1008px; opacity: 1; ">
-            <img :src="element.imgSrc" alt="">
+            <img :src="http + element.imgSrc" alt="">
           </div>
         </div>
         <div @click.stop="selectedElement(element)">
@@ -27,7 +27,13 @@
   import FontElement from './Element/FontElement'
   import ShapesElement from './Element/ShapesElement'
   import 'animate.css'
+  import * as appConst from '../util/appConst'
   export default {
+    data () {
+      return {
+        http: appConst.APP_MALL_API_URL
+      }
+    },
     props: {
       elements: {
         type: Array
