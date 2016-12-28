@@ -26,4 +26,5 @@ const mutations = {
     list.splice(index, 1)
   }
 }
+
 export default mutations
