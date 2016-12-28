@@ -48,6 +48,9 @@
           <el-tag class="block-title">请输入文本</el-tag>
           <el-input placeholder="文本" v-model="element.text"></el-input>
         </div>
+        <div class="clearfix adjust">字体大小<el-input class="adjust-control" placeholder="填写字体大小" v-model="element.fontSize"></el-input></div>
+        <div class="clearfix adjust">颜色<el-input class="adjust-control" placeholder="填写颜色编号，省略#" v-model="element.color"></el-input></div>
+        <div class="clearfix adjust">字体样式<el-input class="adjust-control" placeholder="填写字体样式" v-model="element.fontFamily"></el-input></div>
         <div class="block">
           <el-tag class="block-title">上传图片</el-tag>
           <PicPicker v-model="picBase64" @style="style"></PicPicker>
@@ -89,8 +92,11 @@
             <svg class="svg" @click="addIcon('action-redo')">
               <use xlink:href="/static/svg/icon.svg#action-redo"></use>
             </svg>
-            <svg class="svg" @click="addIcon('circle-fill')">
-              <use xlink:href="/static/svg/icon.svg#circle-fill"></use>
+            <svg class="svg" @click="addIcon('circle-fill')"  fill="#000">
+              <use xlink:href="/static/svg/icon.svg#circle-fill"  fill="#000"></use>
+            </svg>
+            <svg class="svg" @click="addIcon('bmLogo')">
+              <use xlink:href="/static/svg/icon.svg#bmLogo"  fill="#fff"></use>
             </svg>
           </div>
         </div>
@@ -184,6 +190,8 @@
       },
       addTextElement () {
         this.element.type = 'text'
+        this.element.width = 100
+        this.element.height = 100
         this.$store.dispatch('addElement', this.element)
       },
       playAnimate () {
@@ -309,13 +317,12 @@
       display: inline-block;
       vertical-align: top;
       margin-bottom: 5px;
-      width: 50%;
+      width: 50px;
     }
     .svg {
       float: left;
       width: 50px;
       height: 50px;
-
     }
   }
 

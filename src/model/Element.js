@@ -19,5 +19,8 @@ export default class Element {
     this.text = ele.text || ''
     this.iconKey = ele.iconKey || ''
     this.bg = ele.bg || ''
+    this.fontSize = ele.fontSize || 18
+    this.color = ele.color || 'fff'
+    this.fontFamily = ele.fontFamily || '微软雅黑'
   }
 }
