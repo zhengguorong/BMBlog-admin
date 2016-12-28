@@ -41,23 +41,7 @@
       editorElement: {
         type: Object
       },
-      deleteElement: {
-        type: Function
-      },
       type: ''
-    },
-    mounted () {
-      window.document.onkeydown = (e) => {
-        var keyCode = e.keyCode
-        if (keyCode === 8) {
-          this.deleteElement()
-        }
-      }
-    },
-    destroyed () {
-      window.document.onkeydown = (e) => {
-        return false
-      }
     },
     methods: {
       selectedElement (element) {

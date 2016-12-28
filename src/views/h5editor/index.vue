@@ -1,46 +1,42 @@
 <template>
-  <div class="container">
+  <div class="editor">
     <div class="control-view">
-      <div class="clearfix">
-        <p class="tab active">页面</p>
-      </div>
       <ul class="list custom-scrollbar">
         <li v-for="(page, index) in pages">
-          <div class="views" :class="{ active: page === editorPage }" :style="{ width: 131 + 8 + 'px', height: (131 / canvasWidth) * canvasHeight + 34 + 'px' }" @click="setEditorPage(page)">
-            <Page class="view-content" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', transform: 'scale(' + 131 / canvasWidth +')' }" :elements="page.elements" type="see" />
-            <i class="el-icon-document" @click="copyPage(page)"></i>
-            <i class="el-icon-delete" @click="delPage(page)"></i>
+          <div class="view" :class="{ active: page === editorPage }" :style="{ width: 131 + 8 + 'px', height: (131 / canvasWidth) * canvasHeight + 34 + 'px' }" @click="setEditorPage(page)">
+            <Page class="content" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', transform: 'scale(' + 131 / canvasWidth +')' }" :elements="page.elements" type="see" />
+            <div class="icons clearfix">
+              <i class="icon el-icon-delete" @click="delPage(page)"></i>
+              <i class="icon el-icon-document" @click="copyPage(page)"></i>
+            </div>
           </div>
         </li>
       </ul>
-      <div class="add el-icon-plus" @click="addPage"></div>
+      <button class="add el-icon-plus" @click="addPage"></button>
     </div>
-    <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :deleteElement="deleteElement" />
+    <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" />
     <div class="control-panel">
-      <div class="main-nav">
-        <!--<el-tooltip class="item main-btn" effect="dark" content="添加元素" placement="left">-->
-          <!--<span @click="addPicElement">ELE</span>-->
-        <!--</el-tooltip>-->
-        <el-tooltip class="item main-btn" effect="dark" content="清除元素" placement="left">
-          <span @click="cleanEle">CELE</span>
+      <div class="funcs">
+        <el-tooltip  effect="dark" content="清除元素" placement="left">
+          <button class="func" @click="cleanEle">CELE</button>
         </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="添加背景图" placement="left">
-          <span @click="addBG">BG</span>
+        <el-tooltip  effect="dark" content="添加背景图" placement="left">
+          <button class="func" @click="addBG">BG</button>
         </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="清除背景图" placement="left">
-          <span @click="cleanBG">CBG</span>
+        <el-tooltip  effect="dark" content="清除背景图" placement="left">
+          <button class="func" @click="cleanBG">CBG</button>
         </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="添加文本" placement="left">
-          <span @click="addTextElement">WORD</span>
+        <el-tooltip  effect="dark" content="添加文本" placement="left">
+          <button class="func" @click="addTextElement">WORD</button>
         </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="播放动画" placement="left">
-          <span @click="playAnimate">PLAY</span>
+        <el-tooltip  effect="dark" content="播放动画" placement="left">
+          <button class="func" @click="playAnimate">PLAY</button>
         </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="保存" placement="left">
-          <span @click="save">SAVE</span>
+        <el-tooltip  effect="dark" content="保存" placement="left">
+          <button class="func" @click="save">SAVE</button>
         </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="发布" placement="left">
-          <span @click="deploy">SEND</span>
+        <el-tooltip  effect="dark" content="发布" placement="left">
+          <button class="func" @click="deploy">SEND</button>
         </el-tooltip>
       </div>
       <div class="wrapper custom-scrollbar">
@@ -53,7 +49,9 @@
         <div class="clearfix adjust">字体样式<el-input class="adjust-control" placeholder="填写字体样式" v-model="element.fontFamily"></el-input></div>
         <div class="block">
           <el-tag class="block-title">上传图片</el-tag>
-          <PicPicker v-model="picBase64" @style="style"></PicPicker>
+          <div>
+            <PicPicker v-model="picBase64" @style="style"></PicPicker>
+          </div>
         </div>
         <div class="block">
           <el-tag class="block-title">图片地址</el-tag>
@@ -147,7 +145,7 @@
         this.$store.dispatch('getPicListByThemeId', _id)
       },
       addPicElement (ele) {
-//        if (ele) {
+        // if (ele) {
         let obj = {}
         obj.type = 'pic'
         obj.top = 0
@@ -156,9 +154,9 @@
         obj.height = ele.height
         obj.imgSrc = ele.filePath
         this.$store.dispatch('addElement', obj)
-//        } else {
-//          this.$store.dispatch('addElement', this.element)
-//        }
+        // } else {
+        //   this.$store.dispatch('addElement', this.element)
+        // }
         this.element.type = 'pic'
       },
       addIcon (iconKey) {
@@ -222,6 +220,11 @@
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)
       },
+      deleteListener (event) {
+        if (event.keyCode === 8) {
+          this.deleteElement()
+        }
+      },
       deleteElement () {
         this.$store.dispatch('deleteSelectedElement')
       },
@@ -238,13 +241,17 @@
         this.$store.dispatch('getPageByThemeId', this.$route.query.itemId)
       }
       this.getPicList(this.$route.query.itemId)
+      document.addEventListener('keyup', this.deleteListener)
+    },
+    destroyed () {
+      document.removeEventListener('keyup', this.deleteListener)
     }
   }
 
 </script>
 
 <style lang="less" scoped>
-  .container {
+  .editor {
     background-color: #eaedef;
     position: relative;
     height: 100%;
@@ -268,30 +275,29 @@
     top: 0;
     border-left: 1px solid #d6d6d6;
     background-color: #ececec;
-    z-index: 100;
-    .main-nav {
+    z-index: 10;
+    .funcs {
       position: absolute;
       left: -50px;
       top: 0;
-      color: #b2bcba;
-      line-height: 50px;
-      text-align: center;
-      .main-btn {
+      width: 50px;
+      .func {
+        color: #b2bcba;
+        background: #fff;
         cursor: pointer;
         margin-top: 20px;
         display: block;
         width: 50px;
         height: 50px;
-        background-color: #fff;
         border: 1px solid #d6d6d6;
         border-radius: 3px 0px 0px 3px;
+        user-select: none;
         &:hover {
           color: #000;
         }
       }
     }
     .wrapper {
-      width: 100%;
       height: 100%;
       padding: 10px;
       overflow-y: auto;
@@ -299,9 +305,6 @@
     }
     .block {
       margin-bottom: 30px;
-      &:last-of-type {
-        margin-top: 0;
-      }
       &-title {
         margin-bottom: 5px;
       }
@@ -316,8 +319,8 @@
     .preview {
       display: inline-block;
       vertical-align: top;
-      margin-bottom: 5px;
-      width: 50px;
+      margin: 0 1% 1%;
+      width: 18%;
     }
     .svg {
       float: left;
@@ -332,32 +335,17 @@
     width: 160px;
     height: 100%;
     border-right: 1px solid #d6d6d6;
-    z-index: 100;
-    .tab {
-      width: 50%;
-      float: left;
-      line-height: 40px;
-      text-align: center;
-      &.active {
-        background-color: #d6d6d6;
-      }
-    }
+    z-index: 10;
     .list {
       background-color: #d6d6d6;
       position: absolute;
-      top: 40px;
+      top: 0;
       bottom: 50px;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
     }
-    .view-content {
-      transform-origin: left top;
-      background-color: #fff;
-      overflow: hidden;
-      position: relative;
-    }
-    .views {
+    .view {
       position: relative;
       border-color: transparent;
       border-style: solid;
@@ -365,39 +353,55 @@
       margin: 10px;
       &.active {
         border-color: #18ccc0;
-        .el-icon-document, .el-icon-delete {
+        .icons {
           display: block;
         }
       }
-      .el-icon-document, .el-icon-delete {
-        display: none;
-        position: absolute;
-        bottom: -1.5em;
-        color: #fff;
-        opacity: 0.5;
-        cursor: pointer;
-        &:hover {
-          opacity: 1;
+      .content {
+        transform-origin: left top;
+        background-color: #fff;
+        overflow: hidden;
+        position: relative;
+        &:before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          z-index: 10;
         }
       }
-      .el-icon-document {
-        right: 2.5em;
-      }
-      .el-icon-delete {
+      .icons {
+        position: absolute;
+        bottom: -1.5em;
         right: 0.5em;
+        display: none;
+        width: 100%;
+        color: #fff;
+        .icon {
+          float: right;
+          margin-left: 1em;
+          opacity: 0.5;
+          cursor: pointer;
+          &:hover {
+            opacity: 1;
+          }
+        }
       }
     }
     .add {
+      border: none;
       position: absolute;
       bottom: 0;
       height: 50px;
+      line-height: 50px;
       width: 100%;
       left: 0;
       background-color: #373f42;
-      cursor: pointer;
       text-align: center;
-      line-height: 50px;
       color: #fff;
+      cursor: pointer;
     }
   }
 </style>

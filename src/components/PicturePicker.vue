@@ -1,31 +1,24 @@
 <template>
-  <div class="el-input">
-    <label class="lable-pic dib el-input__inner" >
-      <img class="img-pic"  v-show="picUrl" :src="picUrl">
-      <input class="input-pic"  type="file" accept="image/gif,image/jpeg,image/jpg,image/png" @change="fileChange"/>
-    </label>
-    <img>
-  </div>
-
+  <label class="lable-pic">
+    <input class="input-pic" type="file" @change="fileChange"/>
+  </label>
 </template>
+
 <style scoped>
-   .lable-pic{
-     width: 2.95rem;
-     height: 2.95rem;
-     background: url("../assets/addpic_large.png") no-repeat;
-     background-size: 100%;
-     border: none;
-   }
-   .img-pic{
-     width: 100%;
-     height: 100%;
-   }
-  .input-pic{
-    width: 100%;
-    height: 100%;
+  .lable-pic {
+    display: block;
+    cursor: pointer;
+    width: 3em;
+    height: 3em;
+    background: url("../assets/addpic_large.png") no-repeat;
+    background-size: cover;
+  }
+
+  .input-pic {
     display: none;
   }
 </style>
+
 <script>
   export default{
     data () {
