@@ -18,10 +18,10 @@
     <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :deleteElement="deleteElement" />
     <div class="control-panel">
       <div class="main-nav">
-        <el-tooltip class="item main-btn" effect="dark" content="添加元素" placement="left">
-          <span @click="addPicElement">ELE</span>
-        </el-tooltip>
-        <el-tooltip class="item main-btn" effect="dark" content="添加元素" placement="left">
+        <!--<el-tooltip class="item main-btn" effect="dark" content="添加元素" placement="left">-->
+          <!--<span @click="addPicElement">ELE</span>-->
+        <!--</el-tooltip>-->
+        <el-tooltip class="item main-btn" effect="dark" content="清除元素" placement="left">
           <span @click="cleanEle">CELE</span>
         </el-tooltip>
         <el-tooltip class="item main-btn" effect="dark" content="添加背景图" placement="left">
