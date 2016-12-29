@@ -246,6 +246,7 @@
       } else {
         this.$store.dispatch('createTheme')
         this.$store.dispatch('addPage')
+        this.$store.dispatch('cleanPicList')
       }
       document.addEventListener('keyup', this.deleteListener)
     },

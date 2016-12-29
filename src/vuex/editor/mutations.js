@@ -101,6 +101,9 @@ const mutations = {
   },
   [types.PUSH_PIC_LIST] (state, ele) {
     state.picList.push(ele)
+  },
+  [types.CLEAN_PIC_LIST] (state) {
+    state.picList = []
   }
 }
 export default mutations
