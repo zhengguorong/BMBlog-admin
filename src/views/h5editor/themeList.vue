@@ -45,8 +45,6 @@
         this.$router.push({ path: '/h5editor', query: { itemId: item._id } })
       },
       create () {
-        this.$store.dispatch('createTheme')
-        this.$store.dispatch('addPage')
         window.location.href = '#/h5editor'
       }
     },

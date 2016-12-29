@@ -3,8 +3,8 @@
     <div>
       <template v-for="element in elements">
         <div v-if="element.type==='bg'"  class="bg-layer" style="background-color: rgb(250, 250, 250);">
-          <div style="left: -499px; top: 0px; width: 1638px; height: 1008px; opacity: 1; ">
-            <img :src="http + element.imgSrc" alt="">
+          <div style="left: -499px; top: 0px; width: 320px; height: 500px; opacity: 1; ">
+            <img :src="http + element.imgSrc" alt="" style="width: 100%;height: 100%;">
           </div>
         </div>
         <div @click.stop="selectedElement(element)">

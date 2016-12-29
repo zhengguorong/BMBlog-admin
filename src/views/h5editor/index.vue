@@ -237,10 +237,16 @@
       Page, PicPicker, appConst
     },
     mounted () {
-      if (!this.pages) {
-        this.$store.dispatch('getPageByThemeId', this.$route.query.itemId)
+      let itemId = this.$route.query.itemId
+      if (itemId) {
+        if (!this.pages) {
+          this.$store.dispatch('getPageByThemeId', this.$route.query.itemId)
+        }
+        this.getPicList(this.$route.query.itemId)
+      } else {
+        this.$store.dispatch('createTheme')
+        this.$store.dispatch('addPage')
       }
-      this.getPicList(this.$route.query.itemId)
       document.addEventListener('keyup', this.deleteListener)
     },
     destroyed () {
