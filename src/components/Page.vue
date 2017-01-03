@@ -46,7 +46,7 @@
       },
       cleanSelected () {
         console.log('chean')
-        this.$store.dispatch('setEditorElement', {})
+        this.$store.dispatch('setEditorElement', null)
       }
     },
     components: {

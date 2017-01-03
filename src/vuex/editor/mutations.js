@@ -26,7 +26,7 @@ const mutations = {
   [types.PLAY_ANIMATE] (state, data) {
     // 如存在选择元素，则播放选择元素动画，否则全部元素播放
     var elements = state.editorPage.elements
-    if (state.editorElement) {
+    if (state.editorElement && state.editorElement.type) {
       elements.find((value, index, arr) => {
         if (value === state.editorElement) {
           if (value.playing) {
@@ -40,9 +40,14 @@ const mutations = {
         }
       })
     } else {
-      for (var element of elements) {
-        element.playing = true
-      }
+      elements.find((value, index, arr) => {
+        if (value.type !== 'bg') {
+          value.playing = false
+          setTimeout(() => {
+            value.playing = true
+          }, 100)
+        }
+      })
     }
   },
   [types.ADD_PAGE] (state, page) {
