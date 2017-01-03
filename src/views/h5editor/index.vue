@@ -76,6 +76,12 @@
               </el-option>
             </el-select>
           </div>
+          <div class="clearfix adjust">动画循环
+            <el-select class="adjust-control"  v-model="element.loop" clearable>
+              <el-option value="false" label="否"></el-option>
+              <el-option value="true" label="是"></el-option>
+            </el-select>
+          </div>
           <div class="clearfix adjust">速度<el-input class="adjust-control" placeholder="填写秒数，省略单位s" v-model="element.duration"></el-input></div>
           <div class="clearfix adjust">延迟<el-input class="adjust-control" placeholder="填写秒数，省略单位s" v-model="element.delay"></el-input></div>
           <div class="clearfix adjust">X偏移<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.left"></el-input></div>
@@ -87,13 +93,13 @@
         <div class="block">
           <el-tag class="block-title">svg元素</el-tag>
           <div class="clearfix">
-            <svg class="svg" @click="addIcon('action-redo')">
+            <svg class="svg" @dblclick="addIcon('action-redo')">
               <use xlink:href="/static/svg/icon.svg#action-redo"></use>
             </svg>
-            <svg class="svg" @click="addIcon('circle-fill')"  fill="#000">
+            <svg class="svg" @dblclick="addIcon('circle-fill')"  fill="#000">
               <use xlink:href="/static/svg/icon.svg#circle-fill"  fill="#000"></use>
             </svg>
-            <svg class="svg" @click="addIcon('bmLogo')">
+            <svg class="svg" @dblclick="addIcon('bmLogo')">
               <use xlink:href="/static/svg/icon.svg#bmLogo"  fill="#fff"></use>
             </svg>
           </div>
@@ -153,6 +159,7 @@
         obj.width = ele.width
         obj.height = ele.height
         obj.imgSrc = ele.filePath
+        obj.loop = ele.loop
         this.$store.dispatch('addElement', obj)
         // } else {
         //   this.$store.dispatch('addElement', this.element)

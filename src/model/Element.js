@@ -13,6 +13,7 @@ export default class Element {
     this.duration = ele.duration
     this.delay = ele.delay
     this.playing = false
+    this.loop = false
     this.opacity = ele.opacity || 100
     this.zindex = ele.zindex || 1
     this.transform = ele.transform || 0

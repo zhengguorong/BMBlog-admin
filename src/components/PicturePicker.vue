@@ -35,7 +35,6 @@
         var $vue = this
         if (!value) return
         let file = value.target.files[0]
-        console.log(file)
         var reader = new window.FileReader()
         reader.onload = function (e) {
           var data = e.target.result
