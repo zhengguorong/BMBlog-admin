@@ -1,25 +1,22 @@
 <template>
   <div :class="[type!=='see'?'canvas':'']"  @click="cleanSelected">
-    <div>
-      <template v-for="element in elements">
-        <div v-if="element.type==='bg'"  class="bg-layer" style="background-color: rgb(250, 250, 250);">
-          <div style="left: -499px; top: 0px; width: 320px; height: 500px; opacity: 1; ">
-            <img :src="http + element.imgSrc" alt="" style="width: 100%;height: 100%;">
-          </div>
+    <template v-for="element in elements">
+      <div v-if="element.type==='bg'"  class="bg-layer" style="background-color: rgb(250, 250, 250);">
+        <div style="left: -499px; top: 0px; width: 100%; height: 100%; opacity: 1; ">
+          <img :src="http + element.imgSrc" alt="" style="width: 100%;height: 100%;">
         </div>
-        <div @click.stop="selectedElement(element)">
-          <PicElement :type="type" v-if="element.type==='pic'" :class="[element.playing?'animated ' + element.animatedName:'']" :element="element"
-                      :style="{transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
-                      :showOperate="editorElement == element">
-            <img style="width:100%;height:100%;" :src="element.imgSrc">
-          </PicElement>
-          <FontElement v-if="element.type==='text'" :element="element" :style="{'font-family':element.fontFamily,color:'#'+element.color,'font-size':element.fontSize+'px',transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,top:element.top+'px',left:element.left + 'px',width:element.width+'px',height:element.height+'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></FontElement>
-          <ShapesElement v-if="element.type==='icon'" :iconKey="element.iconKey" :element="element" :style="{fill:'#fff',transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></ShapesElement>
-        </div>
-      </template>
-    </div>
-
-</div>
+      </div>
+      <div @click.stop="selectedElement(element)">
+        <PicElement :type="type" v-if="element.type==='pic'" :class="[element.playing?'animated ' + element.animatedName:'']" :element="element"
+                    :style="{transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}"
+                    :showOperate="editorElement == element">
+          <img style="width:100%;height:100%;" :src="element.imgSrc">
+        </PicElement>
+        <FontElement v-if="element.type==='text'" :element="element" :style="{'font-family':element.fontFamily,color:'#'+element.color,'font-size':element.fontSize+'px',transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,top:element.top+'px',left:element.left + 'px',width:element.width+'px',height:element.height+'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></FontElement>
+        <ShapesElement v-if="element.type==='icon'" :iconKey="element.iconKey" :element="element" :style="{fill:'#fff',transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></ShapesElement>
+      </div>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -64,8 +61,6 @@
     -webkit-animation-fill-mode:none
   }
   .canvas {
-    width: 320px;
-    height: 504px;
     background-color: #fff;
     margin: 0 auto;
     position: relative;
@@ -73,7 +68,7 @@
   .bg-layer{
     position:relative;
     width: 100%;
-    height: 500px;
+    height: 100%;
     overflow: hidden;
     z-index: 0;
   }

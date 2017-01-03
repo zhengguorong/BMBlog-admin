@@ -14,7 +14,7 @@
       </ul>
       <button class="add el-icon-plus" @click="addPage"></button>
     </div>
-    <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" />
+    <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
     <div class="control-panel">
       <div class="funcs">
         <el-tooltip  effect="dark" content="清除元素" placement="left">
@@ -78,10 +78,10 @@
           </div>
           <div class="clearfix adjust">速度<el-input class="adjust-control" placeholder="填写秒数，省略单位s" v-model="element.duration"></el-input></div>
           <div class="clearfix adjust">延迟<el-input class="adjust-control" placeholder="填写秒数，省略单位s" v-model="element.delay"></el-input></div>
-          <div class="clearfix adjust">X偏移<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.left"></el-input></div>
-          <div class="clearfix adjust">Y偏移<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.top"></el-input></div>
-          <div class="clearfix adjust">宽度<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.width"></el-input></div>
-          <div class="clearfix adjust">高度<el-input class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.height"></el-input></div>
+          <div class="clearfix adjust">X偏移<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.left"></el-input></div>
+          <div class="clearfix adjust">Y偏移<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.top"></el-input></div>
+          <div class="clearfix adjust">宽度<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.width"></el-input></div>
+          <div class="clearfix adjust">高度<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.height"></el-input></div>
           <div class="clearfix adjust">顺序<el-input class="adjust-control" placeholder="填写顺序（z-index）" v-model="element.zindex"></el-input></div>
         </div>
         <div class="block">
@@ -112,7 +112,7 @@
     data () {
       return {
         canvasWidth: '320',
-        canvasHeight: '504',
+        canvasHeight: '508',
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
         http: appConst.APP_MALL_API_URL
@@ -221,7 +221,7 @@
         this.$store.dispatch('setEditorElement', element)
       },
       deleteListener (event) {
-        if (event.keyCode === 8) {
+        if (event.keyCode === 8 && event.target.nodeName !== 'INPUT') {
           this.deleteElement()
         }
       },
@@ -272,6 +272,7 @@
     transform: translate(-75%, -50%);
     border: 2px solid #373f42;
     box-shadow: 0px 2px 30px 5px rgba(0,0,0,0.2);
+    box-sizing: content-box;
   }
 
   .control-panel {
