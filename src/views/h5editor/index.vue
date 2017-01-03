@@ -140,7 +140,7 @@
         return this.$store.state.editor.editorPage
       },
       element () {
-        return this.$store.state.editor.editorElement
+        return this.$store.state.editor.editorElement || {}
       },
       picList () {
         return this.$store.state.editor.picList
