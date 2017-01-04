@@ -235,9 +235,9 @@
       deleteElement () {
         this.$store.dispatch('deleteSelectedElement')
       },
-      style (val) {
-        this.element.width = val.width
-        this.element.height = val.height
+      style (obj) {
+        this.element.width = obj.width
+        this.element.height = obj.height
       }
     },
     components: {
