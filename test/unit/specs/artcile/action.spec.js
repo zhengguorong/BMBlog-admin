@@ -8,6 +8,7 @@ const actionsInjector = require('inject!src/vuex/article/actions')
 const article = new Article()
 var articleList = []
 articleList.push(article)
+console.log(actionsInjector)
 // actionsInjector的作用是替代aja，使用模拟数据替代请求接口，../../api/article为请求ajax的方法，getArticleList覆盖该文件的对应方法。
 const actions = actionsInjector({
   // 文件路径相对于当前action

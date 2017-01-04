@@ -37,7 +37,7 @@
       methods: {
         // 处理元素拖动
         move () {
-          document.querySelector('.canvas').onmousemove = (event) => {
+          document.querySelector('.editor').onmousemove = (event) => {
             var e = event || window.event
             if (this.flag) {
               let nowX = e.clientX
@@ -51,10 +51,10 @@
         },
         // 处理元素伸缩
         scaleMousemove () {
-          document.querySelector('.canvas').onmouseup = (event) => {
+          document.querySelector('.editor').onmouseup = (event) => {
             this.scaleFlag = false
           }
-          document.querySelector('.canvas').onmousemove = (event) => {
+          document.querySelector('.editor').onmousemove = (event) => {
             var e = event || window.event
             if (this.scaleFlag) {
               let nowX = e.clientX
