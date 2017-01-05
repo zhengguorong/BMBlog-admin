@@ -73,6 +73,7 @@ const mutations = {
     state.editorPage.elements.findIndex((value, index, arr) => {
       if (value === data) {
         state.editorPage.elements.splice(index, 1)
+        state.editorElement = null
       }
     })
   },
@@ -93,7 +94,7 @@ const mutations = {
   },
   [types.CLEAN_BG] (state) {
     state.editorPage.elements.findIndex((value, index, arr) => {
-      if (value.type === 'bg') {
+      if (value && value.type === 'bg') {
         state.editorPage.elements.splice(index, 1)
       }
     })

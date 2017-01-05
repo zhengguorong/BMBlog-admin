@@ -70,10 +70,10 @@ export const addPage = ({commit}) => {
 /**
  * 添加页面元素
  */
-export const addElement = ({commit}, data) => {
+export const addElement = ({commit, state}, data) => {
   var element = new Element(data)
   commit(types.ADD_PIC_ELEMENT, element)
-  commit(types.SET_CUR_EDITOR_ELEMENT, element)
+  commit(types.SET_CUR_EDITOR_ELEMENT, state.editorPage.elements.slice(-1)[0])
 }
 
 /**
@@ -82,7 +82,7 @@ export const addElement = ({commit}, data) => {
 export const addBGElement = ({commit}, data) => {
   var element = new Element(data)
   commit(types.SET_BG_ELEMENT, element)
-  commit(types.SET_CUR_EDITOR_ELEMENT, element)
+  commit(types.SET_CUR_EDITOR_ELEMENT, null)
 }
 
 /**
