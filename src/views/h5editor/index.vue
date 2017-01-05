@@ -17,8 +17,8 @@
       </ul>
       <ul class="list custom-scrollbar" style="z-index: 2;" v-show="viewState === 1">
         <li v-for="layer in layers">
-          <div class="layer" :class="{ active: element === layer}" @click="function () { $store.dispatch('setEditorElement', layer) }">
-            <span class="layer-img" :style="{ backgroundImage: 'url(' + http + layer.imgSrc + ')' }"></span>{{ layer.type }}
+          <div class="layer" :class="{ active: element === layer}" @click="selectLayer(layer, $event)" @mousedown="moveLayer">
+            <span class="layer-img" :style="{ backgroundImage: 'url(' + http + layer.imgSrc + ')' }"></span>{{ layer.type }}{{ layer.zindex }}
           </div>
         </li>
       </ul>
@@ -161,6 +161,38 @@
       }
     },
     methods: {
+      moveLayer (layerEvent) {
+        let timer = null
+        let layer = layerEvent.target
+        let li = layer.parentNode
+        let startTop = li.offsetTop
+        let startY = layerEvent.clientY
+        let placeholder = document.createElement('li')
+        placeholder.style = 'height: 30px; background-color: #d6d6d6;'
+        let move = (moveEvent) => {
+          if (!timer) {
+            if (!layer.getAttribute('data-moving')) {
+              li.parentNode.insertBefore(placeholder, layer.parentNode)
+              layer.setAttribute('data-moving', true)
+            }
+            layer.style.top = moveEvent.clientY - startY + startTop + 'px'
+            timer = setTimeout(() => {
+              timer = null
+            }, 20)
+          }
+        }
+        let up = (upEvent) => {
+          placeholder.parentNode && placeholder.parentNode.removeChild(placeholder)
+          document.removeEventListener('mousemove', move)
+          document.removeEventListener('mouseup', up)
+          layer.removeAttribute('data-moving')
+        }
+        document.addEventListener('mousemove', move)
+        document.addEventListener('mouseup', up)
+      },
+      selectLayer (layerObj, event) {
+        this.$store.dispatch('setEditorElement', layerObj)
+      },
       getPicList (_id) {
         this.$store.dispatch('getPicListByThemeId', _id)
       },
@@ -386,12 +418,22 @@
       overflow-y: auto;
       overflow-x: hidden;
     }
+    .li-placeholder {
+      display: block;
+      width: 100%;
+      height: 30px;
+      background-color: #d6d6d6;
+    }
     .layer {
       padding-left: 20px;
       height: 30px;
       line-height: 30px;
       border-bottom: 1px solid #d6d6d6;
       cursor: pointer;
+      &[data-moving] {
+        position: absolute;
+        width: 100%;
+      }
       &:hover {
         background-color: #d6d6d6;
       }
