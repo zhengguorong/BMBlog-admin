@@ -1,7 +1,10 @@
 <template>
   <div class="editor">
     <div class="control-view">
-      <ul class="list custom-scrollbar">
+      <div>
+        <span class="panel" :class="{ active: viewState === 0 }" @click="function () { viewState = 0 }">页面</span><span class="panel" :class="{ active: viewState === 1 }" @click="function () { viewState = 1 }">图层</span>
+      </div>
+      <ul class="list custom-scrollbar" style="z-index: 1;">
         <li v-for="(page, index) in pages">
           <div class="view" :class="{ active: page === editorPage }" :style="{ width: 131 + 8 + 'px', height: (131 / canvasWidth) * canvasHeight + 34 + 'px' }" @click="setEditorPage(page)">
             <Page class="content" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', transform: 'scale(' + 131 / canvasWidth +')' }" :elements="page.elements" type="see" />
@@ -9,6 +12,13 @@
               <i class="icon el-icon-delete" @click="delPage(page)"></i>
               <i class="icon el-icon-document" @click="copyPage(page)"></i>
             </div>
+          </div>
+        </li>
+      </ul>
+      <ul class="list custom-scrollbar" style="z-index: 2;" v-show="viewState === 1">
+        <li v-for="layer in layers">
+          <div class="layer" :class="{ active: element === layer}" @click="selectLayer(layer, $event)" @mousedown="moveLayer">
+            <span class="layer-img" :style="{ backgroundImage: 'url(' + http + layer.imgSrc + ')' }"></span>{{ layer.type }}{{ layer.zindex }}
           </div>
         </li>
       </ul>
@@ -117,6 +127,7 @@
   export default {
     data () {
       return {
+        viewState: 0,
         canvasWidth: '320',
         canvasHeight: '508',
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
@@ -142,11 +153,46 @@
       element () {
         return this.$store.state.editor.editorElement || {}
       },
+      layers () {
+        return this.editorPage.elements
+      },
       picList () {
         return this.$store.state.editor.picList
       }
     },
     methods: {
+      moveLayer (layerEvent) {
+        let timer = null
+        let layer = layerEvent.target
+        let li = layer.parentNode
+        let startTop = li.offsetTop
+        let startY = layerEvent.clientY
+        let placeholder = document.createElement('li')
+        placeholder.style = 'height: 30px; background-color: #d6d6d6;'
+        let move = (moveEvent) => {
+          if (!timer) {
+            if (!layer.getAttribute('data-moving')) {
+              li.parentNode.insertBefore(placeholder, layer.parentNode)
+              layer.setAttribute('data-moving', true)
+            }
+            layer.style.top = moveEvent.clientY - startY + startTop + 'px'
+            timer = setTimeout(() => {
+              timer = null
+            }, 20)
+          }
+        }
+        let up = (upEvent) => {
+          placeholder.parentNode && placeholder.parentNode.removeChild(placeholder)
+          document.removeEventListener('mousemove', move)
+          document.removeEventListener('mouseup', up)
+          layer.removeAttribute('data-moving')
+        }
+        document.addEventListener('mousemove', move)
+        document.addEventListener('mouseup', up)
+      },
+      selectLayer (layerObj, event) {
+        this.$store.dispatch('setEditorElement', layerObj)
+      },
       getPicList (_id) {
         this.$store.dispatch('getPicListByThemeId', _id)
       },
@@ -235,9 +281,9 @@
       deleteElement () {
         this.$store.dispatch('deleteSelectedElement')
       },
-      style (val) {
-        this.element.width = val.width
-        this.element.height = val.height
+      style (obj) {
+        this.element.width = obj.width
+        this.element.height = obj.height
       }
     },
     components: {
@@ -270,6 +316,7 @@
     position: relative;
     height: 100%;
     overflow: hidden;
+    user-select: none;
   }
 
   .canvas {
@@ -306,7 +353,6 @@
         height: 50px;
         border: 1px solid #d6d6d6;
         border-radius: 3px 0px 0px 3px;
-        user-select: none;
         &:hover {
           color: #000;
         }
@@ -350,15 +396,59 @@
     width: 160px;
     height: 100%;
     border-right: 1px solid #d6d6d6;
+    background-color: #ececec;
     z-index: 10;
-    .list {
+    .panel {
+      display: inline-block;
+      line-height: 40px;
+      width: 50%;
+      text-align: center;
       background-color: #d6d6d6;
+      cursor: pointer;
+      &.active {
+        background-color: #ececec;
+      }
+    }
+    .list {
+      background-color: #ececec;
       position: absolute;
-      top: 0;
+      top: 40px;
       bottom: 50px;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
+    }
+    .li-placeholder {
+      display: block;
+      width: 100%;
+      height: 30px;
+      background-color: #d6d6d6;
+    }
+    .layer {
+      padding-left: 20px;
+      height: 30px;
+      line-height: 30px;
+      border-bottom: 1px solid #d6d6d6;
+      cursor: pointer;
+      &[data-moving] {
+        position: absolute;
+        width: 100%;
+      }
+      &:hover {
+        background-color: #d6d6d6;
+      }
+      &.active {
+        background-color: #18ccc0;
+        color: #fff;
+      }
+      &-img {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-right: 1em;
+        background: white center no-repeat;
+        background-size: cover;
+      }
     }
     .view {
       position: relative;

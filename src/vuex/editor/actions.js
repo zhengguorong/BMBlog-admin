@@ -10,13 +10,13 @@ import tools from '../../util/tools'
  */
 export const saveTheme = ({commit}, theme) => {
   if (theme && theme._id) {
-    api.updateTheme(theme).then((res) => {
-      commit(types.UPDATE_THEME_SUCCESS, res)
-    })
+    return Promise.resolve(api.updateTheme(theme).then((res) => {
+      return commit(types.UPDATE_THEME_SUCCESS, res)
+    }))
   } else {
-    api.saveTheme(theme).then((res) => {
-      commit(types.ADD_THEME_SUCCESS, res)
-    })
+    return Promise.resolve(api.saveTheme(theme).then((res) => {
+      return commit(types.ADD_THEME_SUCCESS, res)
+    }))
   }
 }
 
@@ -148,7 +148,6 @@ export const playAnimate = ({commit}) => {
 }
 
 export const getPicListByThemeId = ({commit}, _id) => {
-  console.log(_id)
   api.getPicListByThemeId(_id).then((res) => {
     commit(types.FETCH_PIC_LIST, res)
   })

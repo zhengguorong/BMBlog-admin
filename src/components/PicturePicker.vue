@@ -39,11 +39,9 @@
         reader.onload = function (e) {
           var data = e.target.result
           var image = new window.Image()
-          image.onload = function () {
-            $vue.style.width = image.width
-            $vue.style.height = image.height
-          }
           image.src = data
+          $vue.style.width = image.width
+          $vue.style.height = image.height
           $vue.$emit('style', $vue.style)
           $vue.$emit('input', image.src)
         }

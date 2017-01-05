@@ -28,6 +28,7 @@
 
 <script>
   import HeaderBar from '../../components/HeaderBar'
+  import tools from '../../util/tools'
   // import ThemeItem from '../../components/ThemeItem'
   export default {
     computed: {
@@ -45,7 +46,13 @@
         this.$router.push({ path: '/h5editor', query: { itemId: item._id } })
       },
       create () {
-        window.location.href = '#/h5editor'
+        this.$store.dispatch('createTheme')
+        this.$store.dispatch('addPage')
+        let $this = this
+        this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
+          console.log($this.$store.state.editor.editorTheme._id)
+          this.$router.push({ path: '/h5editor', query: { itemId: $this.$store.state.editor.editorTheme._id } })
+        })
       }
     },
     components: {
