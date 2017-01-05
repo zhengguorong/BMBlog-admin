@@ -168,7 +168,7 @@
         let startTop = li.offsetTop
         let startY = layerEvent.clientY
         let placeholder = document.createElement('li')
-        placeholder.style = 'height: 30px; background-color: #d6d6d6;'
+        placeholder.style = 'height: 30px;background-color: #d6d6d6;'
         let move = (moveEvent) => {
           if (!timer) {
             if (!layer.getAttribute('data-moving')) {
@@ -182,6 +182,12 @@
           }
         }
         let up = (upEvent) => {
+          if (layer.style.top) {
+            let start = startTop / 30
+            let end = (layer.style.top.substr(0, layer.style.top.length - 2) / 30).toFixed(0)
+            this.$store.dispatch('sortElements', {'start': start, 'end': end})
+          }
+          layer.style.top = ''
           placeholder.parentNode && placeholder.parentNode.removeChild(placeholder)
           document.removeEventListener('mousemove', move)
           document.removeEventListener('mouseup', up)
@@ -260,6 +266,9 @@
         this.$store.dispatch('addPage')
       },
       deploy () {
+        this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
+        let _id = this.$store.state.editor.editorTheme._id
+        window.open(appConst.APP_MALL_API_URL + '/perview/' + _id)
       },
       setEditorPage (page) {
         this.$store.dispatch('setEditorPage', page)

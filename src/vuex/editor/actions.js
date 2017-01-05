@@ -156,3 +156,8 @@ export const getPicListByThemeId = ({commit}, _id) => {
 export const cleanPicList = ({commit}) => {
   commit(types.CLEAN_PIC_LIST)
 }
+
+export const sortElements = ({commit}, location) => {
+  commit(types.SORTELEMENTS, location)
+}
+
