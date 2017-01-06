@@ -125,6 +125,13 @@ const mutations = {
         value.zindex = index + 1
       })
     }
+  },
+  [types.DELETE_THEME] (state, data) {
+    state.themeList.findIndex((value, index, arr) => {
+      if (value === data) {
+        state.themeList.splice(index, 1)
+      }
+    })
   }
 }
 export default mutations

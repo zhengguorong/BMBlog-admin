@@ -11,11 +11,11 @@ import tools from '../../util/tools'
 export const saveTheme = ({commit}, theme) => {
   if (theme && theme._id) {
     return Promise.resolve(api.updateTheme(theme).then((res) => {
-      return commit(types.UPDATE_THEME_SUCCESS, res)
+      commit(types.UPDATE_THEME_SUCCESS, res)
     }))
   } else {
     return Promise.resolve(api.saveTheme(theme).then((res) => {
-      return commit(types.ADD_THEME_SUCCESS, res)
+      commit(types.ADD_THEME_SUCCESS, res)
     }))
   }
 }
@@ -159,5 +159,11 @@ export const cleanPicList = ({commit}) => {
 
 export const sortElements = ({commit}, location) => {
   commit(types.SORTELEMENTS, location)
+}
+
+export const deleteTheme = ({commit}, theme) => {
+  return Promise.resolve(api.delTheme(theme).then((res) => {
+    commit(types.DELETE_THEME, theme)
+  }))
 }
 

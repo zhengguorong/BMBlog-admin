@@ -134,7 +134,7 @@
                 <el-input v-model="element.top"><template slot="append">px</template></el-input>
               </el-form-item>
               <el-form-item label="层叠顺序">
-                <el-input-number v-model="element.zindex"></el-input>
+                <el-input-number v-model="element.zindex"></el-input-number>
               </el-form-item>
             </div>
             <div v-show="panelTabState === 1">
@@ -254,6 +254,7 @@
           placeholder.parentNode && placeholder.parentNode.removeChild(placeholder)
           document.removeEventListener('mousemove', move)
           document.removeEventListener('mouseup', up)
+          layer.removeAttribute('data-moving')
         }
         document.addEventListener('mousemove', move)
         document.addEventListener('mouseup', up)
