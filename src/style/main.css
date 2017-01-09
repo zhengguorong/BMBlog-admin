@@ -410,8 +410,9 @@ a, a:link, a:visited, a:hover, a:active {
 .reset-btn {
   border: none;
   outline: none;
-  background: none;
+  background: inherit;
   appearance: none;
   margin: 0;
   padding: 0;
+  color: inherit;
 }

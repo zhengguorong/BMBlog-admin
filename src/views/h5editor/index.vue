@@ -1,139 +1,151 @@
 <template>
   <div class="editor">
-    <Overview />
-    <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
-    <div class="control-panel">
-      <div class="funcs">
-        <el-tooltip  effect="dark" content="新建文本" placement="left">
-          <button class="func el-icon-edit" @click="togglePanel(1)" :class="{ active: panelState === 1 }"></button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="新建素材" placement="left">
-          <button class="func el-icon-picture" @click="togglePanel(2)":class="{ active: panelState === 2 }"></button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="形状元素" placement="left">
-          <button class="func el-icon-star-on" @click="togglePanel(3)":class="{ active: panelState === 3 }"></button>
-        </el-tooltip>
-        <!--<el-tooltip  effect="dark" content="添加背景图" placement="left">
-          <button class="func" @click="addBG">BG</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="清除背景图" placement="left">
-          <button class="func" @click="cleanBG">CBG</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="添加文本" placement="left">
-          <button class="func" @click="addTextElement">WORD</button>
-        </el-tooltip>-->
-        <el-tooltip  effect="dark" content="播放动画" placement="left">
-          <button class="func el-icon-caret-right" @click="playAnimate"></button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="保存" placement="left">
-          <button class="func el-icon-upload" @click="save"></button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="发布" placement="left">
-          <button class="func el-icon-message" @click="deploy"></button>
-        </el-tooltip>
+    <header class="header">
+      <button class="reset-btn" @click="dialogSaveBeforeBack = true"><i class="el-icon-arrow-left"></i>返回作品</button>
+      <el-dialog title="返回作品列表" v-model="dialogSaveBeforeBack" size="tiny">
+        <span>要保存作品并返回作品列表吗？</span>
+        <span slot="footer">
+          <el-button type="danger" @click="dialogSave(false)">不保存</el-button>
+          <el-button type="primary" @click="dialogSave(true)">保 存</el-button>
+        </span>
+      </el-dialog>
+    </header>
+    <section class="section">
+      <Overview class="overview" />
+      <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
+      <div class="control-panel">
+        <div class="funcs">
+          <el-tooltip  effect="dark" content="新建文本" placement="left">
+            <button class="func el-icon-edit" @click="togglePanel(1)" :class="{ active: panelState === 1 }"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="新建素材" placement="left">
+            <button class="func el-icon-picture" @click="togglePanel(2)":class="{ active: panelState === 2 }"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="形状元素" placement="left">
+            <button class="func el-icon-star-on" @click="togglePanel(3)":class="{ active: panelState === 3 }"></button>
+          </el-tooltip>
+          <!--<el-tooltip  effect="dark" content="添加背景图" placement="left">
+            <button class="func" @click="addBG">BG</button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="清除背景图" placement="left">
+            <button class="func" @click="cleanBG">CBG</button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="添加文本" placement="left">
+            <button class="func" @click="addTextElement">WORD</button>
+          </el-tooltip>-->
+          <el-tooltip  effect="dark" content="播放动画" placement="left">
+            <button class="func el-icon-caret-right" @click="playAnimate"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="保存" placement="left">
+            <button class="func el-icon-upload" @click="save"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="发布" placement="left">
+            <button class="func el-icon-message" @click="deploy"></button>
+          </el-tooltip>
+        </div>
+        <div class="wrapper custom-scrollbar">
+          <!-- 设置背景 0 -->
+          <div class="panel panel-bg" v-show="panelState === 0">
+            <div class="clearfix" v-show="panelTabState !== 1">
+              <el-button class="btn" type="success" @click="panelTabState = 1">更换背景</el-button>
+              <el-button class="btn" type="danger" @click="cleanBG">移除背景</el-button>
+            </div>
+            <div class="clearfix" v-show="panelTabState === 1">
+              <PicPicker class="bgs" v-model="picBase64" @style="style"></PicPicker>
+              <div class="bgs" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addBG(element.filePath)" v-for="element in picList"></div>
+            </div>
+          </div>
+          <!-- 添加文字 1 -->
+          <div class="panel panel-text" v-show="panelState === 1">
+            <div class="btn" @click="addTextElement">插入文本</div>
+          </div>
+          <!-- 添加元素 2 -->
+          <div class="panel panel-element clearfix" v-show="panelState === 2">
+            <PicPicker class="ele" v-model="picBase64" @style="style"></PicPicker>
+            <div class="ele" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addPicElement(element)" v-for="element in picList"></div>
+          </div>
+          <!-- 添加形状 3 -->
+          <div class="panel panel-shape clearfix" v-show="panelState === 3">
+            <svg class="shape" @click="addIcon('action-redo')">
+              <use xlink:href="/static/svg/icon.svg#action-redo"></use>
+            </svg>
+            <svg class="shape" @click="addIcon('circle-fill')"  fill="#000">
+              <use xlink:href="/static/svg/icon.svg#circle-fill"  fill="#000"></use>
+            </svg>
+            <svg class="shape" @click="addIcon('bmLogo')">
+              <use xlink:href="/static/svg/icon.svg#bmLogo"  fill="#fff"></use>
+            </svg>
+          </div>
+          <!-- 图层编辑面板 -->
+          <div class="panel panel-edit">
+            <div class="panel-tab clearfix">
+              <div class="tab" :class="{ active: panelTabState === 0 }" @click="function () { panelTabState = 0 }">
+                <span v-show="panelState === 11">文本</span>
+                <span v-show="panelState === 12">元素</span>
+              </div>
+              <div class="tab" :class="{ active: panelTabState === 1 }" @click="function () { panelTabState = 1 }">动作</div>
+            </div>
+            <el-form label-width="5em">
+              <div v-show="panelTabState === 0">
+                <!-- 文字编辑界面特有控件 -->
+                <template v-if="panelState === 11">
+                  <el-form-item label="文本内容">
+                    <el-input v-model="element.text"></el-input>
+                  </el-form-item>
+                  <el-form-item label="颜色">
+                    <el-input type="color" v-model="element.color"></el-input>
+                  </el-form-item>
+                  <el-form-item label="字体大小">
+                    <el-input-number v-model="element.fontSize"></el-input>
+                  </el-form-item>
+                  <el-form-item label="字体">
+                    <el-input v-model="element.fontFamily"></el-input>
+                  </el-form-item>
+                </template>
+                <!-- 通用控件-->
+                <el-form-item label="透明度">
+                  <el-slider v-model="element.opacity"></el-input>
+                </el-form-item>
+                <el-form-item label="旋转">
+                  <el-slider v-model="element.transform" :max="359"></el-input>
+                </el-form-item>
+                <el-form-item label="高">
+                  <el-input v-model="element.height"><template slot="append">px</template></el-input>
+                </el-form-item>
+                <el-form-item label="宽">
+                  <el-input v-model="element.width"><template slot="append">px</template></el-input>
+                </el-form-item>
+                <el-form-item label="X轴坐标">
+                  <el-input v-model="element.left"><template slot="append">px</template></el-input>
+                </el-form-item>
+                <el-form-item label="Y轴坐标">
+                  <el-input v-model="element.top"><template slot="append">px</template></el-input>
+                </el-form-item>
+              </div>
+              <div v-show="panelTabState === 1">
+                <el-form-item label="动画库">
+                  <el-select placeholder="daneden/animate.css" v-model="element.animatedName" clearable>
+                    <el-option v-for="item in animateList" :label="item" :value="item"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="是否循环">
+                  <el-select v-model="element.loop" placeholder="默认为否">
+                    <el-option value="false" label="否"></el-option>
+                    <el-option value="true" label="是"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="速度">
+                  <el-slider v-model="element.duration" :step="0.1" :min="0" :max="10"></el-slider>
+                </el-form-item>
+                <el-form-item label="延迟">
+                  <el-slider v-model="element.delay" :step="0.1" :min="0" :max="10"></el-slider>
+                </el-form-item>
+              </div>
+            </el-form>
+          </div>
+        </div>
       </div>
-      <div class="wrapper custom-scrollbar">
-        <!-- 设置背景 0 -->
-        <div class="panel panel-bg" v-show="panelState === 0">
-          <div class="clearfix" v-show="panelTabState !== 1">
-            <el-button class="btn" type="success" @click="panelTabState = 1">更换背景</el-button>
-            <el-button class="btn" type="warning" @click="cleanBG">移除背景</el-button>
-          </div>
-          <div class="clearfix" v-show="panelTabState === 1">
-            <PicPicker class="bgs" v-model="picBase64" @style="style"></PicPicker>
-            <div class="bgs" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addBG(element.filePath)" v-for="element in picList"></div>
-          </div>
-        </div>
-        <!-- 添加文字 1 -->
-        <div class="panel panel-text" v-show="panelState === 1">
-          <div class="btn" @click="addTextElement">插入文本</div>
-        </div>
-        <!-- 添加元素 2 -->
-        <div class="panel panel-element clearfix" v-show="panelState === 2">
-          <PicPicker class="ele" v-model="picBase64" @style="style"></PicPicker>
-          <div class="ele" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addPicElement(element)" v-for="element in picList"></div>
-        </div>
-        <!-- 添加形状 3 -->
-        <div class="panel panel-shape clearfix" v-show="panelState === 3">
-          <svg class="shape" @click="addIcon('action-redo')">
-            <use xlink:href="/static/svg/icon.svg#action-redo"></use>
-          </svg>
-          <svg class="shape" @click="addIcon('circle-fill')"  fill="#000">
-            <use xlink:href="/static/svg/icon.svg#circle-fill"  fill="#000"></use>
-          </svg>
-          <svg class="shape" @click="addIcon('bmLogo')">
-            <use xlink:href="/static/svg/icon.svg#bmLogo"  fill="#fff"></use>
-          </svg>
-        </div>
-        <!-- 图层编辑面板 -->
-        <div class="panel panel-edit">
-          <div class="panel-tab clearfix">
-            <div class="tab" :class="{ active: panelTabState === 0 }" @click="function () { panelTabState = 0 }">
-              <span v-show="panelState === 11">文本</span>
-              <span v-show="panelState === 12">元素</span>
-            </div>
-            <div class="tab" :class="{ active: panelTabState === 1 }" @click="function () { panelTabState = 1 }">动作</div>
-          </div>
-          <el-form label-width="5em">
-            <div v-show="panelTabState === 0">
-              <!-- 文字编辑界面特有控件 -->
-              <template v-if="panelState === 11">
-                <el-form-item label="文本内容">
-                  <el-input v-model="element.text"></el-input>
-                </el-form-item>
-                <el-form-item label="颜色">
-                  <el-input type="color" v-model="element.color"></el-input>
-                </el-form-item>
-                <el-form-item label="字体大小">
-                  <el-input-number v-model="element.fontSize"></el-input>
-                </el-form-item>
-                <el-form-item label="字体">
-                  <el-input v-model="element.fontFamily"></el-input>
-                </el-form-item>
-              </template>
-              <!-- 通用控件-->
-              <el-form-item label="透明度">
-                <el-slider v-model="element.opacity"></el-input>
-              </el-form-item>
-              <el-form-item label="旋转">
-                <el-slider v-model="element.transform" :max="359"></el-input>
-              </el-form-item>
-              <el-form-item label="高">
-                <el-input v-model="element.height"><template slot="append">px</template></el-input>
-              </el-form-item>
-              <el-form-item label="宽">
-                <el-input v-model="element.width"><template slot="append">px</template></el-input>
-              </el-form-item>
-              <el-form-item label="X轴坐标">
-                <el-input v-model="element.left"><template slot="append">px</template></el-input>
-              </el-form-item>
-              <el-form-item label="Y轴坐标">
-                <el-input v-model="element.top"><template slot="append">px</template></el-input>
-              </el-form-item>
-            </div>
-            <div v-show="panelTabState === 1">
-              <el-form-item label="动画库">
-                <el-select placeholder="daneden/animate.css" v-model="element.animatedName" clearable>
-                  <el-option v-for="item in animateList" :label="item" :value="item"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="是否循环">
-                <el-select v-model="element.loop" placeholder="默认为否">
-                  <el-option value="false" label="否"></el-option>
-                  <el-option value="true" label="是"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="速度">
-                <el-slider v-model="element.duration" :step="0.1" :min="0" :max="10"></el-slider>
-              </el-form-item>
-              <el-form-item label="延迟">
-                <el-slider v-model="element.delay" :step="0.1" :min="0" :max="10"></el-slider>
-              </el-form-item>
-            </div>
-          </el-form>
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -150,6 +162,7 @@
         panelTabState: 0,
         canvasWidth: this.$store.state.editor.canvasWidth,
         canvasHeight: this.$store.state.editor.canvasHeight,
+        dialogSaveBeforeBack: false,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
         http: appConst.APP_MALL_API_URL
@@ -192,6 +205,11 @@
       }
     },
     methods: {
+      dialogSave (mark) {
+        return Promise.resolve(this.save()).then(() => {
+          this.$router.replace('themeList')
+        })
+      },
       getPicList (_id) {
         this.$store.dispatch('getPicListByThemeId', _id)
       },
@@ -242,7 +260,7 @@
         this.$store.dispatch('playAnimate')
       },
       save () {
-        this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
+        return this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
           this.$message({
             message: '保存成功',
             type: 'success'
@@ -304,6 +322,29 @@
     height: 100%;
     overflow: hidden;
     user-select: none;
+  }
+
+  .header {
+    height: 60px;
+    background-color: #373f42;
+    color: #fff;
+    .reset-btn {
+      height: 100%;
+      padding: 0 20px;
+      cursor: pointer;
+    }
+    .el-icon-arrow-left {
+      margin-right: 20px;
+    }
+  }
+
+  .section {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+    overflow: hidden;
   }
 
   .overview {
@@ -372,7 +413,7 @@
       width: 100%;
       padding: 10px;
       z-index: 2;
-      background-color: #ececec;    
+      background-color: #ececec;
     }
     .panel-bg {
       .btn {
