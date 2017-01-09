@@ -132,6 +132,12 @@ const mutations = {
         state.themeList.splice(index, 1)
       }
     })
+  },
+  [types.SORTELEMENTS_BY_ZINDEX] (state, data) {
+    state.editorPage.elements.sort((a, b) => a['zindex'] - b['zindex'])
+    state.editorPage.elements.forEach((v, i, arr) => {
+      arr[i]['zindex'] = i + 1
+    })
   }
 }
 export default mutations

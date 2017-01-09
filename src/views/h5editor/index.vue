@@ -1,29 +1,6 @@
 <template>
   <div class="editor">
-    <div class="control-view">
-      <div>
-        <span class="panel" :class="{ active: viewState === 0 }" @click="function () { viewState = 0 }">页面</span><span class="panel" :class="{ active: viewState === 1 }" @click="function () { viewState = 1 }">图层</span>
-      </div>
-      <ul class="list custom-scrollbar" style="z-index: 1;">
-        <li v-for="(page, index) in pages">
-          <div class="view" :class="{ active: page === editorPage }" :style="{ width: 131 + 8 + 'px', height: (131 / canvasWidth) * canvasHeight + 34 + 'px' }" @click="setEditorPage(page)">
-            <Page class="content" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', transform: 'scale(' + 131 / canvasWidth +')' }" :elements="page.elements" type="see" />
-            <div class="icons clearfix">
-              <i class="icon el-icon-delete" @click="delPage(page)"></i>
-              <i class="icon el-icon-document" @click="copyPage(page)"></i>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <ul class="list custom-scrollbar" style="z-index: 2;" v-show="viewState === 1">
-        <li v-for="layer in layers">
-          <div class="layer" :class="{ active: element === layer}" @click="selectLayer(layer, $event)" @mousedown="moveLayer">
-            <span class="layer-img" :style="{ backgroundImage: 'url(' + http + layer.imgSrc + ')' }"></span>{{ layer.type }}{{ layer.zindex }}
-          </div>
-        </li>
-      </ul>
-      <button class="add el-icon-plus" @click="addPage"></button>
-    </div>
+    <Overview />
     <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
     <div class="control-panel">
       <div class="funcs">
@@ -133,9 +110,6 @@
               <el-form-item label="Y轴坐标">
                 <el-input v-model="element.top"><template slot="append">px</template></el-input>
               </el-form-item>
-              <el-form-item label="层叠顺序">
-                <el-input-number v-model="element.zindex"></el-input-number>
-              </el-form-item>
             </div>
             <div v-show="panelTabState === 1">
               <el-form-item label="动画库">
@@ -165,17 +139,17 @@
 
 <script>
   import tools from '../../util/tools'
+  import Overview from './overview'
   import Page from '../../components/Page'
   import PicPicker from '../../components/PicturePicker'
   import * as appConst from '../../util/appConst'
   export default {
     data () {
       return {
-        viewState: 0,
         panelState: 0,
         panelTabState: 0,
-        canvasWidth: '320',
-        canvasHeight: '508',
+        canvasWidth: this.$store.state.editor.canvasWidth,
+        canvasHeight: this.$store.state.editor.canvasHeight,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
         http: appConst.APP_MALL_API_URL
@@ -206,9 +180,6 @@
       themeId () {
         return this.$store.state.editor.editorTheme._id
       },
-      pages () {
-        return this.$store.state.editor.editorTheme.pages
-      },
       editorPage () {
         return this.$store.state.editor.editorPage
       },
@@ -216,52 +187,11 @@
         let ele = this.$store.state.editor.editorElement
         return ele || {}
       },
-      layers () {
-        return this.editorPage.elements
-      },
       picList () {
         return this.$store.state.editor.picList
       }
     },
     methods: {
-      moveLayer (layerEvent) {
-        let timer = null
-        let layer = layerEvent.target
-        let li = layer.parentNode
-        let startTop = li.offsetTop
-        let startY = layerEvent.clientY
-        let placeholder = document.createElement('li')
-        placeholder.style = 'height: 30px;background-color: #d6d6d6;'
-        let move = (moveEvent) => {
-          if (!timer) {
-            if (!layer.getAttribute('data-moving')) {
-              li.parentNode.insertBefore(placeholder, layer.parentNode)
-              layer.setAttribute('data-moving', true)
-            }
-            layer.style.top = moveEvent.clientY - startY + startTop + 'px'
-            timer = setTimeout(() => {
-              timer = null
-            }, 20)
-          }
-        }
-        let up = (upEvent) => {
-          if (layer.style.top) {
-            let start = startTop / 30
-            let end = (layer.style.top.substr(0, layer.style.top.length - 2) / 30).toFixed(0)
-            this.$store.dispatch('sortElements', {'start': start, 'end': end})
-          }
-          layer.style.top = ''
-          placeholder.parentNode && placeholder.parentNode.removeChild(placeholder)
-          document.removeEventListener('mousemove', move)
-          document.removeEventListener('mouseup', up)
-          layer.removeAttribute('data-moving')
-        }
-        document.addEventListener('mousemove', move)
-        document.addEventListener('mouseup', up)
-      },
-      selectLayer (layerObj, event) {
-        this.$store.dispatch('setEditorElement', layerObj)
-      },
       getPicList (_id) {
         this.$store.dispatch('getPicListByThemeId', _id)
       },
@@ -319,22 +249,10 @@
           })
         })
       },
-      addPage () {
-        this.$store.dispatch('addPage')
-      },
       deploy () {
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
         let _id = this.$store.state.editor.editorTheme._id
         window.open(appConst.APP_MALL_API_URL + '/perview/' + _id)
-      },
-      setEditorPage (page) {
-        this.$store.dispatch('setEditorPage', page)
-      },
-      copyPage (page) {
-        this.$store.dispatch('copyPage', page)
-      },
-      delPage (page) {
-        this.$store.dispatch('delPage', page)
       },
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)
@@ -356,7 +274,7 @@
       }
     },
     components: {
-      Page, PicPicker, appConst
+      Overview, Page, PicPicker, appConst
     },
     mounted () {
       let itemId = this.$route.query.itemId
@@ -386,6 +304,14 @@
     height: 100%;
     overflow: hidden;
     user-select: none;
+  }
+
+  .overview {
+    position: absolute;
+    left: 0;
+    width: 160px;
+    height: 100%;
+    z-index: 10;
   }
 
   .canvas {
@@ -520,126 +446,6 @@
           background-color: transparent;
         }
       }
-    }
-  }
-
-  .control-view {
-    position: absolute;
-    left: 0;
-    width: 160px;
-    height: 100%;
-    border-right: 1px solid #d6d6d6;
-    background-color: #ececec;
-    z-index: 10;
-    .panel {
-      display: inline-block;
-      line-height: 40px;
-      width: 50%;
-      text-align: center;
-      background-color: #d6d6d6;
-      cursor: pointer;
-      &.active {
-        background-color: #ececec;
-      }
-    }
-    .list {
-      background-color: #ececec;
-      position: absolute;
-      top: 40px;
-      bottom: 50px;
-      width: 100%;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-    .li-placeholder {
-      display: block;
-      width: 100%;
-      height: 30px;
-      background-color: #d6d6d6;
-    }
-    .layer {
-      padding-left: 20px;
-      height: 30px;
-      line-height: 30px;
-      border-bottom: 1px solid #d6d6d6;
-      cursor: pointer;
-      &[data-moving] {
-        position: absolute;
-        width: 100%;
-      }
-      &:hover {
-        background-color: #d6d6d6;
-      }
-      &.active {
-        background-color: #18ccc0;
-        color: #fff;
-      }
-      &-img {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        margin-right: 1em;
-        background: white center no-repeat;
-        background-size: cover;
-      }
-    }
-    .view {
-      position: relative;
-      border-color: transparent;
-      border-style: solid;
-      border-width: 4px 4px 30px;
-      margin: 10px;
-      &.active {
-        border-color: #18ccc0;
-        .icons {
-          display: block;
-        }
-      }
-      .content {
-        transform-origin: left top;
-        background-color: #fff;
-        overflow: hidden;
-        position: relative;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          z-index: 10;
-        }
-      }
-      .icons {
-        position: absolute;
-        bottom: -1.5em;
-        right: 0.5em;
-        display: none;
-        width: 100%;
-        color: #fff;
-        .icon {
-          float: right;
-          margin-left: 1em;
-          opacity: 0.5;
-          cursor: pointer;
-          &:hover {
-            opacity: 1;
-          }
-        }
-      }
-    }
-    .add {
-      border: none;
-      position: absolute;
-      bottom: 0;
-      height: 50px;
-      line-height: 50px;
-      width: 100%;
-      left: 0;
-      background-color: #373f42;
-      text-align: center;
-      color: #fff;
-      cursor: pointer;
     }
   }
 </style>

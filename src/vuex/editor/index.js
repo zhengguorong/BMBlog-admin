@@ -3,10 +3,14 @@ import * as actions from './actions'
 
 const state = {
   editorElement: {}, // 正在编辑的元素
-  editorPage: {}, // 正在编辑的页面
+  editorPage: {
+    elements: []
+  }, // 正在编辑的页面
   themeList: [], // 用户所有主题列表
   editorTheme: {}, // 正在编辑的主题
-  picList: []
+  picList: [], // 图片列表
+  canvasWidth: 320,
+  canvasHeight: 504
 }
 
 export default{

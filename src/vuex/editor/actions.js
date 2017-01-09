@@ -124,10 +124,12 @@ export const delPage = ({commit}, page) => {
   commit(types.DELETE_PAGE, page)
 }
 
-export const getPageByThemeId = ({commit}, id) => {
+export const getPageByThemeId = ({dispatch, commit}, id) => {
   api.getPageByThemeId(id).then((res) => {
     commit(types.SET_CUR_EDITOR_THEME, res)
     commit(types.SET_CUR_EDITOR_PAGE, res.pages[0])
+  }).then(() => {
+    dispatch('sortElementsByZindex')
   })
 }
 
@@ -157,8 +159,8 @@ export const cleanPicList = ({commit}) => {
   commit(types.CLEAN_PIC_LIST)
 }
 
-export const sortElements = ({commit}, location) => {
-  commit(types.SORTELEMENTS, location)
+export const sortElementsByZindex = ({commit}, location) => {
+  commit(types.SORTELEMENTS_BY_ZINDEX, location)
 }
 
 export const deleteTheme = ({commit}, theme) => {
