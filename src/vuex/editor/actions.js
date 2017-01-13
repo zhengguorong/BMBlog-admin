@@ -71,9 +71,11 @@ export const addPage = ({commit}) => {
  * 添加页面元素
  */
 export const addElement = ({commit, state}, data) => {
-  var element = new Element(data)
-  commit(types.ADD_PIC_ELEMENT, element)
-  commit(types.SET_CUR_EDITOR_ELEMENT, state.editorPage.elements.slice(-1)[0])
+  commit(types.ADD_PIC_ELEMENT, new Element(data))
+  var list = state.editorPage.elements
+  var lastIndex = list.length - 1
+  list[lastIndex]['zindex'] = lastIndex ? list[lastIndex - 1]['zindex'] + 1 : 1
+  commit(types.SET_CUR_EDITOR_ELEMENT, state.editorPage.elements[lastIndex])
 }
 
 /**
@@ -137,6 +139,7 @@ export const setEditorElement = ({commit}, element) => {
   commit(types.SET_CUR_EDITOR_ELEMENT, element)
 }
 
+// 删除元素
 export const deleteElement = ({commit}, element) => {
   commit(types.DELETE_ELEMENT, element)
 }
@@ -145,8 +148,20 @@ export const deleteSelectedElement = ({commit, state}) => {
   commit(types.DELETE_ELEMENT, state.editorElement)
 }
 
-export const playAnimate = ({commit}) => {
+export const playAnimate = ({state, commit, getters}) => {
   commit(types.PLAY_ANIMATE)
+  let target = getters['editingElement'] || getters['editingPageElements'] || null
+  let time = 0
+  if (target instanceof Array) {
+    target.forEach(v => {
+      time = v['animatedName'] && (v['duration'] + v['delay']) > time ? (v['duration'] + v['delay']) : time
+    })
+  } else if (target instanceof Object) {
+    time = (target['duration'] + target['delay'])
+  }
+  setTimeout(() => {
+    commit(types.STOP_ANIMATE, target)
+  }, time * 1000)
 }
 
 export const getPicListByThemeId = ({commit}, _id) => {

@@ -1,145 +1,83 @@
 <template>
-  <div class='wrap' @mousedown="mousedown" @mouseup="mouseup">
-    <div class="text" style="width: 100%;height: 100%">{{element.text}}</div>
-    <Operate v-show="showOperate" @mousedown.native.stop="scaleMousedown" @mouseup.native.stop="scaleMouseup" @mousemove.native.stop="scaleMousemove"
-    />
-  </div>
+  <aside class='element' @mousedown="mousedown">
+    <Operate class="operate" v-show="element === editingElement" :element="element" />
+    <section class="content">
+      <div :class="element['playing'] && 'animated ' + this.element['animatedName']" :style="styleAnime">
+        <div :style="styleBasic">{{ element.text }}</div>
+      </div>
+    </section>
+  </aside>
 </template>
 
 <script>
-  import Operate from '../Operate'
-  export default{
-    props: {
-      element: {
-        type: Object,
-        require: true
+  import Operate from './../OperateNew'
+  export default {
+    props: ['element'],
+    computed: {
+      editingElement () {
+        return this.$store.getters['editingElement']
       },
-      showOperate: {
-        type: Boolean
-      }
-    },
-    data () {
-      return {
-        left: 0,
-        top: 0,
-        currentX: 0,
-        currentY: 0,
-        flag: false
+      styleAnime () {
+        return {
+          animationIterationCount: this.element['loop'] ? 'infinite' : 'initial',
+          animationDuration: this.element['duration'] + 's',
+          animationDelay: this.element['delay'] + 's'
+        }
+      },
+      styleBasic () {
+        return {
+          width: this.element['width'] + 'px',
+          lineHeight: this.element['lineHeight'],
+          color: this.element['color'],
+          textAlign: this.element['textAlign'],
+          fontSize: this.element['fontSize'] + 'px',
+          fontWeight: this.element['fontWeight'],
+          fontFamily: this.element['fontFamily'],
+          opacity: this.element['opacity'] / 100,
+          transform: 'rotate(' + this.element['transform'] + 'deg' + ')'
+        }
       }
     },
     methods: {
-      // 处理元素拖动
-      move () {
-        document.querySelector('.canvas').onmousemove = (event) => {
-          var e = event || window.event
-          if (this.flag) {
-            let nowX = e.clientX
-            let nowY = e.clientY
-            let disX = nowX - this.currentX
-            let disY = nowY - this.currentY
-            this.element.top = parseInt(this.top) + disY
-            this.element.left = parseInt(this.left) + disX
-          }
+      mousedown (downEvent) {
+        let ele = this.element
+        let startY = downEvent.clientY
+        let startX = downEvent.clientX
+        let startTop = ele['top']
+        let startLeft = ele['left']
+        let move = moveEvent => {
+          let currX = moveEvent.clientX
+          let currY = moveEvent.clientY
+          ele['top'] = currY - startY + startTop
+          ele['left'] = currX - startX + startLeft
         }
-      },
-      // 处理元素伸缩
-      scaleMousemove () {
-        document.querySelector('.canvas').onmouseup = (event) => {
-          this.scaleFlag = false
+        let up = () => {
+          document.removeEventListener('mousemove', move)
+          document.removeEventListener('mouseup', up)
         }
-        document.querySelector('.canvas').onmousemove = (event) => {
-          var e = event || window.event
-          if (this.scaleFlag) {
-            let nowX = e.clientX
-            let nowY = e.clientY
-            let disX = nowX - this.currentX
-            let disY = nowY - this.currentY
-            switch (this.direction) {
-                // 左边
-              case 'w':
-                this.element.width = parseInt(this.width) - disX
-                this.element.left = parseInt(this.left) + disX
-                break
-                // 右边
-              case 'e':
-                this.element.width = parseInt(this.width) + disX
-                break
-                // 上边
-              case 'n':
-                this.element.height = parseInt(this.height) - disY
-                this.element.top = parseInt(this.top) + disY
-                break
-                // 下边
-              case 's':
-                this.element.height = parseInt(this.height) + disY
-                break
-                // 左上
-              case 'nw':
-                this.element.width = parseInt(this.width) - disX
-                this.element.left = parseInt(this.left) + disX
-                this.element.height = parseInt(this.height) - disY
-                this.element.top = parseInt(this.top) + disY
-                break
-                // 左下
-              case 'sw':
-                this.element.width = parseInt(this.width) - disX
-                this.element.left = parseInt(this.left) + disX
-                this.element.height = parseInt(this.height) + disY
-                break
-              case 'ne':
-                this.element.height = parseInt(this.height) - disY
-                this.element.top = parseInt(this.top) + disY
-                this.element.width = parseInt(this.width) + disX
-                break
-              case 'se':
-                this.element.height = parseInt(this.height) + disY
-                this.element.width = parseInt(this.width) + disX
-                break
-            }
-          }
-        }
-      },
-      mousedown (e) {
-        this.flag = true
-        this.currentX = e.clientX
-        this.currentY = e.clientY
-        this.top = this.element.top
-        this.left = this.element.left
-        this.move()
-      },
-      mouseup (e) {
-        this.flag = false
-        this.scaleFlag = false
-      },
-      scaleMousedown (e) {
-        this.scaleFlag = true
-        this.currentX = e.clientX
-        this.currentY = e.clientY
-        this.top = this.element.top
-        this.left = this.element.left
-        this.width = this.element.width
-        this.height = this.element.height
-        this.direction = e.target.getAttribute('data-direction')
-        this.scaleMousemove()
-      },
-      scaleMouseup (e) {
-        this.scaleFlag = false
+        document.addEventListener('mousemove', move)
+        document.addEventListener('mouseup', up)
       }
     },
-    components: {
-      Operate
-    }
+    components: { Operate }
   }
 </script>
 
 <style lang='less' scoped>
-  .wrap {
+  .element {
     position: absolute;
     cursor: move;
   }
-  .text {
-    position: absolute;
-    /*color: #fff;*/
-    user-select: none;
+
+  .operate {
+    z-index: 2;
   }
+
+  .content {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    position: relative;
+    z-index: 1;
+  }
+
 </style>

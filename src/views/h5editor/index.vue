@@ -2,10 +2,10 @@
   <div class="editor">
     <header class="header">
       <button class="reset-btn" @click="dialogSaveBeforeBack = true"><i class="el-icon-arrow-left"></i>返回作品</button>
-      <el-dialog title="返回作品列表" v-model="dialogSaveBeforeBack" size="tiny">
-        <span>要保存作品并返回作品列表吗？</span>
+      <el-dialog title="即将返回作品列表" v-model="dialogSaveBeforeBack" size="tiny">
+        <span>未保存的作品将会失去目前进度，是否继续返回</span>
         <span slot="footer">
-          <el-button type="danger" @click="dialogSave(false)">不保存</el-button>
+          <el-button type="danger" @click="dialogSave(false)">继续返回</el-button>
           <el-button type="primary" @click="dialogSave(true)">保 存</el-button>
         </span>
       </el-dialog>
@@ -21,17 +21,8 @@
           <el-tooltip  effect="dark" content="新建素材" placement="left">
             <button class="func el-icon-picture" @click="togglePanel(2)":class="{ active: panelState === 2 }"></button>
           </el-tooltip>
-          <el-tooltip  effect="dark" content="形状元素" placement="left">
+          <!--<el-tooltip  effect="dark" content="形状元素" placement="left">
             <button class="func el-icon-star-on" @click="togglePanel(3)":class="{ active: panelState === 3 }"></button>
-          </el-tooltip>
-          <!--<el-tooltip  effect="dark" content="添加背景图" placement="left">
-            <button class="func" @click="addBG">BG</button>
-          </el-tooltip>
-          <el-tooltip  effect="dark" content="清除背景图" placement="left">
-            <button class="func" @click="cleanBG">CBG</button>
-          </el-tooltip>
-          <el-tooltip  effect="dark" content="添加文本" placement="left">
-            <button class="func" @click="addTextElement">WORD</button>
           </el-tooltip>-->
           <el-tooltip  effect="dark" content="播放动画" placement="left">
             <button class="func el-icon-caret-right" @click="playAnimate"></button>
@@ -57,11 +48,12 @@
           </div>
           <!-- 添加文字 1 -->
           <div class="panel panel-text" v-show="panelState === 1">
-            <div class="btn" @click="addTextElement">插入文本</div>
+            <div class="btn" @click="addTextElement('title')" style="font-size: 32px; font-weight: bold;">插入标题</div>
+            <div class="btn" @click="addTextElement('plain')">插入文本</div>
           </div>
           <!-- 添加元素 2 -->
           <div class="panel panel-element clearfix" v-show="panelState === 2">
-            <PicPicker class="ele" v-model="picBase64" @style="style"></PicPicker>
+            <PicPicker class="ele" @uploaded="uploadImage"></PicPicker>
             <div class="ele" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addPicElement(element)" v-for="element in picList"></div>
           </div>
           <!-- 添加形状 3 -->
@@ -90,13 +82,24 @@
                 <!-- 文字编辑界面特有控件 -->
                 <template v-if="panelState === 11">
                   <el-form-item label="文本内容">
-                    <el-input v-model="element.text"></el-input>
+                    <el-input v-model="element.text" type="textarea"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-checkbox v-model="element.fontWeight" true-label="bold" false-label="normal">加粗</el-checkbox>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button size="small" type="primary" @click="element.textAlign = 'left'">左对齐</el-button>
+                    <el-button size="small" type="primary" @click="element.textAlign = 'center'">居中</el-button>
+                    <el-button size="small" type="primary" @click="element.textAlign = 'right'">右对齐</el-button>
                   </el-form-item>
                   <el-form-item label="颜色">
                     <el-input type="color" v-model="element.color"></el-input>
                   </el-form-item>
                   <el-form-item label="字体大小">
                     <el-input-number v-model="element.fontSize"></el-input>
+                  </el-form-item>
+                  <el-form-item label="行高">
+                    <el-input-number v-model="element.lineHeight"></el-input>
                   </el-form-item>
                   <el-form-item label="字体">
                     <el-input v-model="element.fontFamily"></el-input>
@@ -109,7 +112,7 @@
                 <el-form-item label="旋转">
                   <el-slider v-model="element.transform" :max="359"></el-input>
                 </el-form-item>
-                <el-form-item label="高">
+                <el-form-item label="高" v-show="panelState !== 11">
                   <el-input v-model="element.height"><template slot="append">px</template></el-input>
                 </el-form-item>
                 <el-form-item label="宽">
@@ -129,10 +132,7 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="是否循环">
-                  <el-select v-model="element.loop" placeholder="默认为否">
-                    <el-option value="false" label="否"></el-option>
-                    <el-option value="true" label="是"></el-option>
-                  </el-select>
+                  <el-checkbox v-model="element.loop"></el-checkbox>
                 </el-form-item>
                 <el-form-item label="速度">
                   <el-slider v-model="element.duration" :step="0.1" :min="0" :max="10"></el-slider>
@@ -169,10 +169,9 @@
       }
     },
     watch: {
-      picBase64: function () {
-        this.$store.dispatch('savePic', {'imgData': this.picBase64, 'themeId': this.themeId, 'width': this.element.width, 'height': this.element.height})
+      picBase64 () {
       },
-      element: function () {
+      element () {
         let ele = this.$store.state.editor.editorElement
         let type = ele ? ele.type : 'null'
         this.panelTabState = 0
@@ -206,12 +205,18 @@
     },
     methods: {
       dialogSave (mark) {
-        return Promise.resolve(this.save()).then(() => {
-          this.$router.replace('themeList')
-        })
+        return Promise.resolve().then(() => mark && this.save()).then(() => this.$router.replace('themeList'))
       },
       getPicList (_id) {
         this.$store.dispatch('getPicListByThemeId', _id)
+      },
+      uploadImage (data) {
+        this.$store.dispatch('savePic', {
+          'imgData': data['base64'],
+          'themeId': this.themeId,
+          'width': data['width'],
+          'height': data['height']
+        })
       },
       addPicElement (ele) {
         // if (ele) {
@@ -248,13 +253,23 @@
       cleanEle () {
         this.$store.dispatch('cleanEle', this.element)
       },
-      addTextElement () {
-        this.$store.dispatch('addElement', {
-          type: 'text',
-          width: 100,
-          height: 100,
-          text: '请输入文本'
-        })
+      addTextElement (type) {
+        let param = {}
+        param['type'] = 'text'
+        param['text'] = '请输入文本'
+        param['width'] = this.canvasWidth
+        param['lineHeight'] = 1.5
+        switch (type) {
+          case 'plain':
+            break
+          case 'title':
+            param['fontSize'] = 32
+            param['fontWeight'] = 'bold'
+            param['textAlign'] = 'center'
+            break
+          default:
+        }
+        this.$store.dispatch('addElement', param)
       },
       playAnimate () {
         this.$store.dispatch('playAnimate')
@@ -276,7 +291,7 @@
         this.$store.dispatch('setEditorElement', element)
       },
       deleteListener (event) {
-        if (event.keyCode === 8 && event.target.nodeName !== 'INPUT') {
+        if (event.keyCode === 8 && event.target.nodeName !== 'INPUT' && event.target.nodeName !== 'TEXTAREA') {
           this.deleteElement()
         }
       },
@@ -307,9 +322,11 @@
         this.$store.dispatch('cleanPicList')
       }
       document.addEventListener('keyup', this.deleteListener)
+      window.onbeforeunload = () => false
     },
     destroyed () {
       document.removeEventListener('keyup', this.deleteListener)
+      window.onbeforeunload = null
     }
   }
 

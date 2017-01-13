@@ -1,11 +1,9 @@
 <template>
-  <label class="lable-pic">
-    <input class="input-pic" type="file" @change="fileChange"/>
-  </label>
+  <label class="lable"><input class="input" type="file" @change="fileChange"></label>
 </template>
 
 <style scoped>
-  .lable-pic {
+  .lable {
     display: block;
     cursor: pointer;
     width: 3em;
@@ -14,38 +12,32 @@
     background-size: cover;
   }
 
-  .input-pic {
+  .input {
     display: none;
   }
 </style>
 
 <script>
-  export default{
-    data () {
-      return {
-        picUrl: '',
-        style: {
-          width: 200,
-          height: 200
-        }
-      }
-    },
+  export default {
     methods: {
-      fileChange (value) {
-        var $vue = this
-        if (!value) return
-        let file = value.target.files[0]
-        var reader = new window.FileReader()
-        reader.onload = function (e) {
-          var data = e.target.result
-          var image = new window.Image()
-          image.src = data
-          $vue.style.width = image.width
-          $vue.style.height = image.height
-          $vue.$emit('style', $vue.style)
-          $vue.$emit('input', image.src)
+      fileChange (event) {
+        let file = event.target.files[0]
+        if (file) {
+          let reader = new window.FileReader()
+          reader.onload = (ev) => {
+            let img = document.createElement('img')
+            let base64 = ev.target.result
+            img.onload = function () {
+              this.$emit('uploaded', {
+                'base64': base64,
+                'width': img.width,
+                'height': img.height
+              })
+            }
+            img.src = base64
+          }
+          reader.readAsDataURL(file)
         }
-        reader.readAsDataURL(file)
       }
     }
   }

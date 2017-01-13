@@ -11,10 +11,6 @@
     <div class="scale scale-s" data-direction="s"></div>
     <div class="scale scale-w" data-direction="w"></div>
   </div>
-  </div>
-  </div>
-</template>
-</template>
 </template>
 
 <style lang="less" scoped>
