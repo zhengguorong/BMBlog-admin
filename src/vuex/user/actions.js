@@ -17,6 +17,6 @@ export const register = ({commit}, userInfo) => {
   api.register(userInfo)
     .then((res) => {
       window.localStorage.setItem('token', res.token)
-      window.location.replace('#/editor')
+      window.location.replace('#/themeList')
     })
 }

@@ -19,7 +19,7 @@
             <el-button type="primary" class="login-btn" @click.native.prevent="login">登录</el-button>
           </el-form-item>
         </el-form>
-        <router-link to="/register">注册</router-link>
+        <router-link to="/register" replace>注册</router-link>
       </div>
     </div>
   </div>
