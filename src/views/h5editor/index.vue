@@ -42,7 +42,7 @@
               <el-button class="btn" type="danger" @click="cleanBG">移除背景</el-button>
             </div>
             <div class="clearfix" v-show="panelTabState === 1">
-              <PicPicker class="bgs" v-model="picBase64" @style="style"></PicPicker>
+              <PicPicker class="bgs" @uploaded="uploadImage" @style="style"></PicPicker>
               <div class="bgs" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addBG(element.filePath)" v-for="element in picList"></div>
             </div>
           </div>
