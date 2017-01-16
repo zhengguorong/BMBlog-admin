@@ -1,200 +1,222 @@
 <template>
   <div class="editor">
-    <div class="control-view">
-      <div>
-        <span class="panel" :class="{ active: viewState === 0 }" @click="function () { viewState = 0 }">页面</span><span class="panel" :class="{ active: viewState === 1 }" @click="function () { viewState = 1 }">图层</span>
-      </div>
-      <ul class="list custom-scrollbar" style="z-index: 1;">
-        <li v-for="(page, index) in pages">
-          <div class="view" :class="{ active: page === editorPage }" :style="{ width: 131 + 8 + 'px', height: (131 / canvasWidth) * canvasHeight + 34 + 'px' }" @click="setEditorPage(page)">
-            <Page class="content" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px', transform: 'scale(' + 131 / canvasWidth +')' }" :elements="page.elements" type="see" />
-            <div class="icons clearfix">
-              <i class="icon el-icon-delete" @click="delPage(page)"></i>
-              <i class="icon el-icon-document" @click="copyPage(page)"></i>
+    <header class="header">
+      <button class="reset-btn" @click="dialogSaveBeforeBack = true"><i class="el-icon-arrow-left"></i>返回作品</button>
+      <el-dialog title="即将返回作品列表" v-model="dialogSaveBeforeBack" size="tiny">
+        <span>未保存的作品将会失去目前进度，是否继续返回</span>
+        <span slot="footer">
+          <el-button type="danger" @click="dialogSave(false)">继续返回</el-button>
+          <el-button type="primary" @click="dialogSave(true)">保 存</el-button>
+        </span>
+      </el-dialog>
+    </header>
+    <section class="section">
+      <Overview class="overview" />
+      <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
+      <div class="control-panel">
+        <div class="funcs">
+          <el-tooltip  effect="dark" content="新建文本" placement="left">
+            <button class="func el-icon-edit" @click="togglePanel(1)" :class="{ active: panelState === 1 }"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="新建素材" placement="left">
+            <button class="func el-icon-picture" @click="togglePanel(2)":class="{ active: panelState === 2 }"></button>
+          </el-tooltip>
+          <!--<el-tooltip  effect="dark" content="形状元素" placement="left">
+            <button class="func el-icon-star-on" @click="togglePanel(3)":class="{ active: panelState === 3 }"></button>
+          </el-tooltip>-->
+          <el-tooltip  effect="dark" content="播放动画" placement="left">
+            <button class="func el-icon-caret-right" @click="playAnimate"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="保存" placement="left">
+            <button class="func el-icon-upload" @click="save"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="发布" placement="left">
+            <button class="func el-icon-message" @click="deploy"></button>
+          </el-tooltip>
+        </div>
+        <div class="wrapper custom-scrollbar">
+          <!-- 设置背景 0 -->
+          <div class="panel panel-bg" v-show="panelState === 0">
+            <div class="clearfix" v-show="panelTabState !== 1">
+              <el-button class="btn" type="success" @click="panelTabState = 1">更换背景</el-button>
+              <el-button class="btn" type="danger" @click="cleanBG">移除背景</el-button>
+            </div>
+            <div class="clearfix" v-show="panelTabState === 1">
+              <PicPicker class="bgs" v-model="picBase64" @style="style"></PicPicker>
+              <div class="bgs" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addBG(element.filePath)" v-for="element in picList"></div>
             </div>
           </div>
-        </li>
-      </ul>
-      <ul class="list custom-scrollbar" style="z-index: 2;" v-show="viewState === 1">
-        <li v-for="layer in layers">
-          <div class="layer" :class="{ active: element === layer}" @click="selectLayer(layer, $event)" @mousedown="moveLayer">
-            <span class="layer-img" :style="{ backgroundImage: 'url(' + http + layer.imgSrc + ')' }"></span>{{ layer.type }}{{ layer.zindex }}
+          <!-- 添加文字 1 -->
+          <div class="panel panel-text" v-show="panelState === 1">
+            <div class="btn" @click="addTextElement('title')" style="font-size: 32px; font-weight: bold;">插入标题</div>
+            <div class="btn" @click="addTextElement('plain')">插入文本</div>
           </div>
-        </li>
-      </ul>
-      <button class="add el-icon-plus" @click="addPage"></button>
-    </div>
-    <Page class="canvas" :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
-    <div class="control-panel">
-      <div class="funcs">
-        <el-tooltip  effect="dark" content="清除元素" placement="left">
-          <button class="func" @click="cleanEle">CELE</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="添加背景图" placement="left">
-          <button class="func" @click="addBG">BG</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="清除背景图" placement="left">
-          <button class="func" @click="cleanBG">CBG</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="添加文本" placement="left">
-          <button class="func" @click="addTextElement">WORD</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="播放动画" placement="left">
-          <button class="func" @click="playAnimate">PLAY</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="保存" placement="left">
-          <button class="func" @click="save">SAVE</button>
-        </el-tooltip>
-        <el-tooltip  effect="dark" content="发布" placement="left">
-          <button class="func" @click="deploy">SEND</button>
-        </el-tooltip>
-      </div>
-      <div class="wrapper custom-scrollbar">
-        <div class="block">
-          <el-tag class="block-title">请输入文本</el-tag>
-          <el-input placeholder="文本" v-model="element.text"></el-input>
-        </div>
-        <div class="clearfix adjust">字体大小<el-input class="adjust-control" placeholder="填写字体大小" v-model="element.fontSize"></el-input></div>
-        <div class="clearfix adjust">颜色<el-input class="adjust-control" placeholder="填写颜色编号，省略#" v-model="element.color"></el-input></div>
-        <div class="clearfix adjust">字体样式<el-input class="adjust-control" placeholder="填写字体样式" v-model="element.fontFamily"></el-input></div>
-        <div class="block">
-          <el-tag class="block-title">上传图片</el-tag>
-          <div>
-            <PicPicker v-model="picBase64" @style="style"></PicPicker>
+          <!-- 添加元素 2 -->
+          <div class="panel panel-element clearfix" v-show="panelState === 2">
+            <PicPicker class="ele" @uploaded="uploadImage"></PicPicker>
+            <div class="ele" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addPicElement(element)" v-for="element in picList"></div>
           </div>
-        </div>
-        <div class="block">
-          <el-tag class="block-title">图片地址</el-tag>
-          <el-input placeholder="" v-model="element.imgSrc"></el-input>
-        </div>
-        <div class="block">
-          <el-tag class="block-title">图片列表</el-tag>
-          <div class="clearfix">
-            <img class="preview" :src="http + element.filePath" @dblclick="addPicElement(element)" v-for="element in picList">
-          </div>
-        </div>
-        <div class="block">
-          <el-tag class="block-title">属性调节</el-tag>
-          <div class="clearfix adjust">透明度<el-slider class="adjust-control" v-model="element.opacity"></el-slider></div>
-          <div class="clearfix adjust">旋转<el-slider class="adjust-control" v-model="element.transform" :max="360"></el-slider></div>
-          <div class="clearfix adjust">动画名
-            <el-select class="adjust-control" placeholder="Animate.css" v-model="element.animatedName" clearable>
-              <el-option
-                v-for="item in animateList"
-                :label="item"
-                :value="item">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="clearfix adjust">动画循环
-            <el-select class="adjust-control"  v-model="element.loop" clearable>
-              <el-option value="false" label="否"></el-option>
-              <el-option value="true" label="是"></el-option>
-            </el-select>
-          </div>
-          <div class="clearfix adjust">速度<el-input class="adjust-control" placeholder="填写秒数，省略单位s" v-model="element.duration"></el-input></div>
-          <div class="clearfix adjust">延迟<el-input class="adjust-control" placeholder="填写秒数，省略单位s" v-model="element.delay"></el-input></div>
-          <div class="clearfix adjust">X偏移<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.left"></el-input></div>
-          <div class="clearfix adjust">Y偏移<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.top"></el-input></div>
-          <div class="clearfix adjust">宽度<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.width"></el-input></div>
-          <div class="clearfix adjust">高度<el-input-number class="adjust-control" placeholder="填写像素，省略单位px" v-model="element.height"></el-input></div>
-          <div class="clearfix adjust">顺序<el-input class="adjust-control" placeholder="填写顺序（z-index）" v-model="element.zindex"></el-input></div>
-        </div>
-        <div class="block">
-          <el-tag class="block-title">svg元素</el-tag>
-          <div class="clearfix">
-            <svg class="svg" @dblclick="addIcon('action-redo')">
+          <!-- 添加形状 3 -->
+          <div class="panel panel-shape clearfix" v-show="panelState === 3">
+            <svg class="shape" @click="addIcon('action-redo')">
               <use xlink:href="/static/svg/icon.svg#action-redo"></use>
             </svg>
-            <svg class="svg" @dblclick="addIcon('circle-fill')"  fill="#000">
+            <svg class="shape" @click="addIcon('circle-fill')"  fill="#000">
               <use xlink:href="/static/svg/icon.svg#circle-fill"  fill="#000"></use>
             </svg>
-            <svg class="svg" @dblclick="addIcon('bmLogo')">
+            <svg class="shape" @click="addIcon('bmLogo')">
               <use xlink:href="/static/svg/icon.svg#bmLogo"  fill="#fff"></use>
             </svg>
           </div>
+          <!-- 图层编辑面板 -->
+          <div class="panel panel-edit">
+            <div class="panel-tab clearfix">
+              <div class="tab" :class="{ active: panelTabState === 0 }" @click="function () { panelTabState = 0 }">
+                <span v-show="panelState === 11">文本</span>
+                <span v-show="panelState === 12">元素</span>
+              </div>
+              <div class="tab" :class="{ active: panelTabState === 1 }" @click="function () { panelTabState = 1 }">动作</div>
+            </div>
+            <el-form label-width="5em">
+              <div v-show="panelTabState === 0">
+                <!-- 文字编辑界面特有控件 -->
+                <template v-if="panelState === 11">
+                  <el-form-item label="文本内容">
+                    <el-input v-model="element.text" type="textarea"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-checkbox v-model="element.fontWeight" true-label="bold" false-label="normal">加粗</el-checkbox>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button size="small" type="primary" @click="element.textAlign = 'left'">左对齐</el-button>
+                    <el-button size="small" type="primary" @click="element.textAlign = 'center'">居中</el-button>
+                    <el-button size="small" type="primary" @click="element.textAlign = 'right'">右对齐</el-button>
+                  </el-form-item>
+                  <el-form-item label="颜色">
+                    <el-input type="color" v-model="element.color"></el-input>
+                  </el-form-item>
+                  <el-form-item label="字体大小">
+                    <el-input-number v-model="element.fontSize"></el-input>
+                  </el-form-item>
+                  <el-form-item label="行高">
+                    <el-input-number v-model="element.lineHeight"></el-input>
+                  </el-form-item>
+                  <el-form-item label="字体">
+                    <el-input v-model="element.fontFamily"></el-input>
+                  </el-form-item>
+                </template>
+                <!-- 通用控件-->
+                <el-form-item label="透明度">
+                  <el-slider v-model="element.opacity"></el-input>
+                </el-form-item>
+                <el-form-item label="旋转">
+                  <el-slider v-model="element.transform" :max="359"></el-input>
+                </el-form-item>
+                <el-form-item label="高" v-show="panelState !== 11">
+                  <el-input v-model="element.height"><template slot="append">px</template></el-input>
+                </el-form-item>
+                <el-form-item label="宽">
+                  <el-input v-model="element.width"><template slot="append">px</template></el-input>
+                </el-form-item>
+                <el-form-item label="X轴坐标">
+                  <el-input v-model="element.left"><template slot="append">px</template></el-input>
+                </el-form-item>
+                <el-form-item label="Y轴坐标">
+                  <el-input v-model="element.top"><template slot="append">px</template></el-input>
+                </el-form-item>
+              </div>
+              <div v-show="panelTabState === 1">
+                <el-form-item label="动画库">
+                  <el-select placeholder="daneden/animate.css" v-model="element.animatedName" clearable>
+                    <el-option v-for="item in animateList" :label="item" :value="item"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="是否循环">
+                  <el-checkbox v-model="element.loop"></el-checkbox>
+                </el-form-item>
+                <el-form-item label="速度">
+                  <el-slider v-model="element.duration" :step="0.1" :min="0" :max="10"></el-slider>
+                </el-form-item>
+                <el-form-item label="延迟">
+                  <el-slider v-model="element.delay" :step="0.1" :min="0" :max="10"></el-slider>
+                </el-form-item>
+              </div>
+            </el-form>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
 <script>
   import tools from '../../util/tools'
+  import Overview from './overview'
   import Page from '../../components/Page'
   import PicPicker from '../../components/PicturePicker'
   import * as appConst from '../../util/appConst'
   export default {
     data () {
       return {
-        viewState: 0,
-        canvasWidth: '320',
-        canvasHeight: '508',
+        panelState: 0,
+        panelTabState: 0,
+        canvasWidth: this.$store.state.editor.canvasWidth,
+        canvasHeight: this.$store.state.editor.canvasHeight,
+        dialogSaveBeforeBack: false,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
         http: appConst.APP_MALL_API_URL
       }
     },
     watch: {
-      picBase64: function () {
-        this.$store.dispatch('savePic', {'imgData': this.picBase64, 'themeId': this.themeId, 'width': this.element.width, 'height': this.element.height})
+      picBase64 () {
+      },
+      element () {
+        let ele = this.$store.state.editor.editorElement
+        let type = ele ? ele.type : 'null'
+        this.panelTabState = 0
+        switch (type) {
+          case 'text':
+            this.panelState = 11
+            break
+          case 'icon':
+          case 'pic':
+            this.panelState = 12
+            break
+          default:
+            this.panelState = 0
+        }
       }
     },
     computed: {
       themeId () {
         return this.$store.state.editor.editorTheme._id
       },
-      pages () {
-        return this.$store.state.editor.editorTheme.pages
-      },
       editorPage () {
         return this.$store.state.editor.editorPage
       },
       element () {
-        return this.$store.state.editor.editorElement || {}
-      },
-      layers () {
-        return this.editorPage.elements
+        let ele = this.$store.state.editor.editorElement
+        return ele || {}
       },
       picList () {
         return this.$store.state.editor.picList
       }
     },
     methods: {
-      moveLayer (layerEvent) {
-        let timer = null
-        let layer = layerEvent.target
-        let li = layer.parentNode
-        let startTop = li.offsetTop
-        let startY = layerEvent.clientY
-        let placeholder = document.createElement('li')
-        placeholder.style = 'height: 30px; background-color: #d6d6d6;'
-        let move = (moveEvent) => {
-          if (!timer) {
-            if (!layer.getAttribute('data-moving')) {
-              li.parentNode.insertBefore(placeholder, layer.parentNode)
-              layer.setAttribute('data-moving', true)
-            }
-            layer.style.top = moveEvent.clientY - startY + startTop + 'px'
-            timer = setTimeout(() => {
-              timer = null
-            }, 20)
-          }
-        }
-        let up = (upEvent) => {
-          placeholder.parentNode && placeholder.parentNode.removeChild(placeholder)
-          document.removeEventListener('mousemove', move)
-          document.removeEventListener('mouseup', up)
-          layer.removeAttribute('data-moving')
-        }
-        document.addEventListener('mousemove', move)
-        document.addEventListener('mouseup', up)
-      },
-      selectLayer (layerObj, event) {
-        this.$store.dispatch('setEditorElement', layerObj)
+      dialogSave (mark) {
+        return Promise.resolve().then(() => mark && this.save()).then(() => this.$router.replace('themeList'))
       },
       getPicList (_id) {
         this.$store.dispatch('getPicListByThemeId', _id)
+      },
+      uploadImage (data) {
+        this.$store.dispatch('savePic', {
+          'imgData': data['base64'],
+          'themeId': this.themeId,
+          'width': data['width'],
+          'height': data['height']
+        })
       },
       addPicElement (ele) {
         // if (ele) {
@@ -222,16 +244,8 @@
         obj.height = 100
         this.$store.dispatch('addElement', obj)
       },
-      addBG () {
-        let obj = {}
-        obj.type = 'bg'
-        obj.top = 0
-        obj.left = 0
-        obj.width = this.element.width
-        obj.height = this.element.height
-        obj.imgSrc = this.element.imgSrc
-        obj.zindex = 0
-        this.$store.dispatch('addBGElement', obj)
+      addBG (src) {
+        this.$store.dispatch('addBGElement', { type: 'bg', imgSrc: src })
       },
       cleanBG () {
         this.$store.dispatch('cleanBG')
@@ -239,42 +253,45 @@
       cleanEle () {
         this.$store.dispatch('cleanEle', this.element)
       },
-      addTextElement () {
-        this.element.type = 'text'
-        this.element.width = 100
-        this.element.height = 100
-        this.$store.dispatch('addElement', this.element)
+      addTextElement (type) {
+        let param = {}
+        param['type'] = 'text'
+        param['text'] = '请输入文本'
+        param['width'] = this.canvasWidth
+        param['lineHeight'] = 1.5
+        switch (type) {
+          case 'plain':
+            break
+          case 'title':
+            param['fontSize'] = 32
+            param['fontWeight'] = 'bold'
+            param['textAlign'] = 'center'
+            break
+          default:
+        }
+        this.$store.dispatch('addElement', param)
       },
       playAnimate () {
         this.$store.dispatch('playAnimate')
       },
       save () {
-        this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
+        return this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
           this.$message({
             message: '保存成功',
             type: 'success'
           })
         })
       },
-      addPage () {
-        this.$store.dispatch('addPage')
-      },
       deploy () {
-      },
-      setEditorPage (page) {
-        this.$store.dispatch('setEditorPage', page)
-      },
-      copyPage (page) {
-        this.$store.dispatch('copyPage', page)
-      },
-      delPage (page) {
-        this.$store.dispatch('delPage', page)
+        this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
+        let _id = this.$store.state.editor.editorTheme._id
+        window.open(appConst.APP_MALL_API_URL + '/perview/' + _id)
       },
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)
       },
       deleteListener (event) {
-        if (event.keyCode === 8 && event.target.nodeName !== 'INPUT') {
+        if (event.keyCode === 8 && event.target.nodeName !== 'INPUT' && event.target.nodeName !== 'TEXTAREA') {
           this.deleteElement()
         }
       },
@@ -284,10 +301,13 @@
       style (obj) {
         this.element.width = obj.width
         this.element.height = obj.height
+      },
+      togglePanel (code) {
+        this.panelState = code
       }
     },
     components: {
-      Page, PicPicker, appConst
+      Overview, Page, PicPicker, appConst
     },
     mounted () {
       let itemId = this.$route.query.itemId
@@ -302,9 +322,11 @@
         this.$store.dispatch('cleanPicList')
       }
       document.addEventListener('keyup', this.deleteListener)
+      window.onbeforeunload = () => false
     },
     destroyed () {
       document.removeEventListener('keyup', this.deleteListener)
+      window.onbeforeunload = null
     }
   }
 
@@ -317,6 +339,37 @@
     height: 100%;
     overflow: hidden;
     user-select: none;
+  }
+
+  .header {
+    height: 60px;
+    background-color: #373f42;
+    color: #fff;
+    .reset-btn {
+      height: 100%;
+      padding: 0 20px;
+      cursor: pointer;
+    }
+    .el-icon-arrow-left {
+      margin-right: 20px;
+    }
+  }
+
+  .section {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  .overview {
+    position: absolute;
+    left: 0;
+    width: 160px;
+    height: 100%;
+    z-index: 10;
   }
 
   .canvas {
@@ -356,157 +409,101 @@
         &:hover {
           color: #000;
         }
+        &.active {
+          border-right: 1px solid #ececec;
+          background-color: #ececec;
+          color: #000;
+        }
       }
     }
     .wrapper {
       height: 100%;
-      padding: 10px;
       overflow-y: auto;
       overflow-x: hidden;
-    }
-    .block {
-      margin-bottom: 30px;
-      &-title {
-        margin-bottom: 5px;
-      }
-    }
-    .adjust {
-      line-height: 2em;
-      &-control {
-        float: right;
-        width: 70%;
-      }
-    }
-    .preview {
-      display: inline-block;
-      vertical-align: top;
-      margin: 0 1% 1%;
-      width: 18%;
-    }
-    .svg {
-      float: left;
-      width: 50px;
-      height: 50px;
-    }
-  }
-
-  .control-view {
-    position: absolute;
-    left: 0;
-    width: 160px;
-    height: 100%;
-    border-right: 1px solid #d6d6d6;
-    background-color: #ececec;
-    z-index: 10;
-    .panel {
-      display: inline-block;
-      line-height: 40px;
-      width: 50%;
-      text-align: center;
-      background-color: #d6d6d6;
-      cursor: pointer;
-      &.active {
-        background-color: #ececec;
-      }
-    }
-    .list {
-      background-color: #ececec;
-      position: absolute;
-      top: 40px;
-      bottom: 50px;
-      width: 100%;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-    .li-placeholder {
-      display: block;
-      width: 100%;
-      height: 30px;
-      background-color: #d6d6d6;
-    }
-    .layer {
-      padding-left: 20px;
-      height: 30px;
-      line-height: 30px;
-      border-bottom: 1px solid #d6d6d6;
-      cursor: pointer;
-      &[data-moving] {
-        position: absolute;
-        width: 100%;
-      }
-      &:hover {
-        background-color: #d6d6d6;
-      }
-      &.active {
-        background-color: #18ccc0;
-        color: #fff;
-      }
-      &-img {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        margin-right: 1em;
-        background: white center no-repeat;
-        background-size: cover;
-      }
-    }
-    .view {
       position: relative;
-      border-color: transparent;
-      border-style: solid;
-      border-width: 4px 4px 30px;
-      margin: 10px;
-      &.active {
-        border-color: #18ccc0;
-        .icons {
-          display: block;
-        }
+    }
+    .panel {
+      position: absolute;
+      left: 0;
+      top: 0;
+      min-height: 100%;
+      width: 100%;
+      padding: 10px;
+      z-index: 2;
+      background-color: #ececec;
+    }
+    .panel-bg {
+      .btn {
+        float: left;
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
       }
-      .content {
-        transform-origin: left top;
-        background-color: #fff;
-        overflow: hidden;
-        position: relative;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          z-index: 10;
-        }
-      }
-      .icons {
-        position: absolute;
-        bottom: -1.5em;
-        right: 0.5em;
-        display: none;
-        width: 100%;
-        color: #fff;
-        .icon {
-          float: right;
-          margin-left: 1em;
-          opacity: 0.5;
+      .bgs {
+        float: left;
+        width: 80px;
+        height: 80px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        margin: 5px 5px;
+        &:hover {
+          border: 2px solid #18ccc0;
           cursor: pointer;
-          &:hover {
-            opacity: 1;
-          }
         }
       }
     }
-    .add {
-      border: none;
-      position: absolute;
-      bottom: 0;
-      height: 50px;
-      line-height: 50px;
-      width: 100%;
-      left: 0;
-      background-color: #373f42;
-      text-align: center;
-      color: #fff;
-      cursor: pointer;
+    .panel-text {
+      .btn {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border: 2px solid transparent;
+        &:hover {
+          cursor: pointer;
+          border-color: #04b9c4;
+        }
+      }
+    }
+    .panel-element {
+      .ele {
+        float: left;
+        width: 80px;
+        height: 80px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        margin: 5px 5px;
+        &:hover {
+          border: 2px solid #18ccc0;
+          cursor: pointer;
+        }
+      }
+    }
+    .panel-shape {
+      .shape {
+        float: left;
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+      }
+    }
+    .panel-edit {
+      z-index: 1;
+    }
+    .panel-tab {
+      line-height: 40px;
+      margin: -10px -10px 10px;
+      .tab {
+        float: left;
+        width: 50%;
+        text-align: center;
+        cursor: pointer;
+        background-color: #d6d6d6;
+        &.active {
+          background-color: transparent;
+        }
+      }
     }
   }
 </style>

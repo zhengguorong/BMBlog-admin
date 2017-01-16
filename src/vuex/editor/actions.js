@@ -11,11 +11,11 @@ import tools from '../../util/tools'
 export const saveTheme = ({commit}, theme) => {
   if (theme && theme._id) {
     return Promise.resolve(api.updateTheme(theme).then((res) => {
-      return commit(types.UPDATE_THEME_SUCCESS, res)
+      commit(types.UPDATE_THEME_SUCCESS, res)
     }))
   } else {
     return Promise.resolve(api.saveTheme(theme).then((res) => {
-      return commit(types.ADD_THEME_SUCCESS, res)
+      commit(types.ADD_THEME_SUCCESS, res)
     }))
   }
 }
@@ -70,10 +70,12 @@ export const addPage = ({commit}) => {
 /**
  * 添加页面元素
  */
-export const addElement = ({commit}, data) => {
-  var element = new Element(data)
-  commit(types.ADD_PIC_ELEMENT, element)
-  commit(types.SET_CUR_EDITOR_ELEMENT, element)
+export const addElement = ({commit, state}, data) => {
+  commit(types.ADD_PIC_ELEMENT, new Element(data))
+  var list = state.editorPage.elements
+  var lastIndex = list.length - 1
+  list[lastIndex]['zindex'] = lastIndex ? list[lastIndex - 1]['zindex'] + 1 : 1
+  commit(types.SET_CUR_EDITOR_ELEMENT, state.editorPage.elements[lastIndex])
 }
 
 /**
@@ -82,7 +84,7 @@ export const addElement = ({commit}, data) => {
 export const addBGElement = ({commit}, data) => {
   var element = new Element(data)
   commit(types.SET_BG_ELEMENT, element)
-  commit(types.SET_CUR_EDITOR_ELEMENT, element)
+  commit(types.SET_CUR_EDITOR_ELEMENT, null)
 }
 
 /**
@@ -124,10 +126,12 @@ export const delPage = ({commit}, page) => {
   commit(types.DELETE_PAGE, page)
 }
 
-export const getPageByThemeId = ({commit}, id) => {
+export const getPageByThemeId = ({dispatch, commit}, id) => {
   api.getPageByThemeId(id).then((res) => {
     commit(types.SET_CUR_EDITOR_THEME, res)
     commit(types.SET_CUR_EDITOR_PAGE, res.pages[0])
+  }).then(() => {
+    dispatch('sortElementsByZindex')
   })
 }
 
@@ -135,6 +139,7 @@ export const setEditorElement = ({commit}, element) => {
   commit(types.SET_CUR_EDITOR_ELEMENT, element)
 }
 
+// 删除元素
 export const deleteElement = ({commit}, element) => {
   commit(types.DELETE_ELEMENT, element)
 }
@@ -143,8 +148,20 @@ export const deleteSelectedElement = ({commit, state}) => {
   commit(types.DELETE_ELEMENT, state.editorElement)
 }
 
-export const playAnimate = ({commit}) => {
+export const playAnimate = ({state, commit, getters}) => {
   commit(types.PLAY_ANIMATE)
+  let target = getters['editingElement'] || getters['editingPageElements'] || null
+  let time = 0
+  if (target instanceof Array) {
+    target.forEach(v => {
+      time = v['animatedName'] && (v['duration'] + v['delay']) > time ? (v['duration'] + v['delay']) : time
+    })
+  } else if (target instanceof Object) {
+    time = (target['duration'] + target['delay'])
+  }
+  setTimeout(() => {
+    commit(types.STOP_ANIMATE, target)
+  }, time * 1000)
 }
 
 export const getPicListByThemeId = ({commit}, _id) => {
@@ -156,3 +173,14 @@ export const getPicListByThemeId = ({commit}, _id) => {
 export const cleanPicList = ({commit}) => {
   commit(types.CLEAN_PIC_LIST)
 }
+
+export const sortElementsByZindex = ({commit}, location) => {
+  commit(types.SORTELEMENTS_BY_ZINDEX, location)
+}
+
+export const deleteTheme = ({commit}, theme) => {
+  return Promise.resolve(api.delTheme(theme).then((res) => {
+    commit(types.DELETE_THEME, theme)
+  }))
+}
+

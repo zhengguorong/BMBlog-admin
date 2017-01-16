@@ -11,12 +11,13 @@
           </li>
           <template v-for="item in list">
             <li class="theme-item" @click="toEditor(item)">
-              <div class="thumb">
+              <div class="thumb" >
                 <img src="../../assets/images/default.png" alt="">
               </div>
               <div class="footer">
                 <div class="title">作品名字</div>
                 <div class="content">作品简介</div>
+                <div @click.stop="deleteTheme(item)">删除</div>
               </div>
             </li>
           </template>
@@ -43,7 +44,25 @@
       toEditor (item) {
         this.$store.dispatch('setEditorTheme', item)
         this.$store.dispatch('setEditorPage', item.pages[0])
-        this.$router.push({ path: '/h5editor', query: { itemId: item._id } })
+        this.$router.replace({ path: '/h5editor', query: { itemId: item._id } })
+      },
+      deleteTheme (item) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('deleteTheme', item)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       },
       create () {
         this.$store.dispatch('createTheme')
@@ -51,7 +70,7 @@
         let $this = this
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
           console.log($this.$store.state.editor.editorTheme._id)
-          this.$router.push({ path: '/h5editor', query: { itemId: $this.$store.state.editor.editorTheme._id } })
+          this.$router.replace({ path: '/h5editor', query: { itemId: $this.$store.state.editor.editorTheme._id } })
         })
       }
     },
@@ -67,17 +86,17 @@
     height: 100%;
     background-color: #f2f5f6;
   }
-  
+
   .my-themes .container {
     width: 1024px;
     margin: 0 auto;
     padding-top: 20px;
   }
-  
+
   .my-themes .theme-list {
     overflow: hidden;
   }
-  
+
   .theme-item {
     width: 230px;
     height: 328px;
@@ -86,19 +105,19 @@
     margin-bottom: 20px;
     background: #fff;
   }
-  
+
   .theme-item .thumb img {
     width: 100%;
     height: 100%;
   }
-  
+
   .theme-item .footer {
     height: 98px;
     padding: 10px;
     background-color: #fff;
     box-sizing: border-box;
   }
-  
+
   .theme-item .footer > .title {
     color: #4a4a4a;
     font-size: 14px;
@@ -107,7 +126,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  
+
   .theme-item .footer > .content {
     color: #83817b;
     margin-top: 12px;
@@ -116,11 +135,11 @@
     overflow: hidden;
     line-height: 1.5;
   }
-  
+
   .theme-item.create {
     text-align: center;
   }
-  
+
   .theme-item.create .create-area p {
     font-size: 20px;
     cursor: pointer;

@@ -12,7 +12,7 @@
                     :showOperate="editorElement == element">
           <img style="width:100%;height:100%;" :src="element.imgSrc">
         </PicElement>
-        <FontElement v-if="element.type==='text'" :element="element" :style="{'font-family':element.fontFamily,color:'#'+element.color,'font-size':element.fontSize+'px',transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,top:element.top+'px',left:element.left + 'px',width:element.width+'px',height:element.height+'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></FontElement>
+        <FontElement class="element" v-if="element.type === 'text'" :element="element" :style="elementPosition(element)"></FontElement>
         <ShapesElement v-if="element.type==='icon'" :iconKey="element.iconKey" :element="element" :style="{fill:'#fff',transform:'rotate('+element.transform+'deg)','z-index':element.zindex,opacity:element.opacity/100,width:element.width+'px',height:element.height+'px',top:element.top+'px',left:element.left + 'px','animation-duration':element.duration + 's','-webkit-animation-duration':element.duration + 's','animation-delay':element.delay + 's','-webkit-animation-delay':element.delay + 's'}" :class="[element.playing?'animated ' + element.animatedName:'']" :showOperate="editorElement == element"></ShapesElement>
       </div>
     </template>
@@ -29,6 +29,17 @@
     data () {
       return {
         http: appConst.APP_MALL_API_URL
+      }
+    },
+    computed: {
+      elementPosition () {
+        return (ele) => {
+          return {
+            zIndex: ele['zindex'],
+            top: ele['top'] + 'px',
+            left: ele['left'] + 'px'
+          }
+        }
       }
     },
     props: {
@@ -71,5 +82,8 @@
     height: 100%;
     overflow: hidden;
     z-index: 0;
+  }
+  .element {
+    position: absolute;
   }
 </style>

@@ -9,19 +9,22 @@ export default class Element {
     this.top = ele.top || 0
     this.width = ele.width || 0
     this.height = ele.height || 0
-    this.animatedName = ele.animatedName
-    this.duration = ele.duration
-    this.delay = ele.delay
+    this.lineHeight = ele.lineHeight || 0
+    this.animatedName = ele.animatedName || ''
+    this.duration = ele.duration || 1
+    this.delay = ele.delay || 0
     this.playing = false
     this.loop = false
     this.opacity = ele.opacity || 100
-    this.zindex = ele.zindex || 1
     this.transform = ele.transform || 0
     this.text = ele.text || ''
+    this.textAlign = ele.textAlign || 'left'
     this.iconKey = ele.iconKey || ''
     this.bg = ele.bg || ''
     this.fontSize = ele.fontSize || 18
-    this.color = ele.color || 'fff'
     this.fontFamily = ele.fontFamily || '微软雅黑'
+    this.fontWeight = ele.fontWeight || 'normal'
+    this.color = ele.color || '#ffffff'
+    this.zindex = ele.zindex || 1
   }
 }

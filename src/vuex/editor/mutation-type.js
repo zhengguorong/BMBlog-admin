@@ -1,6 +1,7 @@
 export const SET_CUR_EDITOR_ELEMENT = 'SET_CUR_EDITOR_ELEMENT' // 设置当前编辑的h5元素
 export const ADD_PIC_ELEMENT = 'ADD_PIC_ELEMENT' // 添加图片元素
 export const PLAY_ANIMATE = 'PLAY_ANIMATE' // 播放动画
+export const STOP_ANIMATE = 'STOP_ANIMATE' // 播放动画
 export const ADD_PAGE = 'ADD_PAGE' // 添加页面
 export const DELETE_PAGE = 'DELETE_PAGE' // 删除页面
 export const SET_CUR_EDITOR_PAGE = 'SET_CUR_EDITOR_PAGE' // 设置当前编辑的页面
@@ -19,3 +20,5 @@ export const FETCH_PIC_LIST = 'FETCH_PIC_LIST' // 获取图片列表
 export const SET_BG_ELEMENT = 'SET_BG_ELEMENT' // 设置背景图
 export const PUSH_PIC_LIST = 'PUSH_PIC_LIST' // 图片列表
 export const CLEAN_PIC_LIST = 'CLEAN_PIC_LIST' // 清除图片列表
+export const DELETE_THEME = 'DELETE_THEME' // 删除主题
+export const SORTELEMENTS_BY_ZINDEX = 'SORTELEMENTS_BY_ZINDEX' // 元素重新排序

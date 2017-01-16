@@ -23,30 +23,35 @@ const mutations = {
       state.editorPage.elements.push(new Element(data))
     }
   },
-  [types.PLAY_ANIMATE] (state, data) {
-    // 如存在选择元素，则播放选择元素动画，否则全部元素播放
-    var elements = state.editorPage.elements
-    if (state.editorElement && state.editorElement.type) {
-      elements.find((value, index, arr) => {
-        if (value === state.editorElement) {
-          if (value.playing) {
-            value.playing = false
-            setTimeout(() => {
-              value.playing = true
-            }, 100)
-          } else {
-            value.playing = true
-          }
-        }
+  // 播放动画
+  [types.PLAY_ANIMATE] (state) {
+    let elements = state.editorPage.elements
+    let editingElement = state.editorElement
+    if (editingElement && editingElement.animatedName) {
+      // 如存在有动画的选择元素
+      editingElement.playing = true
+    } else if (!editingElement) {
+      // 不存在被选择的元素
+      elements.forEach(v => {
+        v.playing = true
       })
+    }
+  },
+  // 停止播放动画
+  [types.STOP_ANIMATE] (state, data) {
+    console.log(data)
+    if (data instanceof Array) {
+      // 该页元素
+      data.forEach(v => {
+        v['playing'] = false
+      })
+    } else if (data instanceof Object) {
+      // 单个元素
+      data['playing'] = false
     } else {
-      elements.find((value, index, arr) => {
-        if (value.type !== 'bg') {
-          value.playing = false
-          setTimeout(() => {
-            value.playing = true
-          }, 100)
-        }
+      // 不传参情况
+      state['editorPage']['elements'].forEach(v => {
+        v['playing'] = false
       })
     }
   },
@@ -73,6 +78,7 @@ const mutations = {
     state.editorPage.elements.findIndex((value, index, arr) => {
       if (value === data) {
         state.editorPage.elements.splice(index, 1)
+        state.editorElement = null
       }
     })
   },
@@ -93,7 +99,7 @@ const mutations = {
   },
   [types.CLEAN_BG] (state) {
     state.editorPage.elements.findIndex((value, index, arr) => {
-      if (value.type === 'bg') {
+      if (value && value.type === 'bg') {
         state.editorPage.elements.splice(index, 1)
       }
     })
@@ -109,6 +115,34 @@ const mutations = {
   },
   [types.CLEAN_PIC_LIST] (state) {
     state.picList = []
+  },
+  [types.SORTELEMENTS] (state, data) {
+    let element = state.editorPage.elements[data.start]
+    let end = parseInt(data.end)
+    if (end !== -1) {
+      state.editorPage.elements.splice(data.start, 1)
+      if (end >= state.editorPage.elements.length) {
+        state.editorPage.elements.push(element)
+      } else {
+        state.editorPage.elements.splice(end, 0, element)
+      }
+      state.editorPage.elements.map((value, index, arr) => {
+        value.zindex = index + 1
+      })
+    }
+  },
+  [types.DELETE_THEME] (state, data) {
+    state.themeList.findIndex((value, index, arr) => {
+      if (value === data) {
+        state.themeList.splice(index, 1)
+      }
+    })
+  },
+  [types.SORTELEMENTS_BY_ZINDEX] (state, data) {
+    state.editorPage.elements.sort((a, b) => a['zindex'] - b['zindex'])
+    state.editorPage.elements.forEach((v, i, arr) => {
+      arr[i]['zindex'] = i + 1
+    })
   }
 }
 export default mutations
