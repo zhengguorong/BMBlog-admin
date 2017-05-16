@@ -2,7 +2,7 @@
   <div class="container">
     <div class="login-main">
       <div class="login-title">
-        蓝月亮前端－冇理想同条咸鱼有咩分别
+        蓝月亮前端
       </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">
@@ -72,7 +72,7 @@
     background-size: auto;
     min-height: calc(100vh);
   }
-  
+
   .error-info {
     text-align: left;
     background: #ffeeed;
@@ -89,7 +89,7 @@
       padding-left: 10px;
     }
   }
-  
+
   .login-main {
     width: 450px;
     margin: 0 auto;
@@ -97,23 +97,23 @@
     position: relative;
     top: 100px;
   }
-  
+
   .login-title {
     margin: 0;
     padding: 30px 20px 26px;
     text-align: center;
     font-size: 18px;
   }
-  
+
   .content {
     padding: 0 25px 10px;
   }
-  
+
   .form-item {
     line-height: 1.5;
     margin-bottom: 17px;
   }
-  
+
   .login-btn {
     width: 100%;
   }
