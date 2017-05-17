@@ -2,7 +2,7 @@
   <div class="container">
     <div class="login-main">
       <div class="login-title">
-        蓝月亮前端－冇理想同条咸鱼有咩分别
+        蓝月亮前端
       </div>
       <div class="content">
         <el-form :model="loginForm" ref="loginForm" :rules="loginRule">

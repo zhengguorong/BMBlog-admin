@@ -27,7 +27,7 @@
           reader.onload = (ev) => {
             let img = document.createElement('img')
             let base64 = ev.target.result
-            img.onload = function () {
+            img.onload = () => {
               this.$emit('uploaded', {
                 'base64': base64,
                 'width': img.width,

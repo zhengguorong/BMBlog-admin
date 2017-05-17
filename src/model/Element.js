@@ -24,7 +24,7 @@ export default class Element {
     this.fontSize = ele.fontSize || 18
     this.fontFamily = ele.fontFamily || '微软雅黑'
     this.fontWeight = ele.fontWeight || 'normal'
-    this.color = ele.color || '#ffffff'
+    this.color = ele.color || '#000000'
     this.zindex = ele.zindex || 1
   }
 }
