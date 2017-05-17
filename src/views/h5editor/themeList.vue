@@ -17,7 +17,7 @@
               <div class="footer">
                 <div class="title">作品名字</div>
                 <div class="content">作品简介</div>
-                <div @click.stop="deleteTheme(item)">删除</div>
+                <el-button class="delete" @click.stop="deleteTheme(item)" type="danger">删除</el-button>
               </div>
             </li>
           </template>
@@ -108,7 +108,7 @@
 
   .theme-item .thumb img {
     width: 100%;
-    height: 100%;
+    height: 230px;
   }
 
   .theme-item .footer {
@@ -116,6 +116,7 @@
     padding: 10px;
     background-color: #fff;
     box-sizing: border-box;
+    position: relative;
   }
 
   .theme-item .footer > .title {
@@ -134,6 +135,11 @@
     max-height: 40px;
     overflow: hidden;
     line-height: 1.5;
+  }
+  .footer .delete {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
   }
 
   .theme-item.create {

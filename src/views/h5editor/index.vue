@@ -285,7 +285,7 @@
       deploy () {
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
         let _id = this.$store.state.editor.editorTheme._id
-        window.open(appConst.BACKEND_DOMAIN + '/perview/' + _id)
+        window.open(appConst.BACKEND_DOMAIN + '/pages/' + _id + '.html')
       },
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)
