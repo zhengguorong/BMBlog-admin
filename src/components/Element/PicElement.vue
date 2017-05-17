@@ -8,7 +8,7 @@
 
 <script>
     import Operate from '../Operate'
-    import * as appConst from '../../util/appConst'
+    import appConst from '../../util/appConst'
     export default{
       props: {
         element: {
@@ -31,7 +31,7 @@
           flag: false,
           scaleFlag: false,
           direction: '',
-          http: appConst.APP_MALL_API_URL
+          http: appConst.BACKEND_DOMAIN
         }
       },
       methods: {
@@ -150,7 +150,7 @@
     position: absolute;
     cursor: move;
   }
-  
+
   .wrap img {
     position: absolute;
     user-select: none;

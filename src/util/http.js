@@ -1,12 +1,12 @@
 import axios from 'axios'
-
+import appConst from './appConst'
 export const get = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
   let _url
   if (query) {
-    _url = `http://localhost:3000${url}?${query}`
+    _url = `${appConst.BACKEND_DOMAIN}${url}?${query}`
   } else {
-    _url = `http://localhost:3000${url}`
+    _url = `${appConst.BACKEND_DOMAIN}${url}`
   }
   return axios.get(_url, {
     headers: { authorization: token }
@@ -24,7 +24,7 @@ export const get = (url, query) => {
 
 export const post = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
-  let _url = `http://localhost:3000${url}`
+  let _url = `${appConst.BACKEND_DOMAIN}${url}`
   return axios.post(_url, query, {
     headers: { authorization: token }
   })
@@ -41,7 +41,7 @@ export const post = (url, query) => {
 
 export const put = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
-  let _url = `http://localhost:3000${url}`
+  let _url = `${appConst.BACKEND_DOMAIN}${url}`
   return axios.put(_url, query, {
     headers: { authorization: token }
   })
@@ -58,7 +58,7 @@ export const put = (url, query) => {
 
 export const patch = (url, query) => {
   const token = 'Bearer ' + window.localStorage.token
-  let _url = `http://localhost:3000${url}`
+  let _url = `${appConst.BACKEND_DOMAIN}${url}`
   return axios.patch(_url, query, {
     headers: { authorization: token }
   })
@@ -75,7 +75,7 @@ export const patch = (url, query) => {
 
 export const del = (url, article) => {
   const token = 'Bearer ' + window.localStorage.token
-  let _url = `http://localhost:3000${url}/${article._id}`
+  let _url = `${appConst.BACKEND_DOMAIN}${url}/${article._id}`
   return axios.delete(_url, {
     headers: { authorization: token }
   })

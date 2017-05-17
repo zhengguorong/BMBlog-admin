@@ -32,13 +32,13 @@
 </template>
 <script>
   import Page from './../../components/Page'
-  import * as AppConst from '../../util/appConst'
+  import AppConst from '../../util/appConst'
   export default {
     data () {
       return {
         viewState: 0,
         dragState: 0,
-        http: AppConst['APP_MALL_API_URL']
+        http: AppConst.BACKEND_DOMAIN
       }
     },
     computed: {

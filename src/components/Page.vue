@@ -24,11 +24,11 @@
   import FontElement from './Element/FontElement'
   import ShapesElement from './Element/ShapesElement'
   import 'animate.css'
-  import * as appConst from '../util/appConst'
+  import appConst from '../util/appConst'
   export default {
     data () {
       return {
-        http: appConst.APP_MALL_API_URL
+        http: appConst.BACKEND_DOMAIN
       }
     },
     computed: {

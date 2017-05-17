@@ -154,7 +154,7 @@
   import Overview from './overview'
   import Page from '../../components/Page'
   import PicPicker from '../../components/PicturePicker'
-  import * as appConst from '../../util/appConst'
+  import appConst from '../../util/appConst'
   export default {
     data () {
       return {
@@ -165,7 +165,7 @@
         dialogSaveBeforeBack: false,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
-        http: appConst.APP_MALL_API_URL
+        http: appConst.BACKEND_DOMAIN
       }
     },
     watch: {
@@ -285,7 +285,7 @@
       deploy () {
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
         let _id = this.$store.state.editor.editorTheme._id
-        window.open(appConst.APP_MALL_API_URL + '/perview/' + _id)
+        window.open(appConst.BACKEND_DOMAIN + '/perview/' + _id)
       },
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)

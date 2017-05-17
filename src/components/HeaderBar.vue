@@ -9,10 +9,7 @@
       <div class="nav">
         <ul>
           <li class="active">
-            <a href="">我的作品</a>
-          </li>
-          <li>
-            <a href="">我的作品</a>
+            <a href="#/themeList">我的作品</a>
           </li>
         </ul>
       </div>

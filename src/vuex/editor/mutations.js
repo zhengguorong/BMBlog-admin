@@ -1,5 +1,5 @@
 import * as types from './mutation-type'
-import * as app from '../../util/appConst'
+import app from '../../util/appConst'
 import Element from '../../model/Element'
 
 const mutations = {
