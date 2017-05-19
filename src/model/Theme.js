@@ -3,6 +3,8 @@
  */
 export default class Theme {
   constructor (theme = {}) {
+    this.title = theme.title || '蓝月亮'
+    this.description = theme.description || '蓝月亮'
     this.pages = theme.pages || []
   }
 }

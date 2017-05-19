@@ -4,7 +4,7 @@
 export default [{
   path: '/',
   name: 'index',
-  component: require('./views/user/login')
+  component: require('./views/h5editor/themeList.vue')
 }, {
   path: '/login',
   name: 'login',

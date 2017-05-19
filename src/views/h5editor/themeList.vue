@@ -15,8 +15,8 @@
                 <img src="../../assets/images/default.png" alt="">
               </div>
               <div class="footer">
-                <div class="title">作品名字</div>
-                <div class="content">作品简介</div>
+                <div class="title">{{item.title}}</div>
+                <div class="content">{{item.description}}</div>
                 <el-button class="delete" @click.stop="deleteTheme(item)" type="danger">删除</el-button>
               </div>
             </li>

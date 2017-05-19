@@ -1,15 +1,15 @@
 <template>
   <ul class="toolbar">
-    <li><button class="reset-btn" @click="bold">加粗</li>
-    <li><button class="reset-btn" @click="italic">斜体</li>
-    <li><button class="reset-btn" @click="link">链接</li>
-    <li><button class="reset-btn" @click="quote">引用</li>
-    <li><button class="reset-btn" @click="code">代码</li>
-    <li><button class="reset-btn" @click="image">图片</li>
-    <li><button class="reset-btn" @click="list">列表</li>
-    <li><button class="reset-btn" @click="header">标题</li>
-    <li><button class="reset-btn" @click="line">分割</li>
-    <li><button class="reset-btn" @click="table">表格</li>
+    <li><button class="reset-btn" @click="bold">加粗</button></li>
+    <li><button class="reset-btn" @click="italic">斜体</button></li>
+    <li><button class="reset-btn" @click="link">链接</button></li>
+    <li><button class="reset-btn" @click="quote">引用</button></li>
+    <li><button class="reset-btn" @click="code">代码</button></li>
+    <li><button class="reset-btn" @click="image">图片</button></li>
+    <li><button class="reset-btn" @click="list">列表</button></li>
+    <li><button class="reset-btn" @click="header">标题</button></li>
+    <li><button class="reset-btn" @click="line">分割</button></li>
+    <li><button class="reset-btn" @click="table">表格</button></li>
   </ul>
 </template>
 

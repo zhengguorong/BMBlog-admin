@@ -74,6 +74,10 @@ const mutations = {
   [types.SET_CUR_EDITOR_THEME] (state, data) {
     state.editorTheme = data
   },
+  [types.UPDATE_THEME_DES] (state, {title, description}) {
+    state.editorTheme.title = title
+    state.editorTheme.description = description
+  },
   [types.DELETE_ELEMENT] (state, data) {
     state.editorPage.elements.findIndex((value, index, arr) => {
       if (value === data) {

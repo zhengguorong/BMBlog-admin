@@ -8,7 +8,10 @@ const state = {
     elements: []
   }, // 正在编辑的页面
   themeList: [], // 用户所有主题列表
-  editorTheme: {}, // 正在编辑的主题
+  editorTheme: {
+    title: '蓝月亮',
+    description: '蓝月亮'
+  }, // 正在编辑的主题
   picList: [], // 图片列表
   canvasWidth: 320,
   canvasHeight: 504

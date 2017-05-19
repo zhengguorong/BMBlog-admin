@@ -16,10 +16,10 @@
             <el-input class="password" type="password" v-model="loginForm.password" placeholder="密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="login-btn" @click.native.prevent="login">登录</el-button>
+            <el-button style="width:30%" :plain="true" type="success" @click.native.prevent="register">注册</el-button>
+            <el-button style="width:65%;float:right" type="primary" class="login-btn" @click.native.prevent="login">登录</el-button>
           </el-form-item>
         </el-form>
-        <router-link to="/register" replace>注册</router-link>
       </div>
     </div>
   </div>
@@ -61,6 +61,9 @@
             return false
           }
         })
+      },
+      register () {
+        window.location.href = '#register'
       }
     }
   }

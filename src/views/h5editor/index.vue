@@ -1,14 +1,14 @@
 <template>
   <div class="editor">
     <header class="header">
-      <button class="reset-btn" @click="dialogSaveBeforeBack = true"><i class="el-icon-arrow-left"></i>返回作品</button>
-      <el-dialog title="即将返回作品列表" v-model="dialogSaveBeforeBack" size="tiny">
+      <button class="reset-btn" @click="dialogSave(true)"><i class="el-icon-arrow-left"></i>返回作品</button>
+      <!--<el-dialog title="即将返回作品列表" v-model="dialogSaveBeforeBack" size="tiny">
         <span>未保存的作品将会失去目前进度，是否继续返回</span>
         <span slot="footer">
           <el-button type="danger" @click="dialogSave(false)">继续返回</el-button>
           <el-button type="primary" @click="dialogSave(true)">保 存</el-button>
         </span>
-      </el-dialog>
+      </el-dialog>-->
     </header>
     <section class="section">
       <Overview class="overview" />
@@ -20,6 +20,9 @@
           </el-tooltip>
           <el-tooltip  effect="dark" content="新建素材" placement="left">
             <button class="func el-icon-picture" @click="togglePanel(2)":class="{ active: panelState === 2 }"></button>
+          </el-tooltip>
+          <el-tooltip  effect="dark" content="设置" placement="left">
+            <button class="func el-icon-setting" @click="togglePanel(4)" :class="{ active: panelState === 4 }"></button>
           </el-tooltip>
           <!--<el-tooltip  effect="dark" content="形状元素" placement="left">
             <button class="func el-icon-star-on" @click="togglePanel(3)":class="{ active: panelState === 3 }"></button>
@@ -33,6 +36,7 @@
           <el-tooltip  effect="dark" content="发布" placement="left">
             <button class="func el-icon-message" @click="deploy"></button>
           </el-tooltip>
+
         </div>
         <div class="wrapper custom-scrollbar">
           <!-- 设置背景 0 -->
@@ -68,6 +72,20 @@
               <use xlink:href="/static/svg/icon.svg#bmLogo"  fill="#fff"></use>
             </svg>
           </div>
+          <!-- 设置信息 -->
+          <div class="panel panel-shape clearfix" v-show="panelState === 4">
+            <el-form label-width="40px">
+              <el-form-item label="标题">
+                <el-input v-model="title"></el-input>
+              </el-form-item>
+              <el-form-item label="描述">
+                <el-input type="textarea" v-model="description"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="saveSetting">确认</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
           <!-- 图层编辑面板 -->
           <div class="panel panel-edit">
             <div class="panel-tab clearfix">
@@ -96,10 +114,10 @@
                     <el-input type="color" v-model="element.color"></el-input>
                   </el-form-item>
                   <el-form-item label="字体大小">
-                    <el-input-number v-model="element.fontSize"></el-input>
+                    <el-input-number v-model="element.fontSize"></el-input-number>
                   </el-form-item>
                   <el-form-item label="行高">
-                    <el-input-number v-model="element.lineHeight"></el-input>
+                    <el-input-number v-model="element.lineHeight"></el-input-number>
                   </el-form-item>
                   <el-form-item label="字体">
                     <el-input v-model="element.fontFamily"></el-input>
@@ -107,10 +125,10 @@
                 </template>
                 <!-- 通用控件-->
                 <el-form-item label="透明度">
-                  <el-slider v-model="element.opacity"></el-input>
+                  <el-slider v-model="element.opacity"></el-slider>
                 </el-form-item>
                 <el-form-item label="旋转">
-                  <el-slider v-model="element.transform" :max="359"></el-input>
+                  <el-slider v-model="element.transform" :max="359"></el-slider>
                 </el-form-item>
                 <el-form-item label="高" v-show="panelState !== 11">
                   <el-input v-model="element.height"><template slot="append">px</template></el-input>
@@ -165,7 +183,9 @@
         dialogSaveBeforeBack: false,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
-        http: appConst.BACKEND_DOMAIN
+        http: appConst.BACKEND_DOMAIN,
+        title: this.$store.state.editor.editorTheme.title || '',
+        description: this.$store.state.editor.editorTheme.description || ''
       }
     },
     watch: {
@@ -286,6 +306,10 @@
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
         let _id = this.$store.state.editor.editorTheme._id
         window.open(appConst.BACKEND_DOMAIN + '/pages/' + _id + '.html')
+      },
+      saveSetting () {
+        this.$store.commit('UPDATE_THEME_DES', {title: this.title, description: this.description})
+        this.save()
       },
       selectedElement (element) {
         this.$store.dispatch('setEditorElement', element)
