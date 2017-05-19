@@ -20,6 +20,7 @@
     "lrz": "^4.9.40",
     "marked": "^0.3.6",
     "moment": "^2.15.2",
+    "qrcode": "^0.8.1",
     "vue": "^2.3.3",
     "vue-router": "^2.5.3",
     "vuex": "^2.3.0"
@@ -81,7 +82,7 @@
     "selenium-server": "2.53.1",
     "semver": "^5.3.0",
     "shelljs": "^0.7.4",
-    "sinon": "^1.17.3",
+    "sinon": "^2.2.0",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
     "vue-loader": "^10.0.0",

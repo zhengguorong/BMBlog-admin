@@ -33,8 +33,8 @@
           <el-tooltip  effect="dark" content="保存" placement="left">
             <button class="func el-icon-upload" @click="save"></button>
           </el-tooltip>
-          <el-tooltip  effect="dark" content="发布" placement="left">
-            <button class="func el-icon-message" @click="deploy"></button>
+          <el-tooltip  effect="dark" content="发布" placement="left"  >
+            <button class="func el-icon-message" @click="deployAndShowCode()" :class="{ active: panelState === 5 }"></button>
           </el-tooltip>
 
         </div>
@@ -85,6 +85,10 @@
                 <el-button type="primary" @click="saveSetting">确认</el-button>
               </el-form-item>
             </el-form>
+          </div>
+          <!-- 发布 -->
+          <div class="panel panel-shape clearfix" v-show="panelState === 5">
+            <div><canvas id="canvas"></canvas></div>
           </div>
           <!-- 图层编辑面板 -->
           <div class="panel panel-edit">
@@ -173,6 +177,7 @@
   import Page from '../../components/Page'
   import PicPicker from '../../components/PicturePicker'
   import appConst from '../../util/appConst'
+  import QRCode from 'qrcode'
   export default {
     data () {
       return {
@@ -309,7 +314,17 @@
       deploy () {
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme))
         let _id = this.$store.state.editor.editorTheme._id
+        let releaseUrl = appConst.BACKEND_DOMAIN + '/pages/' + _id + '.html'
         window.open(appConst.BACKEND_DOMAIN + '/pages/' + _id + '.html')
+        // 生成二维码
+        var canvas = document.getElementById('canvas')
+        QRCode.toCanvas(canvas, releaseUrl, (err) => {
+          console.log(err)
+        })
+      },
+      deployAndShowCode () {
+        this.togglePanel(5)
+        this.deploy()
       },
       saveSetting () {
         this.$store.commit('UPDATE_THEME_DES', {title: this.title, description: this.description})
