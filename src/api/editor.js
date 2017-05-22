@@ -3,8 +3,8 @@
  */
 import * as http from '../util/http'
 
-const getUserThemeList = () => {
-  return http.get('/api/pages')
+const getUserThemeList = (type = 'h5') => {
+  return http.get('/api/pages?type=' + type)
 }
 const getPageByThemeId = (id) => {
   return http.get('/api/pages/' + id)
