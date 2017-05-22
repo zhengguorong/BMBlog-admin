@@ -7,5 +7,6 @@ export default class Theme {
     this.description = theme.description || '蓝月亮'
     this.pages = theme.pages || []
     this.type = theme.type || 'h5'
+    this.canvasHeight = theme.canvasHeight || 504
   }
 }

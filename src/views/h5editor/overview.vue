@@ -38,18 +38,14 @@
       return {
         viewState: 0,
         dragState: 0,
-        http: AppConst.BACKEND_DOMAIN
+        http: AppConst.BACKEND_DOMAIN,
+        canvasWidth: 320,
+        canvasHeight: 504
       }
     },
     computed: {
       vxEditor () {
         return this.$store.state['editor']
-      },
-      canvasWidth () {
-        return this.vxEditor['canvasWidth']
-      },
-      canvasHeight () {
-        return this.vxEditor['canvasHeight']
       },
       pages () {
         return this.vxEditor['editorTheme']['pages']

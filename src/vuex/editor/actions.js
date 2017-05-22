@@ -36,8 +36,7 @@ export const getUserThemeList = ({commit}, type) => {
  */
 
 export const createTheme = ({commit}, type) => {
-  var theme = new Theme({type: type
-  })
+  var theme = new Theme({type: type})
   commit(types.CREATE_THEME, theme)
   commit(types.SET_CUR_EDITOR_THEME, theme)
 }
@@ -46,7 +45,8 @@ export const createTheme = ({commit}, type) => {
  * 设置当前编辑的主题
  */
 export const setEditorTheme = ({commit}, theme) => {
-  commit(types.SET_CUR_EDITOR_THEME, theme)
+  var newTheme = new Theme(theme)
+  commit(types.SET_CUR_EDITOR_THEME, newTheme)
 }
 
 /**

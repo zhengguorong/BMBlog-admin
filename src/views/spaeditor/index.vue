@@ -14,7 +14,7 @@
       <Overview class="overview" />
       <div class="canvas-wrap" id="canvas-wrap">
         <Page :elements="editorPage.elements" :editorElement="element" :selectedElement="selectedElement" :style="{ width: canvasWidth + 'px', height: canvasHeight + 'px' }" />
-        <div class="tool-bar" @mousedown="mousedown" @mousemove="mousemove" @mouseup="mouseup" :style="{top: canvasHeight + 35 + 'px'}">拖动调整页面高度</div>
+        <div class="tool-bar" :style="{top: parseInt(canvasHeight) + 35 + 'px'}">在右侧设置界面调整页面高度</div>
       </div>
       <div class="control-panel">
         <div class="funcs">
@@ -83,6 +83,9 @@
               </el-form-item>
               <el-form-item label="描述">
                 <el-input type="textarea" v-model="description"></el-input>
+              </el-form-item>
+              <el-form-item label="页面长度">
+                <el-input type="number" v-model="canvasHeight"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="saveSetting">确认</el-button>
@@ -186,8 +189,8 @@
       return {
         panelState: 0,
         panelTabState: 0,
-        canvasWidth: this.$store.state.editor.canvasWidth,
-        canvasHeight: this.$store.state.editor.canvasHeight,
+        canvasWidth: 320,
+        canvasHeight: this.$store.state.editor.editorTheme.canvasHeight,
         dialogSaveBeforeBack: false,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
@@ -345,7 +348,7 @@
         this.deploy()
       },
       saveSetting () {
-        this.$store.commit('UPDATE_THEME_DES', {title: this.title, description: this.description})
+        this.$store.commit('UPDATE_THEME_DES', {title: this.title, description: this.description, canvasHeight: this.canvasHeight})
         this.save()
       },
       selectedElement (element) {
@@ -460,7 +463,7 @@
     font-size: 12px;
     border: 1px solid #ccc;
     background-color: #fff;
-    cursor: ns-resize;
+    // cursor: ns-resize;
   }
   .control-panel {
     position: absolute;
