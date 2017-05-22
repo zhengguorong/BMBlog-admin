@@ -6,5 +6,6 @@ export default class Theme {
     this.title = theme.title || '蓝月亮'
     this.description = theme.description || '蓝月亮'
     this.pages = theme.pages || []
+    this.type = theme.type || 'h5'
   }
 }

@@ -69,7 +69,7 @@
         this.$store.dispatch('addPage')
         let $this = this
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
-          this.$router.replace({ path: '/h5editor', query: { itemId: $this.$store.state.editor.editorTheme._id } })
+          this.$router.replace({ path: '/spaeditor', query: { itemId: $this.$store.state.editor.editorTheme._id } })
         })
       }
     },

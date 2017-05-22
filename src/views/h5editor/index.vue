@@ -40,28 +40,28 @@
         </div>
         <div class="wrapper custom-scrollbar">
           <!-- 设置背景 0 -->
-          <div class="panel panel-bg" v-show="panelState === 0">
-            <div class="clearfix" v-show="panelTabState !== 1">
+          <div class="panel panel-bg" v-if="panelState === 0">
+            <div class="clearfix" v-if="panelTabState !== 1">
               <el-button class="btn" type="success" @click="panelTabState = 1">更换背景</el-button>
               <el-button class="btn" type="danger" @click="cleanBG">移除背景</el-button>
             </div>
-            <div class="clearfix" v-show="panelTabState === 1">
+            <div class="clearfix" v-if="panelTabState === 1">
               <PicPicker class="bgs" @uploaded="uploadImage" @style="style"></PicPicker>
               <div class="bgs" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addBG(element.filePath)" v-for="element in picList"></div>
             </div>
           </div>
           <!-- 添加文字 1 -->
-          <div class="panel panel-text" v-show="panelState === 1">
+          <div class="panel panel-text" v-if="panelState === 1">
             <div class="btn" @click="addTextElement('title')" style="font-size: 32px; font-weight: bold;">插入标题</div>
             <div class="btn" @click="addTextElement('plain')">插入文本</div>
           </div>
           <!-- 添加元素 2 -->
-          <div class="panel panel-element clearfix" v-show="panelState === 2">
+          <div class="panel panel-element clearfix" v-if="panelState === 2">
             <PicPicker class="ele" @uploaded="uploadImage"></PicPicker>
             <div class="ele" :style="{ backgroundImage: 'url(' + http + element.filePath + ')' }" @click="addPicElement(element)" v-for="element in picList"></div>
           </div>
           <!-- 添加形状 3 -->
-          <div class="panel panel-shape clearfix" v-show="panelState === 3">
+          <div class="panel panel-shape clearfix" v-if="panelState === 3">
             <svg class="shape" @click="addIcon('action-redo')">
               <use xlink:href="/static/svg/icon.svg#action-redo"></use>
             </svg>
@@ -73,7 +73,7 @@
             </svg>
           </div>
           <!-- 设置信息 -->
-          <div class="panel panel-shape clearfix" v-show="panelState === 4">
+          <div class="panel panel-shape clearfix" v-if="panelState === 4">
             <el-form label-width="40px">
               <el-form-item label="标题">
                 <el-input v-model="title"></el-input>
@@ -87,20 +87,20 @@
             </el-form>
           </div>
           <!-- 发布 -->
-          <div class="panel panel-shape clearfix" v-show="panelState === 5">
+          <div class="panel panel-shape clearfix" v-if="panelState === 5">
             <div><canvas id="canvas"></canvas></div>
           </div>
           <!-- 图层编辑面板 -->
           <div class="panel panel-edit">
             <div class="panel-tab clearfix">
               <div class="tab" :class="{ active: panelTabState === 0 }" @click="function () { panelTabState = 0 }">
-                <span v-show="panelState === 11">文本</span>
-                <span v-show="panelState === 12">元素</span>
+                <span v-if="panelState === 11">文本</span>
+                <span v-if="panelState === 12">元素</span>
               </div>
               <div class="tab" :class="{ active: panelTabState === 1 }" @click="function () { panelTabState = 1 }">动作</div>
             </div>
             <el-form label-width="5em">
-              <div v-show="panelTabState === 0">
+              <div v-if="panelTabState === 0">
                 <!-- 文字编辑界面特有控件 -->
                 <template v-if="panelState === 11">
                   <el-form-item label="文本内容">
@@ -134,7 +134,7 @@
                 <el-form-item label="旋转">
                   <el-slider v-model="element.transform" :max="359"></el-slider>
                 </el-form-item>
-                <el-form-item label="高" v-show="panelState !== 11">
+                <el-form-item label="高" v-if="panelState !== 11">
                   <el-input v-model="element.height"><template slot="append">px</template></el-input>
                 </el-form-item>
                 <el-form-item label="宽">
@@ -147,7 +147,7 @@
                   <el-input v-model="element.top"><template slot="append">px</template></el-input>
                 </el-form-item>
               </div>
-              <div v-show="panelTabState === 1">
+              <div v-if="panelTabState === 1">
                 <el-form-item label="动画库">
                   <el-select placeholder="daneden/animate.css" v-model="element.animatedName" clearable>
                     <el-option v-for="item in animateList" :label="item" :value="item"></el-option>
@@ -188,7 +188,9 @@
         dialogSaveBeforeBack: false,
         animateList: ['bounce', 'flash', 'pulse', 'rubberBand', 'shake', 'swing', 'tada', 'wobble', 'jello', 'bounceIn', 'bounceInDown', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceOut', 'bounceOutDown', 'bounceOutLeft', 'bounceOutRight', 'bounceOutUp', 'fadeIn', 'fadeInDown', 'fadeInDownBig', 'fadeInLeft', 'fadeInLeftBig', 'fadeInRight', 'fadeInRightBig', 'fadeInUp', 'fadeInUpBig', 'fadeOut', 'fadeOutDown', 'fadeOutDownBig', 'fadeOutLeft', 'fadeOutLeftBig', 'fadeOutRight', 'fadeOutRightBig', 'fadeOutUp', 'fadeOutUpBig', 'flip', 'flipInX', 'flipInY', 'flipOutX', 'flipOutY', 'lightSpeedIn', 'lightSpeedOut', 'rotateIn', 'rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight', 'rotateOut', 'rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight', 'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight', 'slideOutUp', 'slideOutDown', 'slideOutLeft', 'slideOutRight', 'zoomIn', 'zoomInDown', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomOut', 'zoomOutDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp', 'hinge', 'rollIn', 'rollOut'],
         picBase64: '',
-        http: appConst.BACKEND_DOMAIN
+        http: appConst.BACKEND_DOMAIN,
+        title: this.$store.state.editor.editorTheme.title || '',
+        description: this.$store.state.editor.editorTheme.description || ''
       }
     },
     watch: {
@@ -224,12 +226,6 @@
       },
       picList () {
         return this.$store.state.editor.picList
-      },
-      title () {
-        return this.$store.state.editor.editorTheme.title || ''
-      },
-      description () {
-        return this.$store.state.editor.editorTheme.description || ''
       }
     },
     methods: {
@@ -327,6 +323,7 @@
         this.deploy()
       },
       saveSetting () {
+        console.log(this.description)
         this.$store.commit('UPDATE_THEME_DES', {title: this.title, description: this.description})
         this.save()
       },

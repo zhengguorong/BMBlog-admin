@@ -38,7 +38,7 @@
       }
     },
     mounted () {
-      this.$store.dispatch('getUserThemeList')
+      this.$store.dispatch('getUserThemeList', 'h5')
     },
     methods: {
       toEditor (item) {
@@ -65,11 +65,10 @@
         })
       },
       create () {
-        this.$store.dispatch('createTheme')
+        this.$store.dispatch('createTheme', 'h5')
         this.$store.dispatch('addPage')
         let $this = this
         this.$store.dispatch('saveTheme', tools.vue2json(this.$store.state.editor.editorTheme)).then(() => {
-          console.log($this.$store.state.editor.editorTheme._id)
           this.$router.replace({ path: '/h5editor', query: { itemId: $this.$store.state.editor.editorTheme._id } })
         })
       }

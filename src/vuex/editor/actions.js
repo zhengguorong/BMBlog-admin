@@ -24,8 +24,8 @@ export const saveTheme = ({commit}, theme) => {
  * 获取用户所有场景主题
  * @param commit
  */
-export const getUserThemeList = ({commit}) => {
-  api.getUserThemeList().then((res) => {
+export const getUserThemeList = ({commit}, type) => {
+  api.getUserThemeList(type).then((res) => {
     commit(types.GET_USER_THEME_LIST, res)
   })
 }
@@ -35,8 +35,9 @@ export const getUserThemeList = ({commit}) => {
  * @param commit
  */
 
-export const createTheme = ({commit}) => {
-  var theme = new Theme()
+export const createTheme = ({commit}, type) => {
+  var theme = new Theme({type: type
+  })
   commit(types.CREATE_THEME, theme)
   commit(types.SET_CUR_EDITOR_THEME, theme)
 }
